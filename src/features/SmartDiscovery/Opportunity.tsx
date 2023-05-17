@@ -1,19 +1,20 @@
 import React from 'react';
-import { OpportunityData } from './types';
+import { BeefyVaultData } from './types';
 
 type OpportunityProps = {
-  data: OpportunityData;
+  data: BeefyVaultData;
 };
 
 const Opportunity: React.FC<OpportunityProps> = ({ data }) => {
-    const riskScore = data.risks ? data.risks.length : 0;
+    const apyPercentage = (data.apy * 100).toFixed(2);
 
   return (
     <div>
-      <p>APY: {data.apy}%</p>
-      <p>Assets: {data.assets.join(', ')}</p>
-      <p>Platform ID: {data.platformId}</p>
-      <p>Strategy Type ID: {data.strategyTypeId}</p>
+      <h2>APY: {apyPercentage}%</h2>
+      <h3>Assets: {data.assets.join(', ')}</h3>
+      <h4>Platform ID: {data.platformId}</h4>
+      <h4>Strategy Type ID: {data.strategyTypeId}</h4>
+      <h4>Safety Score: {data.safetyScore}</h4>
     </div>
   );
 };
