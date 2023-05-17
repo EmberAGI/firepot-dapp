@@ -1,8 +1,8 @@
 import React from 'react';
-import { BeefyVaultData } from './types';
+import { OpportunityData } from './types';
 
 type OpportunityProps = {
-  data: BeefyVaultData;
+  data: OpportunityData;
 };
 
 const Opportunity: React.FC<OpportunityProps> = ({ data }) => {

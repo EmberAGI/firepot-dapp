@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BeefyVaultData, CATEGORIES, MAX_SCORE, RISKS } from './types';
+import { BeefyVaultData, CATEGORIES, MAX_SCORE, OpportunityData, RISKS, SafetyRank, UseOpportunitiesOptions } from './types';
 
 const calcRisk = (arr: string[]) => {
 const categories = {};
@@ -36,14 +36,14 @@ for (const c in CATEGORIES) {
 return risk;
 };
 
-const getSafetyScoreCategory = (score: number) => {
+const getSafetyRank = (score: number): SafetyRank => {
     if (score > 8.6) return 'high';
     if (score > 8.1) return 'medium';
     return 'low';
 };
 
-const useOpportunityData = () => {
-    const [data, setData] = useState<BeefyVaultData[] | null>(null);
+const useOpportunityData = (options?: UseOpportunitiesOptions) => {
+    const [opportunities, setOpportunities] = useState<OpportunityData[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<Error | null>(null);
 
@@ -54,9 +54,19 @@ const useOpportunityData = () => {
         ])
         .then(([opportunities, apyData]) => {
             const activeOpportunities = opportunities.filter((opportunity: BeefyVaultData) => opportunity.status === 'active' && Array.isArray(opportunity.risks));
-            const simplifiedData = activeOpportunities.map((opportunity: BeefyVaultData) => {
+            let filteredOpportunities = activeOpportunities;
+
+            if (options != undefined && options?.safetyRanks != undefined) {
+                filteredOpportunities = activeOpportunities.filter((opportunity: BeefyVaultData) => {
+                    const riskScore = MAX_SCORE * (1 - calcRisk(opportunity.risks));
+                    const safetyRank = getSafetyRank(riskScore);
+                    return options.safetyRanks.includes(safetyRank);
+                }); 
+            }
+            
+            const simplifiedData = filteredOpportunities.map((opportunity: BeefyVaultData) => {
                 const safetyScoreNum = MAX_SCORE * (1 - calcRisk(opportunity.risks));
-                const safetyScoreRank = getSafetyScoreCategory(safetyScoreNum);
+                const safetyScoreRank = getSafetyRank(safetyScoreNum);
                 return {
                 apy: apyData[opportunity.id],
                 assets: opportunity.assets,
@@ -65,7 +75,7 @@ const useOpportunityData = () => {
                 safetyScore: safetyScoreRank + `, ${safetyScoreNum}`
                 };
             });
-            setData(simplifiedData);
+            setOpportunities(simplifiedData);
             setLoading(false);
         })
         .catch((error: Error) => {
@@ -74,7 +84,7 @@ const useOpportunityData = () => {
         });
     }, []);
 
-    return { data, loading, error };
+    return { opportunities, loading, error };
 };
 
 export default useOpportunityData;

@@ -34,6 +34,12 @@ export type OpportunityData = {
   safetyScore: string;
 };
 
+export type SafetyRank = 'low' | 'medium' | 'high';
+
+export type UseOpportunitiesOptions = {
+  safetyRanks?: SafetyRank[];
+};
+
 export const MAX_SCORE = 10;
 
 export const RISKS = {
