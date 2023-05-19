@@ -24,6 +24,9 @@ To support even MORE networks, Firepot uses Ankr as its backup-backup RPC provid
 1. Go to [https://ankr.com/rpc](https://ankr.com/rpc) and sign up for an account. Create a project, and copy your api key.
 2. Paste into .env.
 
+### Prettier
+Make sure prettier is installed and in your $PATH.
+
 ## (Optional)
 ### WalletConnect ProjectId
 To enable WalletConnect, con
