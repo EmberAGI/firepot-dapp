@@ -1,29 +1,15 @@
-import './App.css'
-import Opportunity from './features/SmartDiscovery/Opportunity';
-import useOpportunityData from './features/SmartDiscovery/useOpportunities';
+import Home from '.';
+import './App.css';
+import Header from './components/Header';
+import ConnectWalletConfig from './features/ConnectWallet';
 
 const App: React.FC = () => {
-  const { opportunities, loading, error } = useOpportunityData({safetyRanks: ['high']});
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>Error: {error.message}</div>;
-  }
-
-  if (!opportunities) {
-    return <div>No data available</div>;
-  }
-
   return (
-    <div>
-      {opportunities.map((vaultData, index) => (
-        <Opportunity key={index} data={vaultData} />
-      ))}
-    </div>
+    <ConnectWalletConfig>
+      <Header />
+      <Home />
+    </ConnectWalletConfig>
   );
 };
 
-export default App
+export default App;
