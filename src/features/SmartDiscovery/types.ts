@@ -27,11 +27,12 @@ export type BeefyVaultData = {
 };
 
 export type OpportunityData = {
+  id: string,
   apy: number;
   assets: string[];
   platformId: string;
   strategyTypeId: string;
-  safetyScore: string;
+  safetyRank: SafetyRank;
 };
 
 export type SafetyRank = 'low' | 'medium' | 'high';
