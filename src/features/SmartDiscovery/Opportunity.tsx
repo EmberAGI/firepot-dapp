@@ -3,7 +3,7 @@ import { OpportunityData } from './types';
 import styles from "./Opportunity.module.css";
 import safetyRankHigh from './safetyRankHigh.svg';
 import TokenImage from '../../components/TokenImage/TokenImage';
-import { BeefyVaultDepositButton, BeefyVaultWithdrawButton } from '../Contracts/BeefyVault';
+import { BeefyVault, BeefyVaultDepositButton, BeefyVaultWithdrawButton } from '../Contracts/BeefyVault';
 
 const getAssetImage = (platformId: string, strategyTypeId: string) => {
   // Placeholder function: replace this with real image fetching logic.
@@ -37,10 +37,7 @@ const Opportunity: React.FC<OpportunityProps> = ({ data: { id, apy, assets, plat
           <div className={styles.text}>{`${platformId}・${strategyTypeId}`}</div>
         </div>
       </div>
-      {/** TODO: Remove tmp value */}
-      <BeefyVaultDepositButton amount={BigInt(1)} contractAddress={vaultAddress}/>
-      {/** TODO: Remove tmp value */}
-      <BeefyVaultWithdrawButton amount={BigInt(1)} contractAddress={vaultAddress}/>
+      <BeefyVault vaultAddress={vaultAddress} vaultDecimals={10}/>
     </div>
   );
 };
