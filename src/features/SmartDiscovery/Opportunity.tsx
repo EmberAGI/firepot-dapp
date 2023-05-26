@@ -14,7 +14,7 @@ type OpportunityProps = {
   data: OpportunityData;
 };
 
-const Opportunity: React.FC<OpportunityProps> = ({ data: { id, apy, assets, platformId, strategyTypeId, safetyRank, vaultAddress } }) => {
+const Opportunity: React.FC<OpportunityProps> = ({ data: { id, apy, assets, platformId, strategyTypeId, safetyRank, vaultAddress, tokenDecimals } }) => {
   const apyPercentage = (apy * 100).toFixed(2);
 
   return (
@@ -37,7 +37,8 @@ const Opportunity: React.FC<OpportunityProps> = ({ data: { id, apy, assets, plat
           <div className={styles.text}>{`${platformId}・${strategyTypeId}`}</div>
         </div>
       </div>
-      <BeefyVault vaultAddress={vaultAddress} vaultDecimals={10}/>
+      {/* TODO(AVK): Get actual maxDeposit={tokenBalance} maxWithdrawal={vaultTokenBalance} */}
+      <BeefyVault vaultAddress={vaultAddress} tokenDecimals={tokenDecimals} maxDeposit={1n} maxWithdrawal={0n}/>
     </div>
   );
 };

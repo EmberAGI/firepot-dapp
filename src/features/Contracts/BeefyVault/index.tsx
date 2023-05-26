@@ -1,8 +1,7 @@
 import { useNetwork } from 'wagmi';
-import { useBeefyVaultDeposit, useBeefyVaultWithdraw } from './hooks';
+import { useBeefyVaultDeposit, useBeefyVaultWithdraw, usePrettyBigInt } from './hooks';
 import { ConnectWallet } from '../../ConnectWallet';
-import React, { useMemo, useState } from 'react';
-import { safeAmountChange } from './helpers';
+import React from 'react';
 
 export function BeefyVaultDepositButton({ amount, contractAddress }: { amount: bigint; contractAddress: `0x${string}` }) {
   const { chain } = useNetwork();
@@ -16,42 +15,47 @@ export function BeefyVaultWithdrawButton({ amount, contractAddress }: { amount: 
   return <button onClick={() => write?.()}>Withdraw</button>;
 }
 
-export function BeefyVault({ vaultAddress, vaultDecimals }: { vaultAddress: `0x${string}`; vaultDecimals: number }) {
+export function BeefyVault({
+  vaultAddress,
+  tokenDecimals,
+  maxDeposit,
+  maxWithdrawal,
+}: {
+  vaultAddress: `0x${string}`;
+  tokenDecimals: number;
+  maxDeposit: bigint;
+  maxWithdrawal: bigint;
+}) {
   const { chain } = useNetwork();
-  const [formVal, setFormVal] = useState('');
-  if (!chain) return <ConnectWallet />;
+  const { amount: depositAmount, formVal: depositFormVal, setFormVal: setDepositFormVal } = usePrettyBigInt(tokenDecimals);
+  const { amount: withdrawalAmount, formVal: withdrawalFormVal, setFormVal: setWithdrawalFormVal } = usePrettyBigInt(18); // beefy vaults are hardcoded 18 decimals
 
-  const amount: bigint = useMemo(() => {
-    let spl = formVal.split('.');
-    let spl1 = '';
-    if (spl.length > 1) {
-      spl1 = `${spl[1]}${'0'.repeat(vaultDecimals - spl[1].length)}`;
-    } else {
-      spl1 = '0'.repeat(vaultDecimals);
-    }
-    return BigInt(spl[0].concat(spl1));
-  }, [formVal]);
+  if (!chain) return <ConnectWallet />;
 
   return (
     <React.Fragment>
       <label>
-        Amount:{' '}
-        <input
-          name='Deposit/Withdraw Amount'
-          placeholder='0.00'
-          value={formVal}
-          type='text'
-          onChange={(e) => setFormVal(safeAmountChange(e.target.value, formVal, vaultDecimals))}
-        />
+        Deposit Amount:{' '}
+        <input name='Deposit Amount' placeholder='0.00' value={depositFormVal} type='text' onChange={(e) => setDepositFormVal(e.target.value)} />
+        <div>
+          <button onClick={() => setDepositFormVal(maxDeposit)}>Max</button>
+        </div>
       </label>
-      {!!chain ? (
-        <>
-          <BeefyVaultDepositButton amount={amount} contractAddress={vaultAddress} />
-          <BeefyVaultWithdrawButton amount={amount} contractAddress={vaultAddress} />
-        </>
-      ) : (
-        <ConnectWallet />
-      )}
+      <BeefyVaultDepositButton amount={depositAmount} contractAddress={vaultAddress} />
+      <label>
+        Withdrawal Amount:{' '}
+        <input
+          name='Withdraw Amount'
+          placeholder='0.00'
+          value={withdrawalFormVal}
+          type='text'
+          onChange={(e) => setWithdrawalFormVal(e.target.value)}
+        />
+        <div>
+          <button onClick={() => setWithdrawalFormVal(maxWithdrawal)}>Max</button>
+        </div>
+      </label>
+      <BeefyVaultWithdrawButton amount={withdrawalAmount} contractAddress={vaultAddress} />
     </React.Fragment>
   );
 }
