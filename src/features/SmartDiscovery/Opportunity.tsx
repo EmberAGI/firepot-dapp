@@ -1,20 +1,41 @@
 import React from 'react';
 import { OpportunityData } from './types';
+import styles from "./Opportunity.module.css";
+import safetyRankHigh from './safetyRankHigh.svg';
+import TokenImage from '../../components/TokenImage/TokenImage';
+
+const getAssetImage = (platformId: string, strategyTypeId: string) => {
+  // Placeholder function: replace this with real image fetching logic.
+  return "/images/Vectors-Wrapper_1.svg";
+}
 
 type OpportunityProps = {
   data: OpportunityData;
 };
 
-const Opportunity: React.FC<OpportunityProps> = ({ data }) => {
-    const apyPercentage = (data.apy * 100).toFixed(2);
+const Opportunity: React.FC<OpportunityProps> = ({ data: { id, apy, assets, platformId, strategyTypeId, safetyRank } }) => {
+  const apyPercentage = (apy * 100).toFixed(2);
 
   return (
-    <div>
-      <h2>APY: {apyPercentage}%</h2>
-      <h3>Assets: {data.assets.join(', ')}</h3>
-      <h4>Platform ID: {data.platformId}</h4>
-      <h4>Strategy Type ID: {data.strategyTypeId}</h4>
-      <h4>Safety Score: {data.safetyScore}</h4>
+    <div className={styles.opportunity} key={id}>
+      <div className={styles.safetyYield}>
+        <div className={styles.safety}>
+          <img src={safetyRankHigh} loading="lazy" alt="" className={styles.safetyVector} />
+        </div>
+        <div className={styles.yield}>
+          <div className={styles.text}>{`${apyPercentage}%`}</div>
+          <div className={styles.yieldLabel}>APY</div>
+        </div>
+      </div>
+      <div className={styles.icon}>
+        <TokenImage symbol={assets[0]} />
+      </div>
+      <div className={styles.description}>
+        <div className={styles.tokenName}>{`${assets.join(', ')}`}</div>
+        <div className={styles.protocolDetails}>
+          <div className={styles.text}>{`${platformId}・${strategyTypeId}`}</div>
+        </div>
+      </div>
     </div>
   );
 };

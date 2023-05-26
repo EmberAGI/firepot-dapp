@@ -1,0 +1,38 @@
+.iconWrapper {
+  position: relative;
+}
+
+.icon-vector {
+  width: 59.8156px;
+  height: 59.8148px;
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+  object-fit: cover;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+.iconPlaceholder {
+  width: 59.8156px;
+  height: 59.8148px;
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+  object-fit: cover;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  background: linear-gradient(90deg, #f2f2f2 25%, #d9d9d9 50%, #f2f2f2 75%);
+  background-size: 300% 100%;
+  background-position: 100% 0;
+  animation: pulse 1.5s ease-in-out infinite;
+  border-radius: 20%;
+}
+
+@keyframes pulse {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: 0% 0;
+  }
+}
