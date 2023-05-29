@@ -4,6 +4,7 @@ import styles from "./Opportunity.module.css";
 import safetyRankHigh from './safetyRankHigh.svg';
 import TokenImage from '../../components/TokenImage/TokenImage';
 import { BeefyVault, BeefyVaultDepositButton, BeefyVaultWithdrawButton } from '../Contracts/BeefyVault';
+import { ChainData } from '../Contracts/BeefyVault/reads';
 
 const getAssetImage = (platformId: string, strategyTypeId: string) => {
   // Placeholder function: replace this with real image fetching logic.
@@ -12,9 +13,10 @@ const getAssetImage = (platformId: string, strategyTypeId: string) => {
 
 type OpportunityProps = {
   data: OpportunityData;
+  chainData: ChainDataElem;
 };
 
-const Opportunity: React.FC<OpportunityProps> = ({ data: { id, apy, assets, platformId, strategyTypeId, safetyRank, vaultAddress, tokenDecimals } }) => {
+const Opportunity: React.FC<OpportunityProps> = ({ data: { id, apy, assets, platformId, strategyTypeId, safetyRank, vaultAddress, tokenDecimals }, chainData }) => {
   const apyPercentage = (apy * 100).toFixed(2);
 
   return (
@@ -38,7 +40,7 @@ const Opportunity: React.FC<OpportunityProps> = ({ data: { id, apy, assets, plat
         </div>
       </div>
       {/* TODO(AVK): Get actual maxDeposit={tokenBalance} maxWithdrawal={vaultTokenBalance} */}
-      <BeefyVault vaultAddress={vaultAddress} tokenDecimals={tokenDecimals} maxDeposit={1n} maxWithdrawal={0n}/>
+      <BeefyVault vaultAddress={vaultAddress} tokenDecimals={tokenDecimals} chainData={chainData} />
     </div>
   );
 };
