@@ -2,6 +2,7 @@ import { useNetwork } from 'wagmi';
 import { useBeefyVaultDeposit, useBeefyVaultWithdraw, usePrettyBigInt } from './hooks';
 import { ConnectWallet } from '../../ConnectWallet';
 import React from 'react';
+import { ChainData } from './reads';
 
 export function BeefyVaultDepositButton({ amount, contractAddress }: { amount: bigint; contractAddress: `0x${string}` }) {
   const { chain } = useNetwork();
@@ -18,13 +19,11 @@ export function BeefyVaultWithdrawButton({ amount, contractAddress }: { amount: 
 export function BeefyVault({
   vaultAddress,
   tokenDecimals,
-  maxDeposit,
-  maxWithdrawal,
+  chainData,
 }: {
   vaultAddress: `0x${string}`;
   tokenDecimals: number;
-  maxDeposit: bigint;
-  maxWithdrawal: bigint;
+  chainData: ChainData;
 }) {
   const { chain } = useNetwork();
   const { amount: depositAmount, formVal: depositFormVal, setFormVal: setDepositFormVal } = usePrettyBigInt(tokenDecimals);
@@ -38,7 +37,7 @@ export function BeefyVault({
         Deposit Amount:{' '}
         <input name='Deposit Amount' placeholder='0.00' value={depositFormVal} type='text' onChange={(e) => setDepositFormVal(e.target.value)} />
         <div>
-          <button onClick={() => setDepositFormVal(maxDeposit)}>Max</button>
+          <button onClick={() => setDepositFormVal(chainData.depositTokenBalance)}>Max</button>
         </div>
       </label>
       <BeefyVaultDepositButton amount={depositAmount} contractAddress={vaultAddress} />

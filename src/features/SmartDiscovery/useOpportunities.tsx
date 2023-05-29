@@ -84,7 +84,9 @@ const useOpportunityData = (options?: UseOpportunitiesOptions) => {
             strategyTypeId: opportunity.strategyTypeId,
             safetyScore: `${safetyScoreRank}, ${safetyScoreNum}`,
             vaultAddress: opportunity.earnContractAddress,
+            depositTokenAddress: opportunity.tokenAddress,
             tokenDecimals: opportunity.tokenDecimals,
+            chain: opportunity.chain
           };
         });
 
