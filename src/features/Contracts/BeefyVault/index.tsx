@@ -1,10 +1,20 @@
 import { erc20ABI, useAccount, useContractReads, useNetwork } from 'wagmi';
-import { useBeefyVaultDeposit, useBeefyVaultWithdraw, usePrettyBigInt, useTokenApprove } from './hooks';
+import { useBeefyVaultDeposit, useBeefyVaultWithdraw, usePrettyBigInt, useTokenAllowance, useTokenApprove } from './hooks';
 import { ConnectWallet } from '../../ConnectWallet';
 import React, { useMemo, useState } from 'react';
 import { TokenBalanceElem } from './reads';
 
-export function BeefyVaultDepositButton({ allowed, amount, contractAddress, depositTokenAddress }: { allowed: boolean; amount: bigint; contractAddress: `0x${string}`; depositTokenAddress: `0x${string}` }) {
+export function BeefyVaultDepositButton({
+  allowed,
+  amount,
+  contractAddress,
+  depositTokenAddress,
+}: {
+  allowed: boolean;
+  amount: bigint;
+  contractAddress: `0x${string}`;
+  depositTokenAddress: `0x${string}`;
+}) {
   const { chain } = useNetwork(); // TODO: Maybe make requiredChainId this an argument later? if chainId matches required chainId, then we are good. Else, return change network button
   const { write: writeDeposit } = useBeefyVaultDeposit(amount, { contractAddress, chainId: chain?.id! });
   const { write: writeTokenApprove } = useTokenApprove({ spender: contractAddress, amount, tokenAddress: depositTokenAddress });
@@ -34,39 +44,7 @@ export function BeefyVault({
   const { amount: depositAmount, formVal: depositFormVal, setFormVal: setDepositFormVal } = usePrettyBigInt(tokenDecimals);
   const { amount: withdrawalAmount, formVal: withdrawalFormVal, setFormVal: setWithdrawalFormVal } = usePrettyBigInt(18); // beefy vaults are hardcoded 18 decimals
   const [formTouched, setFormTouched] = useState(false);
-
-  const { data: tokenAllowanceData } = useContractReads({
-    contracts: [
-      // vault allowance
-      {
-        abi: erc20ABI,
-        address: vaultAddress,
-        functionName: 'allowance',
-        args: [userAddress!, vaultAddress],
-        chainId: chain?.id,
-      },
-      // depositToken allowance
-      {
-        abi: erc20ABI,
-        address: depositTokenAddress,
-        functionName: 'allowance',
-        args: [userAddress!, vaultAddress],
-        chainId: chain?.id,
-      },
-    ],
-    enabled: formTouched && !!userAddress, // hook does not attemp to fetch data until form has been touched
-  });
-  const allowances = useMemo(() => {
-    if (!tokenAllowanceData)
-      return {
-        vaultTokenAllowance: 0n,
-        depositTokenAllowance: 0n,
-      };
-    return {
-      vaultTokenAllowance: !tokenAllowanceData[0].error ? tokenAllowanceData[0].result : 0n,
-      depositTokenAllowance: !tokenAllowanceData[1].error ? tokenAllowanceData[1].result : 0n,
-    };
-  }, [tokenAllowanceData]);
+  const allowances = useTokenAllowance({ enabled: formTouched, vaultAddress, depositTokenAddress });
 
   const handleFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setDepositFormVal(e.target.value);
