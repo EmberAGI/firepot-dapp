@@ -32,20 +32,20 @@ export default function ConnectWalletConfig({ children }: Props) {
       // COMMENTS LEGEND: If there is a list, that is the order in which the networks are used.
       //      If there is a blank line, we default to using the default/public RPC.
       arbitrum, // Alchemy, (Infura paid add-on), Ankr
-      aurora, // Infura
+      //aurora, // Infura
       avalanche, // Infura, Ankr
       bsc, // Ankr
-      canto, //
-      celo, // Infura, Ankr
-      cronos, //
+      //canto, //
+      //celo, // Infura, Ankr
+      //cronos, //
       fantom, // Ankr
       mainnet, // Alchemy
-      metis, // Ankr
-      moonbeam, // Ankr
-      moonriver, //
+      //metis, // Ankr
+      //moonbeam, // Ankr
+      //moonriver, //
       optimism, // Alchemy, (Infura paid add-on)
       polygon, // Alchemy, (Infura paid add-on)
-      zkSync, //
+      //zkSync, //
       // fuse,        TODO(AVK): Not urgent. Create custom chain
       // kava,        TODO(AVK): Not urgent. Create custom chain
       // emerald,     TODO(AVK): Not urgent. Create custom chain
