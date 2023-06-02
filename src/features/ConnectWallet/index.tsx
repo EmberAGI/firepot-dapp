@@ -27,7 +27,7 @@ import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
 type Props = { children: JSX.Element | JSX.Element[] };
 
 export default function ConnectWalletConfig({ children }: Props) {
-  const { chains, publicClient } = configureChains(
+  const { chains, publicClient, webSocketPublicClient } = configureChains(
     [
       // COMMENTS LEGEND: If there is a list, that is the order in which the networks are used.
       //      If there is a blank line, we default to using the default/public RPC.
@@ -90,6 +90,8 @@ export default function ConnectWalletConfig({ children }: Props) {
     autoConnect: true,
     connectors,
     publicClient,
+    webSocketPublicClient,
+    // TODO: What does this do? storage: createStorage({ storage: window.localStorage }),
   });
 
   return (
