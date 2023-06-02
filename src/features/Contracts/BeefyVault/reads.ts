@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { ContractFunctionConfig } from 'viem';
 import { arbitrum, aurora, avalanche, bsc, canto, celo, cronos, fantom, metis, moonbeam, moonriver, optimism, polygon, zkSync } from 'wagmi/chains';
 
-function mapChain(chain: string): number | undefined {
+function mapChain(chain: string): number | null {
   switch (chain) {
     // case 'emerald': return 42262;
     // case 'fuse': return 122;
@@ -40,7 +40,7 @@ function mapChain(chain: string): number | undefined {
     case 'zksync':
       return zkSync.id;
   }
-  return undefined;
+  return null;
 }
 
 type MultichainContractFunctionsConfig = ContractFunctionConfig & { chainId: number };
@@ -53,9 +53,9 @@ function packContractCalls({
   userAddress: `0x${string}`;
   vaultAddress: `0x${string}`;
   depositTokenAddress: `0x${string}`;
-  chainId: number | undefined;
+  chainId: number | null;
 }): MultichainContractFunctionsConfig[] {
-  if (chainId == undefined) chainId = 0; // forces a fail, but does not change array size from the opportunityData size
+  if (!chainId) chainId = 0; // forces a fail, but does not change array size from the opportunityData size
   return [
     // vault balance
     {
@@ -63,14 +63,6 @@ function packContractCalls({
       address: vaultAddress,
       functionName: 'balanceOf',
       args: [userAddress],
-      chainId,
-    },
-    // vault allowance
-    {
-      abi: erc20ABI,
-      address: vaultAddress,
-      functionName: 'allowance',
-      args: [userAddress, vaultAddress],
       chainId,
     },
     // depositToken balance
@@ -81,34 +73,20 @@ function packContractCalls({
       args: [userAddress],
       chainId,
     },
-    // depositToken allowance
-    {
-      abi: erc20ABI,
-      address: depositTokenAddress,
-      functionName: 'allowance',
-      args: [userAddress, vaultAddress],
-      chainId,
-    },
   ];
 }
 
-export type ChainData =
-  | {
-      vaultTokenBalance: bigint;
-      vaultTokenAllowance: bigint;
-      depositTokenBalance: bigint;
-      depositTokenAllowance: bigint;
-    }[]
-  | null;
-
-export type ChainDataElem = {
+export type TokenBalances = TokenBalanceElem[] | null;
+export type TokenBalanceElem = {
   vaultTokenBalance: bigint;
-  vaultTokenAllowance: bigint;
   depositTokenBalance: bigint;
-  depositTokenAllowance: bigint;
 };
-export function useChainData(opportunityData: OpportunityData[]): ChainData {
-  const [chainData, setChainData] = useState<ChainData>(null);
+export const defaultTokenBalance: TokenBalanceElem = {
+    vaultTokenBalance: 0n,
+    depositTokenBalance: 0n
+}
+export function useChainData(opportunityData: OpportunityData[]): TokenBalances {
+  const [chainData, setChainData] = useState<TokenBalances>(null);
   const { address } = useAccount();
   useEffect(() => {
     async function getDatData() {
@@ -122,26 +100,29 @@ export function useChainData(opportunityData: OpportunityData[]): ChainData {
           chainId: mapChain(opportunity.chain),
         }),
       );
-      console.log(opportunityData.length * 4);
-      console.log(contractReadConfig.length);
 
       const data = await readContracts({
         contracts: contractReadConfig as any[],
-        batchSize: 0, // disables size limit
+        batchSize: 100000, // disables size limit
       });
-      console.log(data.length);
 
       setChainData(
-        data.reduce((reducer, _, index) => {
-          if (index % 4 != 0) return reducer;
-          reducer[index / 4] = {
-            vaultTokenBalance: !data[index].error && data[index].result,
-            vaultTokenAllowance: !data[index + 1].error && data[index + 1].result,
-            depositTokenBalance: !data[index + 2].error &&  data[index + 2].result,
-            depositTokenAllowance: !data[index + 3].error &&  data[index + 3].result,
-          };
-          return reducer;
-        }, new Array(data.length / 4).fill(0n)),
+        data.reduce(
+          (reducer, _, index) => {
+            if (index % 4 != 0) return reducer;
+            reducer[index / 4] = {
+              vaultTokenBalance: !data[index].error && data[index].result,
+              vaultTokenAllowance: !data[index + 1].error && data[index + 1].result,
+              depositTokenBalance: !data[index + 2].error && data[index + 2].result,
+              depositTokenAllowance: !data[index + 3].error && data[index + 3].result,
+            };
+            return reducer;
+          },
+          new Array(data.length / 4).fill({
+            vaultTokenBalance: 0n,
+            depositTokenBalance: 0n,
+          }),
+        ),
       );
     }
     getDatData();

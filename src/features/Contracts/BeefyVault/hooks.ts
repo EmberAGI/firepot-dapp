@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { beefyVaultABI } from '../../../generated.ts';
-import { useContractWrite, usePrepareContractWrite } from 'wagmi';
+import { erc20ABI, useContractWrite, usePrepareContractWrite } from 'wagmi';
 
 type BeefyVaultConfig = {
   contractAddress: `0x${string}`;
@@ -24,6 +24,16 @@ export function useBeefyVaultWithdraw(amount: bigint, { contractAddress, chainId
     functionName: 'withdraw',
     chainId,
     args: [amount],
+  });
+  return useContractWrite(config);
+}
+
+export function useTokenApprove({ spender, amount, tokenAddress }: { spender: `0x${string}`; amount: bigint; tokenAddress: `0x${string}` }) {
+  const { config } = usePrepareContractWrite({
+    abi: erc20ABI,
+    address: tokenAddress,
+    functionName: 'approve',
+    args: [spender, amount],
   });
   return useContractWrite(config);
 }
@@ -79,7 +89,7 @@ export function usePrettyBigInt(decimalPlaces: number) {
       unsafeSetFormVal(safeAmountChange(val, formVal, decimalPlaces));
     }
     if (typeof val == 'bigint') {
-        unsafeSetFormVal(formatBigInt(val, decimalPlaces));
+      unsafeSetFormVal(formatBigInt(val, decimalPlaces));
     }
   };
 
