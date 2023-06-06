@@ -33,6 +33,10 @@ export type OpportunityData = {
   platformId: string;
   strategyTypeId: string;
   safetyRank: SafetyRank;
+  vaultAddress: `0x${string}`;
+  depositTokenAddress: `0x${string}`;
+  tokenDecimals: number;
+  chain: string;
 };
 
 export type SafetyRank = 'low' | 'medium' | 'high';
