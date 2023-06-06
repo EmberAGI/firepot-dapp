@@ -1,8 +1,10 @@
-import { erc20ABI, useAccount, useContractReads, useNetwork } from 'wagmi';
-import { useBeefyVaultDeposit, useBeefyVaultWithdraw, usePrettyBigInt, useTokenAllowance, useTokenApprove } from './hooks';
+import { useNetwork } from 'wagmi';
+import { useBeefyVaultDeposit, useBeefyVaultWithdraw } from './hooks';
+import { useTokenApprove, useTokenAllowance } from '../hooks';
 import { ConnectWallet } from '../../ConnectWallet';
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import { TokenBalanceElem } from './reads';
+import { useSafeBigIntForms } from '../../../lib/hooks/useSafeBigIntForms';
 
 export function BeefyVaultDepositButton({
   allowed,
@@ -40,9 +42,8 @@ export function BeefyVault({
   tokenBalances: TokenBalanceElem;
 }) {
   const { chain } = useNetwork();
-  const { address: userAddress } = useAccount();
-  const { amount: depositAmount, formVal: depositFormVal, setFormVal: setDepositFormVal } = usePrettyBigInt(tokenDecimals);
-  const { amount: withdrawalAmount, formVal: withdrawalFormVal, setFormVal: setWithdrawalFormVal } = usePrettyBigInt(18); // beefy vaults are hardcoded 18 decimals
+  const { amount: depositAmount, formVal: depositFormVal, setFormVal: setDepositFormVal } = useSafeBigIntForms(tokenDecimals);
+  const { amount: withdrawalAmount, formVal: withdrawalFormVal, setFormVal: setWithdrawalFormVal } = useSafeBigIntForms(18); // beefy vaults are hardcoded 18 decimals
   const [formTouched, setFormTouched] = useState(false);
   const allowances = useTokenAllowance({ enabled: formTouched, vaultAddress, depositTokenAddress });
 
