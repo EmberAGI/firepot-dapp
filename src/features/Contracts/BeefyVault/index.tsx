@@ -39,7 +39,7 @@ export function BeefyVault({
   vaultAddress: `0x${string}`;
   depositTokenAddress: `0x${string}`;
   tokenDecimals: number;
-  tokenBalances: TokenBalanceElem;
+  tokenBalances: TokenBalanceElem | null;
 }) {
   const { chain } = useNetwork();
   const { amount: depositAmount, formVal: depositFormVal, setFormVal: setDepositFormVal } = useSafeBigIntForms(tokenDecimals);
@@ -58,11 +58,11 @@ export function BeefyVault({
       <label>
         Deposit Amount: <input name='Deposit Amount' placeholder='0.00' value={depositFormVal} type='text' onChange={(e) => handleFormChange(e)} />
         <div>
-          <button onClick={() => setDepositFormVal(tokenBalances.depositTokenBalance)}>Max</button>
+          <button onClick={() => setDepositFormVal(tokenBalances?.depositTokenBalance ?? BigInt(0))}>Max</button>
         </div>
       </label>
       <BeefyVaultDepositButton
-        allowed={allowances.vaultTokenAllowance >= tokenBalances.vaultTokenBalance}
+        allowed={allowances.vaultTokenAllowance >= (tokenBalances?.vaultTokenBalance ?? BigInt(0))}
         amount={depositAmount}
         contractAddress={vaultAddress}
         depositTokenAddress={depositTokenAddress}
@@ -77,11 +77,11 @@ export function BeefyVault({
           onChange={(e) => setWithdrawalFormVal(e.target.value)}
         />
         <div>
-          <button onClick={() => setWithdrawalFormVal(tokenBalances.vaultTokenBalance)}>Max</button>
+          <button onClick={() => setWithdrawalFormVal(tokenBalances?.vaultTokenBalance ?? BigInt(0))}>Max</button>
         </div>
       </label>
       <BeefyVaultWithdrawButton
-        allowed={allowances.depositTokenAllowance >= tokenBalances.depositTokenBalance}
+        allowed={allowances.depositTokenAllowance >= (tokenBalances?.depositTokenBalance ?? BigInt(0))}
         amount={withdrawalAmount}
         contractAddress={vaultAddress}
       />

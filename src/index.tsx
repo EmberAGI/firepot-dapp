@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import './App.css'
 import { useChainData, defaultTokenBalance } from './features/Contracts/BeefyVault/reads';
 import Opportunity from './features/SmartDiscovery/Opportunity';
@@ -27,8 +28,10 @@ export default function Home() {
 
   return (
       <div className='opportunities'>
-        {limitedOpportunities.map((vaultData, index) => (
-          <Opportunity key={index} data={vaultData} tokenBalances={!tokenBalances ? defaultTokenBalance : tokenBalances[index]} />
+        {limitedOpportunities.map((opportunity, index) => (
+          <Link to={`/opportunities/${opportunity.id}`} state={{ opportunity: opportunity, tokenBalances: !tokenBalances ? defaultTokenBalance : tokenBalances[index] }} >
+            <Opportunity key={index} data={opportunity} />
+          </Link>
         ))}
       </div>
   );

@@ -13,10 +13,10 @@ const getAssetImage = (platformId: string, strategyTypeId: string) => {
 
 type OpportunityProps = {
   data: OpportunityData;
-  tokenBalances: TokenBalanceElem | null;
 };
 
-const Opportunity: React.FC<OpportunityProps> = ({ data: { id, apy, assets, platformId, strategyTypeId, safetyRank, vaultAddress, tokenDecimals }, tokenBalances }) => {
+const Opportunity: React.FC<OpportunityProps> = ({ data }) => {
+  const { id, apy, assets, platformId, strategyTypeId, safetyRank, vaultAddress, tokenDecimals } = data;
   const apyPercentage = (apy * 100).toFixed(2);
 
   return (
@@ -39,8 +39,6 @@ const Opportunity: React.FC<OpportunityProps> = ({ data: { id, apy, assets, plat
           <div className={styles.text}>{`${platformId}・${strategyTypeId}`}</div>
         </div>
       </div>
-      {/* TODO(AVK): Get actual maxDeposit={tokenBalance} maxWithdrawal={vaultTokenBalance} */}
-      <BeefyVault vaultAddress={vaultAddress} tokenDecimals={tokenDecimals} tokenBalances={tokenBalances} />
     </div>
   );
 };
