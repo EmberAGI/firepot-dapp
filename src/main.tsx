@@ -6,7 +6,7 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
-import OpportunityDetails from './features/OpportunityDetails/OpportunityDetails.tsx';
+import YieldVaultDetails from './features/YieldVaultDetails/components/yieldVaultDetails.tsx';
 
 const router = createBrowserRouter([
   {
@@ -15,7 +15,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/opportunities/:id",
-    element: <OpportunityDetails />,
+    element: <YieldVaultDetails />,
   },
 ]);
 

@@ -1,0 +1,126 @@
+.yield-vault-card {
+    width: 100%;
+    grid-column-gap: 8px;
+    grid-row-gap: 8px;
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+    background-color: #fff;
+    border-radius: 24px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 12px 16px;
+    display: flex;
+  }
+
+  .yield-vault-header {
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    display: flex;
+  }
+
+  .return-risk-element {
+    grid-column-gap: 6px;
+    grid-row-gap: 6px;
+    flex: 0 auto;
+    justify-content: flex-end;
+    align-items: center;
+    display: flex;
+  }
+
+  .return-label {
+    grid-column-gap: 10px;
+    grid-row-gap: 10px;
+    flex: 0 auto;
+    justify-content: flex-end;
+    align-items: center;
+    display: flex;
+  }
+  
+  .return-label-text {
+    color: #4e4e4e;
+    text-align: right;
+    font-size: 9px;
+    font-weight: 500;
+  }
+  
+  .return-risk-chip {
+    grid-column-gap: 4px;
+    grid-row-gap: 4px;
+    background-color: rgba(48, 177, 115, .8);
+    border-radius: 11px;
+    flex: 0 auto;
+    justify-content: center;
+    align-items: center;
+    padding: 4px 6px;
+    display: flex;
+  }
+
+  .return-text-0 {
+    color: #fff;
+    text-align: right;
+    font-size: 16px;
+    font-weight: 600;
+  }
+  
+  .return-text-1 {
+    color: #fff;
+    text-align: right;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .yield-vault-headline {
+    width: 100%;
+    grid-column-gap: 8px;
+    grid-row-gap: 8px;
+    justify-content: flex-start;
+    align-items: flex-end;
+    display: flex;
+  }
+
+  .frame-46 {
+    width: 100%;
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    display: flex;
+  }
+
+  .frame-2608175 {
+    width: 100%;
+    grid-column-gap: 10px;
+    grid-row-gap: 10px;
+    justify-content: flex-start;
+    align-items: flex-start;
+    display: flex;
+  }
+
+  .text-3 {
+    color: #4e4e4e;
+    font-size: 11px;
+    font-weight: 500;
+  }
+
+  .chain-airdao {
+    grid-column-gap: 4px;
+    grid-row-gap: 4px;
+    background-color: rgba(0, 0, 0, .08);
+    border-radius: 9px;
+    flex: 0 auto;
+    justify-content: center;
+    align-items: flex-end;
+    padding: 2px 4px;
+    display: flex;
+  }
+
+  .text-4 {
+    color: #4e4e4e;
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 9px;
+    font-weight: 600;
+  }
