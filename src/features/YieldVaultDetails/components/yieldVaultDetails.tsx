@@ -5,6 +5,7 @@ import { BeefyVault } from '../Contracts/BeefyVault';
 import { TokenBalanceElem } from '../../Contracts/BeefyVault/reads';
 import YieldVaultCard from "./yieldVaultCard";
 import DepositAssetCard from "./depositAssetCard";
+import { useEffect, useState } from "react";
 
 type LocationState = {
     opportunity: OpportunityData;
@@ -12,7 +13,7 @@ type LocationState = {
 }
 
 export default function OpportunityDetails(): JSX.Element {
-    const location = useLocation();
+  const location = useLocation();
   const { opportunity, tokenBalances } = location.state as LocationState;
   const {
     id,
@@ -26,6 +27,14 @@ export default function OpportunityDetails(): JSX.Element {
     tokenDecimals,
     chain,
   } = opportunity;
+
+const [tokenPrice, setTokenPrice] = useState(0);
+    useEffect(()=>{
+        const fetchTokenPrice = async () => {
+        setTokenPrice(1);
+        }
+        fetchTokenPrice();
+    },[]);
 
 /* TODO(AVK): Get actual maxDeposit={tokenBalance} maxWithdrawal={vaultTokenBalance}
       <BeefyVault vaultAddress={vaultAddress} tokenDecimals={tokenDecimals} tokenBalances={tokenBalances} depositTokenAddress={depositTokenAddress} /> */
@@ -54,7 +63,7 @@ export default function OpportunityDetails(): JSX.Element {
               <div className={styles.frame2608175}>
                   <div className={styles.sectionLabelText}>Deposit Asset</div>
               </div>
-            <DepositAssetCard />
+            <DepositAssetCard price={tokenPrice} tokenDecimals={tokenDecimals} depositTokenBalance={tokenBalances && tokenBalances.depositTokenBalance} />
           </div>
       </div>
       <div className={styles.actions}>
