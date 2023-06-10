@@ -1,7 +1,5 @@
 .deposit-asset-card {
-    width: 100%;
-    grid-column-gap: 8px;
-    grid-row-gap: 8px;
+    row-gap: 8px;
     -webkit-backdrop-filter: blur(20px);
     backdrop-filter: blur(20px);
     background-color: #fff;

@@ -1,7 +1,5 @@
 .yield-vault-card {
-    width: 100%;
-    grid-column-gap: 8px;
-    grid-row-gap: 8px;
+    row-gap: 8px;
     -webkit-backdrop-filter: blur(20px);
     backdrop-filter: blur(20px);
     background-color: #fff;
@@ -88,6 +86,18 @@
     justify-content: center;
     align-items: flex-start;
     display: flex;
+  }
+
+  .token-name-2 {
+    color: #373737;
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  .text-2 {
+    color: #4e4e4e;
+    font-size: 13px;
+    font-weight: 600;
   }
 
   .frame-2608175 {
