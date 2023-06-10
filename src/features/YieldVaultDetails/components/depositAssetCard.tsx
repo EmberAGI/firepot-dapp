@@ -1,44 +1,21 @@
-import { useEffect, useMemo } from 'react';
-import { formatBigInt, useSafeBigIntForms } from '../../../lib/hooks/useSafeBigIntForms';
+import { formatBigInt } from '../../../lib/hooks/useSafeBigIntForms';
 import styles from './depositAssetCard.module.css';
 
 export default function DepositAssetCard({
-  tokenDecimals,
+  amount,
+  usdAmount,
+  setUsd,
+  setMax,
   depositTokenBalance,
-  price,
+  tokenDecimals,
 }: {
-  tokenDecimals: number;
+  amount: string;
+  usdAmount: string;
+  setUsd: (input: bigint | string) => void;
+  setMax: () => void;
   depositTokenBalance: bigint | null;
-  price: number | null;
+  tokenDecimals: number;
 }): JSX.Element {
-  // fetch price
-  const { formVal: formattedAmount, setFormVal: setTokenAmount } = useSafeBigIntForms(tokenDecimals);
-
-  function setMax() {
-    if (!price || !depositTokenBalance) return;
-    // 1. bigint amount is set equal to depositTokenBalance
-    //  a) bigint amount is parsed to formattedAmount based on tokenDecimals
-    //  b) formattedAmount is used as the numerator
-    setTokenAmount(depositTokenBalance);
-    // USD should react accordingly
-  }
-
-  function setUsd(input: string) {
-    if (!price || isNaN(Number(input)) || (input.split('.').length > 1 && input.split('.')[1].length > tokenDecimals)) return;
-      //console.log(price);
-    // 1. formattedAmount = string(usd / price)
-    setTokenAmount((parseFloat(input) / price).toString());
-    // USD should react accordingly
-  }
-
-  const usdAmount = useMemo(() => {
-    if (!price || !formattedAmount) return;
-    return (parseFloat(formattedAmount) * price).toFixed(2);
-  }, [formattedAmount, price]);
-
-  useEffect(()=>console.log(usdAmount),[usdAmount]);
-
-  ////// USER INPUTS IN USD
   return (
     <div className={styles.depositAssetCard}>
       <div className={styles.depositElement}>
@@ -51,15 +28,14 @@ export default function DepositAssetCard({
           className={styles.vectorsWrapper13}
         />
         <div className={styles.depositAmountInput}>
-          <div className={styles.maxButton}>
+          <button className={styles.maxButton}>
             <div className={styles.buttonText} onClick={() => setMax()}>
               MAX
             </div>
-          </div>
+          </button>
           <input
             type='text'
-            placeholder={"0.00"}
-            style={{ textAlign: 'right' }} // TODO: TOM CHANGE TO CSS
+            placeholder={'0.00'}
             onChange={(e) => setUsd(e.target.value)}
             value={usdAmount}
           />
@@ -76,7 +52,7 @@ export default function DepositAssetCard({
         <div className={styles.tokenName3}>Bitcoin</div>
         <div className={styles.returnText}>
           <div className={`${styles.returnText} ${styles.tokenBalanceText0}`}>
-            <span className={styles.tokenBalanceText0}>{formattedAmount}</span>
+            <span className={styles.tokenBalanceText0}>{amount}</span>
             <span className={styles.tokenBalanceText1}> / </span>
             <span className={styles.tokenBalanceText2}>{formatBigInt(depositTokenBalance ? depositTokenBalance : 0n, tokenDecimals)} BTC</span>
           </div>
