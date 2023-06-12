@@ -1,5 +1,5 @@
 import styles from './yieldVaultDetails.module.css';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { OpportunityData } from '../../SmartDiscovery/types';
 import { BeefyVault } from '../Contracts/BeefyVault';
 import { TokenBalanceElem } from '../../Contracts/BeefyVault/reads';
@@ -17,6 +17,7 @@ type LocationState = {
 
 export default function OpportunityDetails(): JSX.Element {
   const location = useLocation();
+  const navigate = useNavigate();
   const { opportunity, tokenBalances } = location.state as LocationState;
   const { id, apy, assets, platformId, strategyTypeId, safetyRank, vaultAddress, depositTokenAddress, tokenDecimals, chain: chainName } = opportunity;
 
@@ -39,6 +40,7 @@ export default function OpportunityDetails(): JSX.Element {
   return (
     <div className={styles.yieldVaultDetails}>
       <div className={styles.header3}>
+        <button className={styles.backButton} onClick={() => navigate(-1)}>
         <img
           src='https://uploads-ssl.webflow.com/6467c70a7fa40ab490fb689c/64827a43ae7fb3f99ecc5dd7_Vectors-Wrapper.svg'
           loading='lazy'
@@ -47,6 +49,7 @@ export default function OpportunityDetails(): JSX.Element {
           alt=''
           className={styles.vectorsWrapper8}
         />
+        </button>
         <div className={styles.headerContent}>
           <div className={styles.headerTitle}>Yield Vault</div>
         </div>
