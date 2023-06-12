@@ -19,7 +19,12 @@ const router = createBrowserRouter([
   },
   {
     path: '/opportunities/:id',
-    element: <YieldVaultDetails />,
+    element: (
+      <>
+        <Header />
+        <YieldVaultDetails />
+      </>
+    ),
   },
 ]);
 
