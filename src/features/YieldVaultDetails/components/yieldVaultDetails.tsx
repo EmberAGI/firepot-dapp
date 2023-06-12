@@ -56,7 +56,7 @@ export default function OpportunityDetails(): JSX.Element {
         <div className={styles.vectorsWrapper9}></div>
       </div>
       <div className={styles.bodyContent}>
-        <YieldVaultCard />
+        <YieldVaultCard tokenName={`${assets.join(', ')}`} platform={platformId} vaultYield={apy} />
         <div className={styles.totalDepositSection}>
           <div className={styles.totalDepositContent}>
             <div className={styles.sectionLabelText}>Total Deposit</div>
