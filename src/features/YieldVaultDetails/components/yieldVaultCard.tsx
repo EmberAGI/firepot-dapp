@@ -25,7 +25,7 @@ export default function YieldVaultCard(): JSX.Element {
                 </div>
             </div>
         </div>
-        <div className={styles.yieldVaultHeadline}>
+        {/*<div className={styles.yieldVaultHeadline}>
             <div className={styles.frame46}>
                 <div className={styles.yieldVaultHeadline}>
                     <div className={styles.frame2608175}>
@@ -36,7 +36,7 @@ export default function YieldVaultCard(): JSX.Element {
                     </div>
                 </div>
             </div>
-        </div>
+  </div>*/}
     </div>
   );
 }

@@ -27,23 +27,22 @@ export default function DepositAssetCard({
           alt=''
           className={styles.vectorsWrapper13}
         />
-        <div className={styles.depositAmountInput}>
-          <button className={styles.maxButton}>
-            <div className={styles.buttonText} onClick={() => setMax()}>
+        <div className={styles.depositAmountInputWrapper}>
+          <button className={styles.maxButton} onClick={() => setMax()}>
+            <div className={styles.buttonText}>
               MAX
             </div>
           </button>
           <input
-            type='text'
+            className={styles.depositAmountInput}
+            type='number'
             placeholder={'0.00'}
             onChange={(e) => setUsd(e.target.value)}
             value={usdAmount}
           />
           <div className={styles.returnText}>
             <div className={`${styles.returnText} ${styles.depositAmountText0}`}>
-              {/* <span className={styles.depositAmountText0}>{usdAmount}</span>
-                            <span className={styles.depositAmountText1}> </span> */}
-              <span className={styles.depositAmountText2}>USD</span>
+            USD
             </div>
           </div>
         </div>
@@ -58,7 +57,7 @@ export default function DepositAssetCard({
           </div>
         </div>
       </div>
-      <div className={styles.depositAmountBar}>
+      {/*<div className={styles.depositAmountBar}>
         <div className={styles.bar}>
           <img
             src='https://uploads-ssl.webflow.com/6467c70a7fa40ab490fb689c/64827a47764d189352a3459b_Vectors-Wrapper.svg'
@@ -69,7 +68,7 @@ export default function DepositAssetCard({
             className={styles.vectorsWrapper14}
           />
         </div>
-      </div>
+      </div>*/}
     </div>
   );
 }
