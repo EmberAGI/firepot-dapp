@@ -27,8 +27,8 @@ export default function Dashboard() {
   return (
       <div className='opportunities'>
         {limitedOpportunities.map((opportunity, index) => (
-          <Link to={`/opportunities/${opportunity.id}`} state={{ opportunity: opportunity, tokenBalances: tokenBalances && tokenBalances[index] }} >
-            <Opportunity key={index} data={opportunity} />
+          <Link key={index} to={`/opportunities/${opportunity.id}`} state={{ opportunity: opportunity, tokenBalances: tokenBalances && tokenBalances[index] }} >
+            <Opportunity data={opportunity} />
           </Link>
         ))}
       </div>
