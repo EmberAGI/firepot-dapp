@@ -1,11 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
+import './index.scss';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import YieldVaultDetails from './features/YieldVaultDetails/components/yieldVaultDetails.tsx';
 import ConnectWalletConfig from './features/ConnectWallet';
 import Header from './components/Header/index.tsx';
-import Dashboard from './dashboard.tsx';
+import Dashboard from './pages/dashboard.tsx';
+import Welcome from './pages/welcome.tsx';
 
 const router = createBrowserRouter([
   {
@@ -19,9 +20,11 @@ const router = createBrowserRouter([
   },
   {
     path: '/opportunities/:id',
-    element: (
-      <YieldVaultDetails />
-    ),
+    element: <YieldVaultDetails />,
+  },
+  {
+    path: 'core',
+    element: <Welcome />,
   },
 ]);
 
