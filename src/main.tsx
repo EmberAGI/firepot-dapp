@@ -7,15 +7,16 @@ import ConnectWalletConfig from './features/ConnectWallet';
 import Header from './components/Header/index.tsx';
 import Dashboard from './pages/dashboard.tsx';
 import Welcome from './pages/welcome.tsx';
+import Onboarding from './features/Onboarding/onboarding.tsx';
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: (
-      <>
+      <main className='dashboard'>
         <Header />
         <Dashboard />
-      </>
+      </main>
     ),
   },
   {
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
   {
     path: 'core',
     element: <Welcome />,
+  },
+  {
+    path: 'onboarding',
+    element: <Onboarding />,
   },
 ]);
 

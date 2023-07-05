@@ -1,10 +1,11 @@
-import './styles/welcome.module.scss';
+import styles from './styles/welcome.module.scss';
+import { ReactComponent as FirepotLogo } from '../assets/firepot-logo.svg';
 
 function Welcome() {
+  console.log(styles);
   return (
-    <main>
-      <div>Firepot Logo</div>
-      <h1>Firepot</h1>
+    <main className={styles.welcome}>
+      <FirepotLogo />
     </main>
   );
 }
