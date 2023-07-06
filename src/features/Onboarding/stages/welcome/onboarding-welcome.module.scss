@@ -1,0 +1,22 @@
+.welcome {
+  background-color: var(--bg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  padding: 0 20px 6rem;
+  text-align: center;
+  svg {
+    margin-top: 3rem;
+    width: 50%;
+    max-width: 400px;
+    height: auto;
+  }
+  h1 {
+    font-size: xx-large;
+  }
+  p {
+    margin-top: 0;
+  }
+}
