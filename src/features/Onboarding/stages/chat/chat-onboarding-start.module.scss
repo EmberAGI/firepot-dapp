@@ -1,0 +1,72 @@
+.onboardingStart {
+  background: linear-gradient(180deg, var(--primary) 0%, var(--bg) 100%);
+  padding: 1rem 0rem 0rem 0rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  height: 100%;
+  max-height: 100%;
+  position: relative;
+  top: 0;
+  h1 {
+    color: var(--white);
+    font-size: 1.5rem;
+  }
+
+  p {
+    color: var(--gray);
+    text-align: center;
+    font-size: small;
+  }
+
+  input {
+    background-color: transparent;
+    border: 1px solid var(--primary);
+    padding: 1rem;
+    border-radius: 25px;
+  }
+
+  .transparent {
+    background-color: transparent;
+    border: none;
+  }
+
+  .button {
+    color: var(--primary);
+    font-size: medium !important;
+    padding: 0.2rem 0.5rem 0.2rem !important;
+    margin-top: 0.2rem !important;
+    margin-bottom: 0.3rem !important;
+    flex: 0 0 auto;
+    justify-content: start;
+    align-items: start;
+  }
+
+  .glass {
+    background: transparent;
+    & > div {
+      background: transparent;
+      & > div {
+        background: rgba(255, 255, 255, 0.4) !important;
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1) !important;
+        backdrop-filter: blur(13.3px) !important;
+        -webkit-backdrop-filter: blur(13.3px) !important;
+      }
+    }
+  }
+
+  .container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .carousel {
+    overflow-x: auto;
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-anchor: start;
+    -webkit-overflow-scrolling: touch;
+    -ms-overflow-style: -ms-autohiding-scrollbar;
+  }
+}

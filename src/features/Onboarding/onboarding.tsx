@@ -10,7 +10,7 @@ function Onboarding() {
   useEffect(() => {
     setTimeout(() => {
       setShowWelcome(false);
-      navigate('/onboarding/start');
+      navigate('/onboarding/welcome');
     }, 2000);
   }, []);
 

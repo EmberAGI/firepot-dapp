@@ -1,8 +1,8 @@
 .primary {
-  background-color: var(--primary);
-  border-radius: 20px;
-  width: 100%;
-  padding: 1rem;
-  font-size: medium;
-  font-weight: bold;
+  background-color: var(--primary) !important;
+  border-radius: 30px !important;
+  width: 100% !important;
+  padding: 0.2rem 0.5rem !important;
+  font-size: medium !important;
+  font-weight: bold !important;
 }

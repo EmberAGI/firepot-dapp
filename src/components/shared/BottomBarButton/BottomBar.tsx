@@ -1,9 +1,9 @@
 import style from './bottombar.module.scss';
-import { ReactComponent as Icon } from '../../../assets/ember-icon.svg';
-import { BsChevronRight } from 'react-icons/bs';
+import { ReactComponent as Icon } from '../../../assets/menu-icon.svg';
 import { useNavigate } from 'react-router-dom';
+import Button from '../Button/Button';
 
-export default function BottomBar() {
+export default function BottomBarButton() {
   const navigate = useNavigate();
 
   return (
@@ -12,8 +12,7 @@ export default function BottomBar() {
         <Icon />
       </button>
       <div className={style.box}>
-        <div>Hi, I’m Ember. Click me to create a new wallet and get started.</div>
-        <BsChevronRight className={style.nav} color='var(--primary)' size='36' />
+        <Button text='Register Passkey' buttonType='primary' onClick={() => {}} disabled={false}></Button>
       </div>
     </aside>
   );

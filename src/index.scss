@@ -27,6 +27,11 @@
   --dark: #373737;
   --card: #dadde5;
   --light: #f3f3f3;
+  --darkGray: #666666;
+
+  .cs-message--outgoing {
+    border-radius: 0.7rem 0.7rem 0 0rem;
+  }
 }
 
 body,
