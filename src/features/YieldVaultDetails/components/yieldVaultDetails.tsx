@@ -1,7 +1,6 @@
 import styles from './yieldVaultDetails.module.css';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { OpportunityData } from '../../SmartDiscovery/types';
-import { BeefyVault } from '../Contracts/BeefyVault';
 import { TokenBalanceElem } from '../../Contracts/BeefyVault/reads';
 import YieldVaultCard from './yieldVaultCard';
 import DepositAssetCard from './depositAssetCard';
@@ -9,6 +8,7 @@ import { useEffect, useState } from 'react';
 import { useSafeUsdAmountState } from '../../../lib/hooks/useSafeUsdAmountState';
 import { useBeefyVaultDeposit } from '../../Contracts/BeefyVault/hooks';
 import { useNetwork } from 'wagmi';
+import { formatBigInt } from '../../../lib/hooks/useSafeBigIntForms';
 
 type LocationState = {
   opportunity: OpportunityData;
@@ -19,15 +19,25 @@ export default function OpportunityDetails(): JSX.Element {
   const location = useLocation();
   const navigate = useNavigate();
   const { opportunity, tokenBalances } = location.state as LocationState;
-  const { id, apy, assets, platformId, strategyTypeId, safetyRank, vaultAddress, depositTokenAddress, tokenDecimals, chain: chainName } = opportunity;
+  const {
+    id,
+    addLiquidityUrl,
+    apy,
+    assets,
+    platformId,
+    strategyTypeId,
+    safetyRank,
+    vaultAddress,
+    depositTokenAddress,
+    tokenDecimals,
+    chain: chainName,
+  } = opportunity;
 
-  // TODO: Actual price fetchin method. Will need to know if token is an LP or a straight token
+  // TODO: Actual price fetching method. Will need to know if token is an LP or a straight token
   const [tokenPrice, setTokenPrice] = useState(0);
   useEffect(() => {
-    const fetchTokenPrice = async () => {
-      setTokenPrice(28000);
-    };
-    fetchTokenPrice();
+    //console.log(Number(formatBigInt(BigInt(opportunity.pricePerFullShare), 18)));
+    setTokenPrice(Number(formatBigInt(BigInt(opportunity.pricePerFullShare), 18)));
   }, []);
   const { amount, formattedAmount, usdAmount, setUsd, setMax } = useSafeUsdAmountState({
     price: tokenPrice,
@@ -41,14 +51,14 @@ export default function OpportunityDetails(): JSX.Element {
     <div className={styles.yieldVaultDetails}>
       <div className={styles.header3}>
         <button className={styles.backButton} onClick={() => navigate(-1)}>
-        <img
-          src='https://uploads-ssl.webflow.com/6467c70a7fa40ab490fb689c/64827a43ae7fb3f99ecc5dd7_Vectors-Wrapper.svg'
-          loading='lazy'
-          width='24'
-          height='24'
-          alt=''
-          className={styles.vectorsWrapper8}
-        />
+          <img
+            src='https://uploads-ssl.webflow.com/6467c70a7fa40ab490fb689c/64827a43ae7fb3f99ecc5dd7_Vectors-Wrapper.svg'
+            loading='lazy'
+            width='24'
+            height='24'
+            alt=''
+            className={styles.vectorsWrapper8}
+          />
         </button>
         <div className={styles.headerContent}>
           <div className={styles.headerTitle}>Yield Vault</div>
@@ -91,6 +101,13 @@ export default function OpportunityDetails(): JSX.Element {
             tokenDecimals={tokenDecimals}
           />
         </div>
+      </div>
+      <div className={styles.actions}>
+        <a href={addLiquidityUrl} target='_blank' className={styles.actions}>
+          <button className={styles.primaryButton} disabled={false}>
+            <div className={styles.buttonText2}>Get LP Tokens</div>
+          </button>
+        </a>
       </div>
       <div className={styles.actions}>
         <button className={styles.primaryButton} disabled={false} onClick={() => write?.()}>

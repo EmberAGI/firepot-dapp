@@ -5,7 +5,7 @@ import useOpportunityData from '../features/SmartDiscovery/useOpportunities';
 import { Fragment, useMemo } from 'react';
 import { OpportunityData } from '../features/SmartDiscovery/types';
 
-function OpportunityMap({ positions }: { positions: { opportunity: OpportunityData; tokenBalanceData: TokenBalanceElem }[] }) {
+function OpportunityMap({ positions }: { positions: { opportunity: OpportunityData; tokenBalanceData: TokenBalanceElem | null }[] }) {
   return (
     <div className='opportunities'>
       {positions!.slice(0, 8).map((position, index) => (
@@ -36,7 +36,8 @@ export default function Dashboard() {
       }));
   }, [opportunities, tokenBalances]);
   const filteredOtherPositions = useMemo(() => {
-    if (!opportunities || !tokenBalances) return null;
+    if (!opportunities) return null;
+    if (!tokenBalances) return opportunities.map((opp) => ({opportunity: opp, tokenBalanceData: null}));
     return opportunities
       .filter((_, index) => tokenBalances[index].depositTokenBalance == 0n)
       .map((opp, index) => ({
@@ -57,23 +58,9 @@ export default function Dashboard() {
     return <div>No data available</div>;
   }
 
-  const limitedOpportunities = opportunities.slice(0, 8);
-
-  if (tokenBalances == null) {
-    return (
-      <div className='opportunities'>
-        {limitedOpportunities.map((opportunity, index) => (
-          <Link key={index} to={`/opportunities/${opportunity.id}`} state={{ opportunity: opportunity, tokenBalances: null }}>
-            <Opportunity data={opportunity} />
-          </Link>
-        ))}
-      </div>
-    );
-  }
-
   return (
     <Fragment>
-      {filteredUserPositions!.length > 0 && (
+      {filteredUserPositions != null && filteredUserPositions.length > 0 && (
         <>
           <h1>Your Positions</h1>
           <OpportunityMap positions={filteredUserPositions!} />

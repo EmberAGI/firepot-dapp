@@ -86,6 +86,8 @@ const useOpportunityData = (options?: UseOpportunitiesOptions) => {
             vaultAddress: opportunity.earnContractAddress,
             depositTokenAddress: opportunity.tokenAddress,
             tokenDecimals: opportunity.tokenDecimals,
+            pricePerFullShare: opportunity.pricePerFullShare,
+            addLiquidityUrl: opportunity.addLiquidityUrl,
             chain: opportunity.chain
           };
         });
