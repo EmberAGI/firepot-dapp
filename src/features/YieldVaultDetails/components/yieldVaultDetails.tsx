@@ -20,24 +20,20 @@ export default function OpportunityDetails(): JSX.Element {
   const navigate = useNavigate();
   const { opportunity, tokenBalances } = location.state as LocationState;
   const {
-    id,
     addLiquidityUrl,
     apy,
+    price,
     assets,
     platformId,
-    strategyTypeId,
-    safetyRank,
     vaultAddress,
-    depositTokenAddress,
     tokenDecimals,
-    chain: chainName,
   } = opportunity;
 
-  // TODO: Actual price fetching method. Will need to know if token is an LP or a straight token
   const [tokenPrice, setTokenPrice] = useState(0);
   useEffect(() => {
-    //console.log(Number(formatBigInt(BigInt(opportunity.pricePerFullShare), 18)));
-    setTokenPrice(Number(formatBigInt(BigInt(opportunity.pricePerFullShare), 18)));
+    if (price) {
+        setTokenPrice(price);
+    }
   }, []);
   const { amount, formattedAmount, usdAmount, setUsd, setMax } = useSafeUsdAmountState({
     price: tokenPrice,

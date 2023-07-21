@@ -28,7 +28,7 @@ export function useSafeUsdAmountState({
       if (!price) return; // only allow reactivity after price is known
       if (BigInt(input.split('.')[0]) * 100n > BigInt(Number.MAX_VALUE)) return; // Avoid number overflow
       setUsdAmount(input);
-      setTokenAmount((parseFloat(input) / price).toString());
+      setTokenAmount((parseFloat(input ? input : "0") / price).toString());
     } else if (typeof input === 'bigint') {
       if (!price) return;
       setUsdAmount(priceMath(input, price));
