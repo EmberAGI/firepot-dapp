@@ -30,25 +30,30 @@
   .transparent {
     background-color: transparent;
     border: none;
+    overflow-y: visible !important;
   }
 
   .button {
     color: var(--primary);
     font-size: medium !important;
     padding: 0.2rem 0.5rem 0.2rem !important;
-    margin-top: 0.2rem !important;
-    margin-bottom: 0.3rem !important;
+    margin-top: 0.5rem !important;
+    margin-bottom: 0.5rem !important;
     flex: 0 0 auto;
     justify-content: start;
     align-items: start;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    border-radius: 8px !important;
   }
 
   .glass {
     background: transparent;
+
     & > div {
       background: transparent;
+
       & > div {
-        background: rgba(255, 255, 255, 0.4) !important;
+        background: rgba(255, 255, 255, 0.6) !important;
         box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1) !important;
         backdrop-filter: blur(13.3px) !important;
         -webkit-backdrop-filter: blur(13.3px) !important;
@@ -56,17 +61,36 @@
     }
   }
 
+  .glassInput {
+    background: rgba(255, 255, 255, 0.4) !important;
+    overflow-y: visible !important;
+  }
+
   .container {
     display: flex;
     flex-direction: column;
+    padding-right: 0 !important;
   }
 
   .carousel {
+    justify-content: center;
+    flex-grow: 1;
     overflow-x: auto;
+
     display: flex;
     flex-wrap: nowrap;
     overflow-anchor: start;
     -webkit-overflow-scrolling: touch;
     -ms-overflow-style: -ms-autohiding-scrollbar;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+    -ms-overflow-style: none;
+  }
+
+  .main {
+    -webkit-mask-image: -webkit-gradient(linear, 0 0, 0 10%, from(rgba(0, 0, 0, 0)), to(rgba(0, 0, 0, 1)));
+
+    mask-image: gradient(linear, 0 0, 0 10%, from(rgba(0, 0, 0, 0)), to(rgba(0, 0, 0, 1)));
   }
 }

@@ -3,7 +3,7 @@ import { ReactComponent as Icon } from '../../../assets/menu-icon.svg';
 import { useNavigate } from 'react-router-dom';
 import Button from '../Button/Button';
 
-export default function BottomBarButton() {
+export default function BottomBarButton(action: any) {
   const navigate = useNavigate();
 
   return (
@@ -12,7 +12,7 @@ export default function BottomBarButton() {
         <Icon />
       </button>
       <div className={style.box}>
-        <Button text='Register Passkey' buttonType='primary' onClick={() => {}} disabled={false}></Button>
+        <Button text='Register Passkey' buttonType='primary' onClick={action} disabled={false} icon='passkey'></Button>
       </div>
     </aside>
   );

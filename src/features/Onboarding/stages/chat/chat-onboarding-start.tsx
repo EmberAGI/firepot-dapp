@@ -5,6 +5,7 @@ import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
 import { useRef, useState } from 'react';
 import BottomBarBalance from '../../../../components/shared/BottomBarBalance/BottomBar';
 import BottomBarButton from '../../../../components/shared/BottomBarButton/BottomBar';
+import background from '../../../../assets/onboarding-bg.svg';
 
 function ChatOnboardingStart() {
   const [step, setStep] = useState(0);
@@ -132,15 +133,25 @@ function ChatOnboardingStart() {
     return;
   };
 
+  function verifyPasskey() {
+    setStep((prevState: any) => prevState + 1);
+  }
+
   return (
     <>
-      <main className={style.onboardingStart}>
+      <main
+        className={style.onboardingStart}
+        style={{
+          backgroundImage: `linear-gradient(to bottom, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.0)), url(${background})`,
+          backgroundSize: 'cover',
+        }}
+      >
         <OnboardingImage />
         <h1>Ember</h1>
 
         {isLoading && <Loader />}
         <div style={{ position: 'relative', height: '80%' }}>
-          <MainContainer className={`${style.transparent} ${style.container}`}>
+          <MainContainer className={`${style.transparent} ${style.container} ${style.main}`}>
             <ChatContainer className={style.transparent}>
               <MessageList className={style.transparent}>
                 {messages.map((m: any, i: any) => (
@@ -148,26 +159,26 @@ function ChatOnboardingStart() {
                 ))}
               </MessageList>
 
-              <InputToolbox className={style.container}>
-                <div className={style.carousel}>
-                  <Button border color='white' className={style.button}>
+              <InputToolbox className={style.container + ' ' + style.glassInput}>
+                <div className={style.carousel + ' ' + style.transparent}>
+                  <Button border color='white' className={style.button + ' ' + style.glassInput}>
                     Re-send code
                   </Button>
-                  <Button border color='white' className={style.button}>
+                  <Button border color='white' className={style.button + ' ' + style.glassInput}>
                     I never received a code
                   </Button>
-                  <Button border color='white' className={style.button}>
+                  <Button border color='white' className={style.button + ' ' + style.glassInput}>
                     I never received a code
                   </Button>
-                  <Button border color='white' className={style.button}>
+                  <Button border color='white' className={style.button + ' ' + style.glassInput}>
                     I never received a code
                   </Button>
                 </div>
-                {2 === step && <BottomBarButton></BottomBarButton>}
+                {2 === step && <BottomBarButton action={verifyPasskey}></BottomBarButton>}
                 {3 <= step && <BottomBarBalance></BottomBarBalance>}
               </InputToolbox>
               {/* @ts-ignore */}
-              <MessageInput placeholder='Type message here' onSend={handleSend} ref={inputRef} attachButton={false} />
+              <MessageInput placeholder='Type message here' onSend={handleSend} ref={inputRef} attachButton={false} className={style.glassInput} />
             </ChatContainer>
           </MainContainer>
         </div>

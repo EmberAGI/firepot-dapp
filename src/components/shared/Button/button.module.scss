@@ -5,4 +5,19 @@
   padding: 0.2rem 0.5rem !important;
   font-size: medium !important;
   font-weight: bold !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.primary:hover {
+  button {
+    background-color: var(--secondary) !important;
+    border-radius: 30px !important;
+    width: 100% !important;
+    padding: 0.2rem 0.5rem !important;
+    font-size: medium !important;
+    font-weight: bold !important;
+  }
 }
