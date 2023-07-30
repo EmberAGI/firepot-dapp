@@ -12,6 +12,8 @@ import OnboardingStart from './features/Onboarding/stages/start/onboarding-start
 import OnboardingConfirmation from './features/Onboarding/stages/confirmation/onboarding-confirmation.tsx';
 import OnboardingWelcome from './features/Onboarding/stages/welcome/onboarding-welcome.tsx';
 import ChatOnboardingStart from './features/Onboarding/stages/chat/chat-onboarding-start.tsx';
+import Home from './features/Home/Home.tsx';
+import HomeDashboard from './features/Home/dashboard/dashboard.tsx';
 
 const router = createBrowserRouter([
   {
@@ -52,6 +54,11 @@ const router = createBrowserRouter([
         element: <ChatOnboardingStart />,
       },
     ],
+  },
+  {
+    path: 'home',
+    element: <Home />,
+    children: [{ path: 'dashboard', element: <HomeDashboard /> }],
   },
 ]);
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { OpportunityData } from './types';
-import styles from "./Opportunity.module.css";
+import styles from './Opportunity.module.css';
 import safetyRankHigh from './safetyRankHigh.svg';
 import TokenImage from '../../components/TokenImage/TokenImage';
 import { BeefyVault } from '../Contracts/BeefyVault';
@@ -8,8 +8,8 @@ import { TokenBalanceElem } from '../Contracts/BeefyVault/reads';
 
 const getAssetImage = (platformId: string, strategyTypeId: string) => {
   // Placeholder function: replace this with real image fetching logic.
-  return "/images/Vectors-Wrapper_1.svg";
-}
+  return '/images/Vectors-Wrapper_1.svg';
+};
 
 type OpportunityProps = {
   data: OpportunityData;
@@ -23,7 +23,7 @@ const Opportunity: React.FC<OpportunityProps> = ({ data }) => {
     <div className={styles.opportunity} key={id}>
       <div className={styles.safetyYield}>
         <div className={styles.safety}>
-          <img src={safetyRankHigh} loading="lazy" alt="" className={styles.safetyVector} />
+          <img src={safetyRankHigh} loading='lazy' alt='' className={styles.safetyVector} />
         </div>
         <div className={styles.yield}>
           <div className={styles.text}>{`${apyPercentage}%`}</div>
@@ -31,6 +31,7 @@ const Opportunity: React.FC<OpportunityProps> = ({ data }) => {
         </div>
       </div>
       <div className={styles.icon}>
+        {assets[0]}
         <TokenImage symbol={assets[0]} />
       </div>
       <div className={styles.description}>

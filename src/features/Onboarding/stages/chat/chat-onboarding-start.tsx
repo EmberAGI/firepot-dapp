@@ -112,7 +112,7 @@ function ChatOnboardingStart() {
       setMessages((prevState: any) => [...prevState, ...EmberResponses[step]]);
       setIsLoading((prevState: any) => !prevState);
       setStep((prevState: any) => prevState + 1);
-    }, 2000);
+    }, 1000);
   };
 
   const handleSend = (message: any) => {
@@ -140,7 +140,7 @@ function ChatOnboardingStart() {
   return (
     <>
       <main
-        className={style.onboardingStart}
+        className={style.onboardingStart + ' ' + (step === 7 ? style.overlay : '')}
         style={{
           backgroundImage: `linear-gradient(to bottom, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.0)), url(${background})`,
           backgroundSize: 'cover',
@@ -153,7 +153,7 @@ function ChatOnboardingStart() {
         <div style={{ position: 'relative', height: '80%' }}>
           <MainContainer className={`${style.transparent} ${style.container} ${style.main}`}>
             <ChatContainer className={style.transparent}>
-              <MessageList className={style.transparent}>
+              <MessageList className={`${style.transparent} ${style.messagelist}`}>
                 {messages.map((m: any, i: any) => (
                   <Message key={i} model={m} className={style.glass} />
                 ))}

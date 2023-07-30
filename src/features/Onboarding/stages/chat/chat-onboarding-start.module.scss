@@ -89,8 +89,26 @@
   }
 
   .main {
+    z-index: 1;
     -webkit-mask-image: -webkit-gradient(linear, 0 0, 0 10%, from(rgba(0, 0, 0, 0)), to(rgba(0, 0, 0, 1)));
 
     mask-image: gradient(linear, 0 0, 0 10%, from(rgba(0, 0, 0, 0)), to(rgba(0, 0, 0, 1)));
+  }
+
+  &.overlay::before {
+    z-index: 0;
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.6);
+  }
+
+  .messagelist {
+    div section {
+      z-index: 100;
+    }
   }
 }
