@@ -1,5 +1,6 @@
 import { BsShieldFillCheck } from 'react-icons/bs';
 import { ReactComponent as Logo } from '../../../assets/vault-icon.svg';
+import { ReactComponent as Hott } from '../../../assets/hott.svg';
 import styles from './card.module.scss';
 
 export default function Card({ text, subtext, onClick, icon, APY }: { text: string; onClick: any; icon?: string; subtext?: string; APY?: number }) {
@@ -10,13 +11,16 @@ export default function Card({ text, subtext, onClick, icon, APY }: { text: stri
         <p> {subtext}</p>
       </div>
 
-      <Logo width={48} height={48} />
+      {icon == 'hott' ? <Hott /> : <Logo width={48} height={48} />}
+
       <div className={`${styles.pill}`}>
         <i>
           <BsShieldFillCheck color='#00D395' size='18px'></BsShieldFillCheck>
         </i>
 
-        <span>{APY}%</span>
+        <span>
+          {APY}% <small>APY</small>
+        </span>
       </div>
     </div>
   );
