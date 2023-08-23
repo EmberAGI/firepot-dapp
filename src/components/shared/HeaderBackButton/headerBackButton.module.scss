@@ -1,0 +1,23 @@
+.headerBox {
+    align-items: center;
+    display: flex;
+    height: 7vh;
+
+    img {
+        object-fit: cover;
+        justify-content: center;
+        align-items: center;
+        display: flex;
+        cursor: pointer;
+    }
+
+    span {
+        font-size: 16px;
+        font-weight: 600;
+        line-height: 19px;
+        letter-spacing: 0em;
+        text-align: center;
+        color: #212082;
+        width: 75%;
+    }
+}

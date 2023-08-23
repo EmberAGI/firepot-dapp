@@ -14,6 +14,8 @@ import OnboardingWelcome from './features/Onboarding/stages/welcome/onboarding-w
 import ChatOnboardingStart from './features/Onboarding/stages/chat/chat-onboarding-start.tsx';
 import Home from './features/Home/Home.tsx';
 import HomeDashboard from './features/Home/dashboard/dashboard.tsx';
+import YieldVaultDeposit from './features/YieldVaultDeposit/yieldVaultDeposit.tsx';
+import YieldVault from './features/YieldVault/yieldVault.tsx';
 
 const router = createBrowserRouter([
   {
@@ -59,6 +61,14 @@ const router = createBrowserRouter([
     path: 'home',
     element: <Home />,
     children: [{ path: 'dashboard', element: <HomeDashboard /> }],
+  },
+  {
+    path: 'yield-vault-deposit',
+    element: <YieldVaultDeposit />,
+  },
+  {
+    path: 'yield-vault',
+    element: <YieldVault />,
   },
 ]);
 
