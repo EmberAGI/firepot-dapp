@@ -1,11 +1,12 @@
 
 import HeaderBackButton from '../../components/shared/HeaderBackButton/headerBackButton';
 import styles from './yield.module.scss';
+import DepositWithdrawInput from '../../components/shared/DepositWithdrawInput/depositWithdrawInput';
 function YieldVaultDeposit() {
     return (
         <>
             <main className={styles.mainBox}>
-                <HeaderBackButton title='Yield Vault Deposit' url='/yield-vault' /> 
+                <HeaderBackButton title='Yield Vault Deposit' url='/yield-vault' />
                 <section className={styles.sectionBox}>
                     <div className={styles.cardWhiteContainer}>
                         <div className={styles.firstSection}>
@@ -64,30 +65,7 @@ function YieldVaultDeposit() {
                             className={styles.leftBox}
                         />
                     </div>
-                    <div className={styles.despositContainer}>
-                        <span className={styles.title}>Deposit</span>
-                        <div className={styles.cardWhiteDepositContainer}>
-                            <div className={styles.currencyBoxContainer}>
-                                <img
-                                    src='src/assets/firepot-blue-logo.svg'
-                                    loading='lazy'
-                                    alt=''
-                                />
-                                <div className={styles.inputDeposit}>
-                                    <button>Max</button>
-                                    <input type='number'></input>
-                                    <span>USD</span>
-                                </div>
-                            </div>
-                            <div className={styles.titleProgressBox}>
-                                <span className={styles.titleCurrency}>Firepot</span>
-                                <span className={styles.valueCurrency}><b>32.00</b> / 32.00 HOTT</span>
-                            </div>
-                            <div className={styles.progressBox}>
-                                <progress value="80" max="100" ></progress>
-                            </div>
-                        </div>
-                    </div>
+                    <DepositWithdrawInput></DepositWithdrawInput>
                     <div className={styles.connectWalletContainer}>
                         <span className={styles.title}>Deposit</span>
                         <button>Deposit</button>

@@ -1,11 +1,12 @@
 .glass {
-  background: linear-gradient(180deg, rgb(232, 232, 232, 0.65) 0%, var(--white) 100%) !important;
+  background: linear-gradient(180deg, rgb(232, 232, 232, 0.65) 0%, rgb(255, 255, 255, 0.9) 100%) !important;
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1) !important;
   backdrop-filter: blur(13.3px) !important;
   -webkit-backdrop-filter: blur(13.3px) !important;
 }
 
 .card {
+  border: solid 1px rgb(255, 255, 255, 0.5);
   padding: 1rem;
   border-radius: 20px;
   display: flex;
@@ -31,7 +32,8 @@
     align-items: center;
   }
   .pill {
-    background-color: var(--light);
+    width: 100%;
+    background-color: rgb(255, 255, 255, 0.5);
     color: var(--dark);
     padding: 0.2rem 0.5rem 0.2rem 0rem;
     border-radius: 30px;
@@ -42,6 +44,12 @@
     height: 24px;
     display: flex;
     align-items: center;
+    justify-content: start;
+
+    span {
+      flex-grow: 1;
+      text-align: center;
+    }
 
     i {
       display: flex;

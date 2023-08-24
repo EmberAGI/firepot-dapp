@@ -4,8 +4,6 @@ import './index.scss';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import YieldVaultDetails from './features/YieldVaultDetails/components/yieldVaultDetails.tsx';
 import ConnectWalletConfig from './features/ConnectWallet';
-import Header from './components/Header/index.tsx';
-import Dashboard from './pages/dashboard.tsx';
 import Welcome from './pages/welcome.tsx';
 import Onboarding from './features/Onboarding/onboarding.tsx';
 import OnboardingStart from './features/Onboarding/stages/start/onboarding-start.tsx';
@@ -16,16 +14,17 @@ import Home from './features/Home/Home.tsx';
 import HomeDashboard from './features/Home/dashboard/dashboard.tsx';
 import YieldVaultDeposit from './features/YieldVaultDeposit/yieldVaultDeposit.tsx';
 import YieldVault from './features/YieldVault/yieldVault.tsx';
+import Portfolio from './features/Portfolio/Portfolio.tsx';
+import PortfolioDashboard from './features/Portfolio/dashboard/dashboard.tsx';
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: (
-      <main className='dashboard'>
-        <Header />
-        <Dashboard />
-      </main>
-    ),
+    element: <Portfolio />,
+  },
+  {
+    path: '/portfolio',
+    element: <PortfolioDashboard />,
   },
   {
     path: '/opportunities/:id',
