@@ -5,8 +5,8 @@ function safeAmountChange(formAmount: string, prevVal: string, nDecimals: number
   if (isNaN(Number(formAmount))) {
     return prevVal;
   }
-  let spltString = formAmount.split('.');
-  if (formAmount.split('.').length > 1 && formAmount.split('.')[1].length > nDecimals) {
+  let spltString = safeParseFloat(formAmount).split('.');
+  if (spltString.length == 2 && spltString[1].length > nDecimals) {
     return `${spltString[0]}.${spltString[1].slice(0, nDecimals)}`;
   }
   return formAmount;
@@ -35,15 +35,49 @@ export function formatBigInt(bi: bigint, decimals: number): string {
   return wholePart.toString().concat('.', '0'.repeat(leadingZeros(decimalPart, decimals)), decimalPart.toString());
 }
 
-export function bigintFromFormattedString(input: string, decimalPlaces: number) {
+function safeParseFloat(input: String): String {
   let spl = input.split('.');
-  let spl1 = '';
-  if (spl.length > 1) {
-    spl1 = `${spl[1]}${'0'.repeat(decimalPlaces - spl[1].length)}`;
-  } else {
-    spl1 = '0'.repeat(decimalPlaces);
+  if (spl.length == 2 && spl[1].includes('e')) {
+    let sple = spl[1].split('e');
+    let decimalPart = sple[0];
+    let exponent = Math.round(Number(sple[1]));
+    if (exponent > 0) {
+      for (let i = 0; i < exponent; ++i) {
+        if (i >= decimalPart.length) {
+          spl[0] += '0';
+        } else {
+          spl[0] += decimalPart.at(i);
+        }
+      }
+      spl[1] = exponent >= decimalPart.length ? '0' : decimalPart.substring(exponent);
+    } else if (exponent < 0) {
+      let transferPart = '';
+      let len = spl[0].length;
+      for (let i = 0; i < -exponent; ++i) {
+        transferPart = i >= len ? '0' : spl[0].at(len - 1 - i) + transferPart;
+      }
+      spl[0] = -exponent >= len ? '' : spl[0].substring(len + exponent);
+      spl[1] = transferPart + decimalPart;
+    } else {
+      return spl[0] + '.' + decimalPart;
+    }
   }
-  return BigInt(spl[0].concat(spl1));
+  return (spl[0].length > 0 ? spl[0].replace(/^0+/g, '') : '0') + '.' + (spl.length == 2 && spl[1].length > 0 ? spl[1] : '0');
+}
+
+export function bigintFromFormattedString(input: string, decimalPlaces: number) {
+  let floatString = safeParseFloat(input);
+  let spl = floatString.split('.');
+  let wholePart = spl[0];
+  let decimalPart = spl.length == 2 ? spl[0] : '';
+  if (BigInt(wholePart) > 0n) {
+    if (decimalPart.length > decimalPlaces) {
+      decimalPart = decimalPart.substring(0, decimalPlaces);
+    } else {
+      decimalPart += '0'.repeat(decimalPlaces - decimalPart.length);
+    }
+  }
+  return BigInt(wholePart.concat(decimalPart));
 }
 
 // Hook to manage form state converting form strings into uint256 bigint values for token inputs

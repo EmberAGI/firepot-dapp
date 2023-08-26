@@ -109,16 +109,14 @@ export function useChainData(opportunityData: OpportunityData[]): TokenBalances 
       setChainData(
         data.reduce(
           (reducer, _, index) => {
-            if (index % 4 != 0) return reducer;
-            reducer[index / 4] = {
+            if (index % 2 != 0) return reducer;
+            reducer[index / 2] = {
               vaultTokenBalance: !data[index].error && data[index].result,
-              vaultTokenAllowance: !data[index + 1].error && data[index + 1].result,
-              depositTokenBalance: !data[index + 2].error && data[index + 2].result,
-              depositTokenAllowance: !data[index + 3].error && data[index + 3].result,
+              depositTokenBalance: !data[index + 1].error && data[index + 1].result,
             };
             return reducer;
           },
-          new Array(data.length / 4).fill({
+          new Array(data.length / 2).fill({
             vaultTokenBalance: 0n,
             depositTokenBalance: 0n,
           }),
