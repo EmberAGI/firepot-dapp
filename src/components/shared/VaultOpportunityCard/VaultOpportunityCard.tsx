@@ -1,9 +1,18 @@
 import { BsShieldFillCheck } from 'react-icons/bs';
 import { ReactComponent as Logo } from '../../../assets/vault-icon.svg';
 import { ReactComponent as Hott } from '../../../assets/hott.svg';
-import styles from './card.module.scss';
+import styles from './vaultOpportunityCard.module.scss';
 
-export default function Card({ text, subtext, onClick, icon, APY }: { text: string; onClick: any; icon?: string; subtext?: string; APY?: number }) {
+export interface VaultOpportunityCardProps {
+  id: string;
+  text: string;
+  onClick: any;
+  icon?: string;
+  subtext?: string;
+  APY?: number;
+}
+
+export default function VaultOpportunityCard({ text, subtext, onClick, icon, APY }: VaultOpportunityCardProps) {
   return (
     <div onClick={onClick} className={`${styles.card} ${styles.glass}`}>
       <div className={styles.top}>

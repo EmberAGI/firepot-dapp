@@ -1,23 +1,18 @@
 import { BsShieldFillCheck } from 'react-icons/bs';
 import { ReactComponent as Logo } from '../../../assets/hott.svg';
-import styles from './card.module.scss';
+import styles from './vaultPositionCard.module.scss';
 
-export default function CardPosition({
-  usd,
-  hott,
-  onClick,
-  // @ts-ignore
-  icon,
-  APY,
-  change,
-}: {
+export interface VaultPositionCardProps {
+  id: string;
   usd: number;
+  hott: number;
   onClick: any;
   icon?: string;
-  hott?: number;
   APY?: number;
   change?: number;
-}) {
+}
+
+export default function VaultPositionCard({ usd, hott, onClick, icon, APY, change }: VaultPositionCardProps) {
   return (
     <div onClick={onClick} className={`${styles.card} ${styles.glass}`}>
       <div className={styles.flex}>
