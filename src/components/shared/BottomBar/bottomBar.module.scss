@@ -1,0 +1,33 @@
+.bar {
+  position: absolute;
+  bottom: 0;
+  color: var(--primary);
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 1rem;
+  button {
+    background-color: white;
+    border: none;
+    border-radius: 50%;
+    width: 56px;
+    height: 56px;
+    padding: 0;
+  }
+
+  .box {
+    max-width: 70vw;
+    background-color: var(--white);
+    padding: 0.5rem 1rem;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin: 0 1rem;
+    font-size: small;
+    font-weight: bold;
+    color: var(--dark);
+  }
+}

@@ -1,0 +1,25 @@
+.bubble {
+  width: 90%;
+  position: fixed;
+  bottom: 100px;
+  right: 0px;
+  transition: all 0.5s ease;
+  display: flex;
+  padding: 0.5rem;
+  gap: 1rem;
+  background-color: var(--white);
+  border-radius: 15px 0 0 15px;
+  color: var(--primary);
+  p {
+    color: var(--dark);
+    margin: 0;
+    padding: 0;
+    font-weight: bold;
+    font-size: 12px;
+    width: 80vw;
+  }
+
+  .flex {
+    display: flex;
+  }
+}

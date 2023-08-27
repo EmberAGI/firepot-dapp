@@ -1,0 +1,40 @@
+.bar {
+  color: var(--primary);
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  padding: 0.2rem 1rem 0.2rem;
+
+  button {
+    background-color: white;
+    border: none;
+    border-radius: 50%;
+    width: 38px;
+    height: 38px;
+    padding: 2px 0 0 0;
+    border: 2px var(--primary) solid;
+  }
+
+  .box {
+    background-color: var(--white);
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 1rem;
+    font-size: small;
+    font-weight: bold;
+    color: var(--dark);
+    flex-grow: 1;
+    & > div {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+}

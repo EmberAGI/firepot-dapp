@@ -1,0 +1,231 @@
+.mainBox {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 0px 12px 12px 12px;
+    background-color: #F3F3F3;
+}
+
+.sectionBox {
+    height: 86vh;
+    padding: 0px 12px 12px 12px;
+
+    .cardWhiteContainer {
+        background-color: #FFFFFF;
+        padding: 12px 16px 12px 16px;
+        border-radius: 20px;
+        margin-bottom: 20px;
+
+        .firstSection {
+            display: flex;
+            align-content: center;
+            align-items: center;
+            margin-bottom: 10px;
+
+            .currencyBox {
+                display: flex;
+                width: 100%;
+                align-items: center;
+                justify-content: end;
+
+                .percentage {
+                    font-size: 16px;
+                    font-weight: 600;
+                    line-height: 19px;
+                    letter-spacing: 0em;
+                    text-align: left;
+                    color: #4E4E4E;
+                }
+
+                .currency {
+                    font-size: 11px;
+                    font-weight: 600;
+                    line-height: 13px;
+                    letter-spacing: 0px;
+                    text-align: left;
+                    color: #4E4E4E;
+                }
+            }
+        }
+
+        .secondSection {
+            display: flex;
+            align-content: left;
+            align-items: left;
+            flex-direction: column;
+
+            .title {
+                color: #373737;
+                font-size: 16px;
+                font-weight: 600;
+                line-height: 19px;
+                letter-spacing: 0em;
+                text-align: left;
+
+            }
+
+            .subtitle {
+                color: #898989;
+                font-size: 12px;
+                font-weight: 600;
+                line-height: 19px;
+                letter-spacing: 0em;
+                text-align: left;
+            }
+        }
+
+        .thirdSection {
+            display: flex;
+
+            .description {
+                color: #4E4E4E;
+                font-size: 12px;
+                font-weight: 400;
+                line-height: 15px;
+                letter-spacing: 0em;
+                text-align: left;
+
+            }
+        }
+    }
+
+    .cardGreyContainer {
+        background-color: #E8E8E8;
+        padding: 12px 16px 12px 16px;
+        border-radius: 20px;
+        display: flex;
+        margin-bottom: 20px;
+
+        .boxList {
+            flex: 1;
+
+            .title {
+                color: #898989;
+                font-size: 12px;
+                font-weight: 600;
+                line-height: 15px;
+                letter-spacing: 0em;
+                padding-left: 15px;
+            }
+
+            ul {
+                font-size: 12px;
+                font-weight: 400;
+                line-height: 15px;
+                letter-spacing: 0em;
+                text-align: left;
+                color: #898989;
+                padding-left: 20px;
+            }
+        }
+    }
+
+    .despositInfoContainer {
+        padding: 12px 16px 12px 16px;
+        display: flex;
+
+        .rightBox {
+            width: 70%;
+
+            .title {
+                font-size: 14px;
+                font-weight: 600;
+                line-height: 17px;
+                letter-spacing: 0em;
+                text-align: left;
+                color: #929292;
+            }
+
+            .value {
+                display: flex;
+                align-content: center;
+                align-items: center;
+
+                .currencyIcon {
+                    font-size: 16px;
+                    font-weight: 600;
+                    line-height: 19px;
+                    letter-spacing: 0em;
+                    text-align: right;
+                    color: #4B4B4B;
+                }
+
+                .price {
+                    font-size: 28px;
+                    font-weight: 600;
+                    line-height: 34px;
+                    letter-spacing: 0em;
+                    text-align: right;
+                    color: #4B4B4B;
+                }
+
+                .currency {
+                    font-size: 16px;
+                    font-weight: 600;
+                    line-height: 19px;
+                    letter-spacing: 0em;
+                    text-align: right;
+                    color: #4B4B4B;
+                }
+            }
+
+        }
+
+        .leftBox {
+            width: 30%;
+        }
+    }
+
+    .connectWalletContainer {
+        display: flex;
+        flex-direction: column;
+
+        .title {
+            font-size: 14px;
+            font-weight: 600;
+            line-height: 17px;
+            letter-spacing: 0em;
+            text-align: left;
+            color: #929292;
+            padding: 12px 16px 12px 16px;
+        }
+
+        button {
+            width: 100%;
+            height: 5vh;
+            border-radius: 35px;
+            background-color: #fff;
+            border-color: #A9E4FF;
+            color: #212082;
+            font-size: 16px;
+            font-weight: 600;
+            line-height: 19px;
+            letter-spacing: 0em;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+    }
+
+
+}
+
+.footerBox {
+    height: 5vh;
+    width: 100%;
+    padding: 0px 12px 0px 12px;
+
+    button {
+        width: 100%;
+        height: 100%;
+        border-radius: 35px;
+        background-color: #212082;
+        color: #FFFFFF;
+        font-size: 16px;
+        font-weight: 600;
+        line-height: 19px;
+        letter-spacing: 0em;
+        text-align: center;
+    }
+}
