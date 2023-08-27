@@ -29,6 +29,8 @@ export type BeefyVaultData = {
 export type OpportunityData = {
   id: string,
   apy: number;
+  price?: number;
+  addLiquidityUrl: string;
   assets: string[];
   platformId: string;
   strategyTypeId: string;
@@ -36,6 +38,7 @@ export type OpportunityData = {
   vaultAddress: `0x${string}`;
   depositTokenAddress: `0x${string}`;
   tokenDecimals: number;
+  pricePerFullShare: string;
   chain: string;
 };
 

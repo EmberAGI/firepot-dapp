@@ -51,13 +51,18 @@ const useOpportunityData = (options?: UseOpportunitiesOptions) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const responseVaults = await fetch('https://api.beefy.finance/vaults');
-        const responseApy = await fetch('https://api.beefy.finance/apy');
-        if (!responseVaults.ok || !responseApy.ok) {
+          const promises = [
+              fetch('https://api.beefy.finance/vaults'),
+              fetch('https://api.beefy.finance/apy'),
+              fetch('https://api.beefy.finance/lps'),
+          ]
+        const [responseVaults, responseApy, responseLps] = await Promise.all(promises);
+        if (!responseVaults.ok || !responseApy.ok || !responseLps.ok) {
             throw new Error('Failed to fetch data from API');
           }
         const opportunitiesData: BeefyVaultData[] = await responseVaults.json();
         const apyData: { [key: string]: number } = await responseApy.json();
+        const lpsData: { [key: string]: number } = await responseLps.json();
 
         const activeOpportunities = opportunitiesData.filter(
           (opportunity: BeefyVaultData) => opportunity.status === 'active' && Array.isArray(opportunity.risks)
@@ -79,6 +84,7 @@ const useOpportunityData = (options?: UseOpportunitiesOptions) => {
           return {
             id: opportunity.id,
             apy: apyData[opportunity.id],
+            price: lpsData[opportunity.id],
             assets: opportunity.assets,
             platformId: opportunity.platformId,
             strategyTypeId: opportunity.strategyTypeId,
@@ -86,6 +92,8 @@ const useOpportunityData = (options?: UseOpportunitiesOptions) => {
             vaultAddress: opportunity.earnContractAddress,
             depositTokenAddress: opportunity.tokenAddress,
             tokenDecimals: opportunity.tokenDecimals,
+            pricePerFullShare: opportunity.pricePerFullShare,
+            addLiquidityUrl: opportunity.addLiquidityUrl,
             chain: opportunity.chain
           };
         });
