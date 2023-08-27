@@ -1,5 +1,5 @@
 import { erc20ABI, mainnet, readContracts, useAccount } from 'wagmi';
-import { OpportunityData } from '../../SmartDiscovery/types';
+import { OpportunityData } from '../../futureRelease/SmartDiscovery/types';
 import { useEffect, useState } from 'react';
 import { ContractFunctionConfig } from 'viem';
 import { arbitrum, aurora, avalanche, bsc, canto, celo, cronos, fantom, metis, moonbeam, moonriver, optimism, polygon, zkSync } from 'wagmi/chains';
@@ -82,9 +82,9 @@ export type TokenBalanceElem = {
   depositTokenBalance: bigint;
 };
 export const defaultTokenBalance: TokenBalanceElem = {
-    vaultTokenBalance: 0n,
-    depositTokenBalance: 0n
-}
+  vaultTokenBalance: 0n,
+  depositTokenBalance: 0n,
+};
 export function useChainData(opportunityData: OpportunityData[]): TokenBalances {
   const [chainData, setChainData] = useState<TokenBalances>(null);
   const { address } = useAccount();

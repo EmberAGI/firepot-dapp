@@ -1,15 +1,15 @@
 import style from './dashboard.module.scss';
-import BottomBar from '../../../components/shared/BottomBarNavigation/BottomBar';
+import BottomBar from '../../../../components/shared/BottomBarNavigation/BottomBar';
 import { MdChevronRight } from 'react-icons/md';
-import Card from '../../../components/shared/Card/Card';
+import Card from '../../../../components/shared/Card/Card';
 import { useState } from 'react';
-import CardSmall from '../../../components/shared/CardSmall/CardSmall';
+import CardSmall from '../../../../components/shared/CardSmall/CardSmall';
 import 'keen-slider/keen-slider.min.css';
 import { useKeenSlider } from 'keen-slider/react';
 import { IoIosArrowDropdownCircle, IoIosArrowDropupCircle } from 'react-icons/io';
-import CardPosition from '../../../components/shared/CardPosition/CardPosition';
-import CardAsset from '../../../components/shared/CardAsset/CardAsset';
-import Bubble from '../../../components/shared/NavBubble/Bubble';
+import CardPosition from '../../../../components/shared/CardPosition/CardPosition';
+import CardAsset from '../../../../components/shared/CardAsset/CardAsset';
+import Bubble from '../../../../components/shared/NavBubble/Bubble';
 
 function HomeDashboard() {
   const [assets, setAssets]: [boolean, any] = useState(true);

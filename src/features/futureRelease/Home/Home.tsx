@@ -2,15 +2,15 @@ import { useEffect, useState } from 'react';
 
 import { Outlet, useNavigate } from 'react-router-dom';
 
-import Welcome from '../../pages/welcome';
-function Onboarding() {
+import Welcome from '../../../pages/welcome';
+function Home() {
   const navigate = useNavigate();
   const [showWelcome, setShowWelcome] = useState(true);
 
   useEffect(() => {
     setTimeout(() => {
       setShowWelcome(false);
-      navigate('/onboarding/welcome');
+      navigate('/home/dashboard');
     }, 2000);
   }, []);
 
@@ -22,4 +22,4 @@ function Onboarding() {
   );
 }
 
-export default Onboarding;
+export default Home;

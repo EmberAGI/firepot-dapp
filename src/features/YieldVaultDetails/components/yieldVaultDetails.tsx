@@ -1,6 +1,6 @@
 import styles from './yieldVaultDetails.module.css';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { OpportunityData } from '../../SmartDiscovery/types';
+import { OpportunityData } from '../../futureRelease/SmartDiscovery/types';
 import { TokenBalanceElem } from '../../Contracts/BeefyVault/reads';
 import YieldVaultCard from './yieldVaultCard';
 import DepositAssetCard from './depositAssetCard';
@@ -19,20 +19,12 @@ export default function OpportunityDetails(): JSX.Element {
   const location = useLocation();
   const navigate = useNavigate();
   const { opportunity, tokenBalances } = location.state as LocationState;
-  const {
-    addLiquidityUrl,
-    apy,
-    price,
-    assets,
-    platformId,
-    vaultAddress,
-    tokenDecimals,
-  } = opportunity;
+  const { addLiquidityUrl, apy, price, assets, platformId, vaultAddress, tokenDecimals } = opportunity;
 
   const [tokenPrice, setTokenPrice] = useState(0);
   useEffect(() => {
     if (price) {
-        setTokenPrice(price);
+      setTokenPrice(price);
     }
   }, []);
   const { amount, formattedAmount, usdAmount, setUsd, setMax } = useSafeUsdAmountState({
