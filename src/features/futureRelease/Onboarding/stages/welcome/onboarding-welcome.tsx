@@ -1,4 +1,4 @@
-import BottomBar from '../../../../components/shared/BottomBar/BottomBar';
+import BottomBar from '../../../../../components/shared/BottomBar/BottomBar';
 import style from './onboarding-welcome.module.scss';
 import { ReactComponent as WelcomeImage } from '../../../../assets/welcome.svg';
 

@@ -2,7 +2,9 @@ import React from 'react';
 import { OpportunityData } from './types';
 import styles from './Opportunity.module.css';
 import safetyRankHigh from './safetyRankHigh.svg';
-import TokenImage from '../../components/TokenImage/TokenImage';
+import TokenImage from '../../../components/TokenImage/TokenImage';
+import { BeefyVault } from '../../Contracts/BeefyVault';
+import { TokenBalanceElem } from '../../Contracts/BeefyVault/reads';
 
 // @ts-ignore
 const getAssetImage = (platformId: string, strategyTypeId: string) => {

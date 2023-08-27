@@ -3,8 +3,8 @@ import { ReactComponent as OnboardingImage } from '../../../../assets/onboarding
 import { useState } from 'react';
 import { BsChevronLeft } from 'react-icons/bs';
 import { useNavigate } from 'react-router-dom';
-import Button from '../../../../components/shared/Button/Button';
-import BottomBar from '../../../../components/shared/BottomBar/BottomBar';
+import Button from '../../../../../components/shared/Button/Button';
+import BottomBar from '../../../../../components/shared/BottomBar/BottomBar';
 
 function OnboardingStart() {
   const [tab, setTab] = useState('email');
