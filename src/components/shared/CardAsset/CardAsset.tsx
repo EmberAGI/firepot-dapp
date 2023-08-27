@@ -2,25 +2,17 @@ import { ReactComponent as Logo } from '../../../assets/hott.svg';
 import styles from './card.module.scss';
 import { IoMdInfinite } from 'react-icons/io';
 
-export default function CardAsset({
-  usd,
-  token,
-  amount,
-  onClick,
-  icon,
-  name,
-  chain,
-}: {
+export interface CardAssetProps {
   usd: number;
+  token: string;
+  amount: number;
   onClick: any;
   icon?: string;
-  token?: string;
-  amount?: number;
-  APY?: number;
-  change?: number;
   name?: string;
   chain?: string;
-}) {
+}
+
+export default function CardAsset({ usd, token, amount, onClick, icon, name, chain }: CardAssetProps) {
   return (
     <div onClick={onClick} className={`${styles.card} ${styles.glass}`}>
       <div className={styles.flex}>
