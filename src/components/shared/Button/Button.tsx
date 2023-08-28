@@ -1,5 +1,6 @@
 import styles from './button.module.scss';
 import { ReactComponent as PasskeyIcon } from '../../../assets/passkey.svg';
+import { ReactComponent as SettingsIcon } from '../../../assets/settings-icon.svg';
 
 export default function Button({
   text,
@@ -17,6 +18,7 @@ export default function Button({
   return (
     <button onClick={onClick} disabled={disabled} className={styles[buttonType]}>
       {icon === 'passkey' && <PasskeyIcon width={24} height={24} />}
+      {icon === 'settings' && <SettingsIcon width={24} height={24} />}
       {text}
     </button>
   );

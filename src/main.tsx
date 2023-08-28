@@ -16,6 +16,8 @@ import YieldVaultDeposit from './features/YieldVaultDeposit/yieldVaultDeposit.ts
 import YieldVault from './features/YieldVault/yieldVault.tsx';
 import Portfolio from './features/Portfolio/Portfolio.tsx';
 import PortfolioDashboard from './features/Portfolio/dashboard/dashboard.tsx';
+import Settings from './features/Settings/Settings.tsx';
+import SettingsWallet from './features/Settings/walletSettings/Settings.tsx';
 
 const router = createBrowserRouter([
   {
@@ -26,6 +28,15 @@ const router = createBrowserRouter([
     path: '/portfolio',
     element: <PortfolioDashboard />,
   },
+  {
+    path: '/settings',
+    element: <Settings />,
+  },
+  {
+    path: '/settings/wallet',
+    element: <SettingsWallet />,
+  },
+
   {
     path: '/opportunities/:id',
     element: <YieldVaultDetails />,
