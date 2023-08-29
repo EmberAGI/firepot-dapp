@@ -95,7 +95,7 @@ function PortfolioDashboard() {
           <section className={style.top}>
             <h4>Total Balance {properties.showWalletAddress && ` • ${properties.truncatedWalletAddress}`} </h4>
             <h1>
-              $0.00 <small>USD</small>
+              ${properties.totalBalance} <small>USD</small>
             </h1>
           </section>
           {!properties.showLoading ? (

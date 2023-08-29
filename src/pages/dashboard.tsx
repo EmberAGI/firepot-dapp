@@ -24,7 +24,7 @@ function OpportunityMap({ positions }: { positions: { opportunity: OpportunityDa
 export default function Dashboard() {
   const { opportunities, loading, error } = useOpportunityData();
   // {safetyRanks: ['high']}
-  const tokenBalances = useChainData(opportunities);
+  const tokenBalances = useChainData(opportunities, 'beefy');
 
   const filteredUserPositions = useMemo(() => {
     if (!opportunities || !tokenBalances) return null;
