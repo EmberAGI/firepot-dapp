@@ -2,7 +2,24 @@ import { erc20ABI, mainnet, readContracts, useAccount } from 'wagmi';
 import { OpportunityData } from '../../futureRelease/SmartDiscovery/types';
 import { useEffect, useState } from 'react';
 import { ContractFunctionConfig } from 'viem';
-import { arbitrum, aurora, avalanche, bsc, canto, celo, cronos, fantom, metis, moonbeam, moonriver, optimism, polygon, zkSync } from 'wagmi/chains';
+import {
+  arbitrum,
+  arbitrumGoerli,
+  aurora,
+  avalanche,
+  bsc,
+  canto,
+  celo,
+  cronos,
+  fantom,
+  metis,
+  moonbeam,
+  moonriver,
+  optimism,
+  polygon,
+  zkSync,
+} from 'wagmi/chains';
+import { rHottTokenAbi } from '../abis/rHottToken.ts';
 
 function mapChain(chain: string): number | null {
   switch (chain) {
@@ -11,6 +28,8 @@ function mapChain(chain: string): number | null {
     // case 'kava': return 2222;
     case 'arbitrum':
       return arbitrum.id;
+    case 'arbitrum-goerli':
+      return arbitrumGoerli.id;
     case 'aurora':
       return aurora.id;
     case 'avax':
@@ -44,7 +63,7 @@ function mapChain(chain: string): number | null {
 }
 
 type MultichainContractFunctionsConfig = ContractFunctionConfig & { chainId: number };
-function packContractCalls({
+function packContractCallsBeefy({
   userAddress,
   vaultAddress,
   depositTokenAddress,
@@ -76,6 +95,38 @@ function packContractCalls({
   ];
 }
 
+function packContractCallsCamelot({
+  userAddress,
+  usageAddress,
+  depositTokenAddress,
+  chainId,
+}: {
+  userAddress: `0x${string}`;
+  usageAddress: `0x${string}`;
+  depositTokenAddress: `0x${string}`;
+  chainId: number | null;
+}): MultichainContractFunctionsConfig[] {
+  if (!chainId) chainId = 0; // forces a fail, but does not change array size from the opportunityData size
+  return [
+    // Reward vault balance
+    {
+      abi: rHottTokenAbi,
+      address: depositTokenAddress,
+      functionName: 'getUsageAllocation',
+      args: [userAddress, usageAddress],
+      chainId,
+    },
+    // depositToken balance
+    {
+      abi: erc20ABI,
+      address: depositTokenAddress,
+      functionName: 'balanceOf',
+      args: [userAddress],
+      chainId,
+    },
+  ];
+}
+
 export type TokenBalances = TokenBalanceElem[] | null;
 export type TokenBalanceElem = {
   vaultTokenBalance: bigint;
@@ -85,26 +136,46 @@ export const defaultTokenBalance: TokenBalanceElem = {
   vaultTokenBalance: 0n,
   depositTokenBalance: 0n,
 };
-export function useChainData(opportunityData: OpportunityData[]): TokenBalances {
+type VaultSource = 'beefy' | 'firepot';
+export function useChainData(opportunityData: OpportunityData[], vaultSource: VaultSource): TokenBalances {
   const [chainData, setChainData] = useState<TokenBalances>(null);
   const { address } = useAccount();
   useEffect(() => {
     async function getDatData() {
       if (opportunityData.length == 0) return;
       if (!address) return;
-      const contractReadConfig = opportunityData.flatMap((opportunity) =>
-        packContractCalls({
-          userAddress: address,
-          vaultAddress: opportunity.vaultAddress,
-          depositTokenAddress: opportunity.depositTokenAddress,
-          chainId: mapChain(opportunity.chain),
-        }),
-      );
+
+      console.log('opportunityData', opportunityData);
+
+      const contractReadConfig = opportunityData.flatMap((opportunity) => {
+        switch (vaultSource) {
+          case 'beefy': {
+            return packContractCallsBeefy({
+              userAddress: address,
+              vaultAddress: opportunity.vaultAddress,
+              depositTokenAddress: opportunity.depositTokenAddress,
+              chainId: mapChain(opportunity.chain),
+            });
+          }
+          case 'firepot': {
+            return packContractCallsCamelot({
+              userAddress: address,
+              usageAddress: opportunity.vaultAddress,
+              depositTokenAddress: opportunity.depositTokenAddress,
+              chainId: mapChain(opportunity.chain),
+            });
+          }
+        }
+      });
+
+      console.log('contractReadConfig', contractReadConfig);
 
       const data = await readContracts({
         contracts: contractReadConfig as any[],
         batchSize: 100000, // disables size limit
       });
+
+      console.log('data', data);
 
       setChainData(
         data.reduce(
