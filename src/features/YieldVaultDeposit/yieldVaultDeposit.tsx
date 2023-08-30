@@ -54,11 +54,9 @@ function YieldVaultDeposit() {
             </div>
             <img src='src/assets/coin.svg' loading='lazy' alt='' className={styles.leftBox} />
           </div>
-          <DepositWithdrawInput></DepositWithdrawInput>
+          {/* <DepositWithdrawInput></DepositWithdrawInput>*/}
           <div className={styles.connectWalletContainer}>
             <span className={styles.title}>Deposit</span>
-            <button>Deposit</button>
-
             <button>Buy HOTT</button>
           </div>
         </section>
