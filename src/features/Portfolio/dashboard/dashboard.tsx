@@ -70,7 +70,7 @@ function PortfolioDashboard() {
         return properties.assets.map((asset) => (
           <CardAsset
             token={asset.token}
-            onClick={asset.onClick}
+            onClick={undefined}
             icon={asset.icon}
             name={asset.name}
             chain={asset.chain}

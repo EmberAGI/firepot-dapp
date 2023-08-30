@@ -256,11 +256,12 @@ export default function useDashboardViewModel(initialState: ViewModelProperties 
 
   const openVaultOpportunity = (id: string) => {
     console.log('openVaultOpportunity', id);
-    navigate('yield-vault-deposit');
+    navigate('/yield-vault-deposit');
   };
 
   const openVaultPosition = (id: string) => {
     console.log('yield-vault', id);
+    navigate('/yield-vault');
   };
 
   return {
