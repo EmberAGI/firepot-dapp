@@ -21,7 +21,7 @@ import {
 } from 'wagmi/chains';
 import { rHottTokenAbi } from '../abis/rHottToken.ts';
 
-function mapChain(chain: string): number | null {
+export function mapChain(chain: string): number | null {
   switch (chain) {
     // case 'emerald': return 42262;
     // case 'fuse': return 122;
@@ -62,7 +62,7 @@ function mapChain(chain: string): number | null {
   return null;
 }
 
-type MultichainContractFunctionsConfig = ContractFunctionConfig & { chainId: number };
+export type MulticallContractFunctionConfig = ContractFunctionConfig & { chainId: number };
 function packContractCallsBeefy({
   userAddress,
   vaultAddress,
@@ -73,7 +73,7 @@ function packContractCallsBeefy({
   vaultAddress: `0x${string}`;
   depositTokenAddress: `0x${string}`;
   chainId: number | null;
-}): MultichainContractFunctionsConfig[] {
+}): MulticallContractFunctionConfig[] {
   if (!chainId) chainId = 0; // forces a fail, but does not change array size from the opportunityData size
   return [
     // vault balance
@@ -95,7 +95,7 @@ function packContractCallsBeefy({
   ];
 }
 
-function packContractCallsCamelot({
+function packContractCallsFirepot({
   userAddress,
   usageAddress,
   depositTokenAddress,
@@ -105,7 +105,7 @@ function packContractCallsCamelot({
   usageAddress: `0x${string}`;
   depositTokenAddress: `0x${string}`;
   chainId: number | null;
-}): MultichainContractFunctionsConfig[] {
+}): MulticallContractFunctionConfig[] {
   if (!chainId) chainId = 0; // forces a fail, but does not change array size from the opportunityData size
   return [
     // Reward vault balance
@@ -158,7 +158,7 @@ export function useChainData(opportunityData: OpportunityData[], vaultSource: Va
             });
           }
           case 'firepot': {
-            return packContractCallsCamelot({
+            return packContractCallsFirepot({
               userAddress: address,
               usageAddress: opportunity.vaultAddress,
               depositTokenAddress: opportunity.depositTokenAddress,

@@ -5,10 +5,11 @@ import useYieldVaultViewModel from './useYieldVaultViewModel';
 import { useEffect, useState } from 'react';
 import Button from '../../components/shared/Button/Button';
 
-function action() {
-}
+const YIELD_VAULT_ADDRESS = '0xe3dc90C119c46d77659CBbc5f470159A3385ad74';
+
+function action() {}
 function YieldVault() {
-  const { properties, commands } = useYieldVaultViewModel();
+  const { properties, commands } = useYieldVaultViewModel(YIELD_VAULT_ADDRESS);
 
   return (
     <>
