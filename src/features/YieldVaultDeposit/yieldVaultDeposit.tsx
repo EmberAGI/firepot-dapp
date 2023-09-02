@@ -1,6 +1,12 @@
 import HeaderBackButton from '../../components/shared/HeaderBackButton/headerBackButton';
 import styles from './yield.module.scss';
-import DepositWithdrawInput from '../../components/shared/DepositWithdrawInput/depositWithdrawInput';
+import Button from '../../components/shared/Button/Button';
+
+
+function action() {
+}
+
+
 function YieldVaultDeposit() {
   return (
     <>
@@ -61,7 +67,7 @@ function YieldVaultDeposit() {
           </div>
         </section>
         <footer className={styles.footerBox}>
-          <button>Deposit</button>
+          <Button text='Deposit' buttonType='primary' onClick={action} disabled={true} icon=''></Button>
         </footer>
       </main>
     </>

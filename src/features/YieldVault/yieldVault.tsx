@@ -3,7 +3,10 @@ import DepositWithdrawInput from '../../components/shared/DepositWithdrawInput/d
 import styles from './yieldVault.module.scss';
 import useYieldVaultViewModel from './useYieldVaultViewModel';
 import { useEffect, useState } from 'react';
+import Button from '../../components/shared/Button/Button';
 
+function action() {
+}
 function YieldVault() {
   const { properties, commands } = useYieldVaultViewModel();
 
@@ -157,7 +160,7 @@ function YieldVault() {
         ) : null}
         {properties.showActionButton ? (
           <footer className={styles.footerBox}>
-            <button>{properties.actionLabel}</button>
+            <Button text={properties.actionLabel} buttonType='primary' onClick={action} disabled={false} icon=''></Button>
           </footer>
         ) : null}
       </main>
