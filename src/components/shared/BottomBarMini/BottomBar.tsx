@@ -7,15 +7,15 @@ export default function BottomBar({ transparent }: { transparent?: boolean }) {
   const navigate = useNavigate();
 
   return (
-    <aside className={`${style.bar} ${transparent && style.glass}`} onClick={() => navigate('/onboarding/chat')}>
-      <button className={`${style.small} ${style.highlight}`}>
+    <aside className={`${style.bar} ${transparent && style.glass}`}>
+      <button className={`${style.small} ${style.highlight}`} onClick={() => navigate('/')}>
         <div className={`${style.button}`}>
           <MdDashboard color={'var(--primary)'} size='22px'></MdDashboard>
         </div>
         <p>Portfolio</p>
       </button>
 
-      <button className={`${style.small}`}>
+      <button className={`${style.small}`} onClick={() => navigate('/settings')}>
         <div className={`${style.button}`}>
           <MdSettings color={'var(--primary)'} size='22px'></MdSettings>
         </div>
