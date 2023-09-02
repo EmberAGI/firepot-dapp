@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAccount } from 'wagmi';
+import { useAccount, useToken } from 'wagmi';
+import { useVaultPosition } from '../Contracts/FirepotVault/useVaultPosition';
+import { useTokenBalance } from '../Contracts/FungibleTokens/useTokenBalance';
 
 interface TransactionPreview {
   tokenSymbol: string;
@@ -75,14 +77,14 @@ const initialProperties: ViewModelProperties = {
   showActionButton: false,
 };
 
-const HOTT_TOKEN_PRICE = 0.005;
+//const HOTT_TOKEN_PRICE = 0.005;
 
-export default function useDashboardViewModel(initialState: ViewModelProperties = initialProperties): YieldVaultViewModel {
+export default function useYieldVaultViewModel(address: `0x${string}`, initialState: ViewModelProperties = initialProperties): YieldVaultViewModel {
   const [properties, setProperties] = useState<ViewModelProperties>(initialState);
+  const [depositTokenAddress, setDepositTokenAddress] = useState<`0x${string}` | undefined>();
   const [moveStableAmount, setMoveStableAmount] = useState<string>('0');
-  //const navigate = useNavigate();
-  //const { address, isConnected } = useAccount();
-  //const tokenBalances = useChainData(vaults, 'firepot');
+  const vaultPosition = useVaultPosition(address);
+  const tokenBalance = useTokenBalance(depositTokenAddress);
 
   useEffect(() => {
     setTimeout(() => {
@@ -92,6 +94,57 @@ export default function useDashboardViewModel(initialState: ViewModelProperties 
       }));
     }, 1000);
   }, []);
+
+  useEffect(() => {
+    if (!vaultPosition) {
+      return;
+    }
+
+    setDepositTokenAddress(vaultPosition.depositTokenAddress);
+  }, [vaultPosition]);
+
+  useEffect(() => {
+    if (!vaultPosition) {
+      return;
+    }
+
+    console.log('vaultPosition', vaultPosition);
+
+    setProperties((properties) => ({
+      ...properties,
+      vaultStableBalance: String(
+        vaultPosition.priceDenominationBalance /
+          BigInt(10 ** vaultPosition.priceDenominationDecimals) /
+          BigInt(10 ** vaultPosition.depositTokenDecimals),
+      ),
+      stableSymbol: vaultPosition.priceDenominationSymbol,
+      vaultTokenBalance: String(vaultPosition.balance / BigInt(10 ** vaultPosition.depositTokenDecimals)),
+      apy: vaultPosition.apy,
+    }));
+  }, [vaultPosition]);
+
+  useEffect(() => {
+    if (!tokenBalance || !vaultPosition || !tokenBalance.hasOwnProperty(vaultPosition.depositTokenAddress)) {
+      return;
+    }
+
+    console.log('tokenBalance', tokenBalance);
+
+    setProperties((properties) => ({
+      ...properties,
+      availableStableBalance: String(
+        Number(tokenBalance[vaultPosition.depositTokenAddress].priceDenominationBalance) /
+          10 ** tokenBalance[vaultPosition.depositTokenAddress].priceDenominationDecimals,
+      ),
+      availableTokenBalance: String(
+        Number(tokenBalance[vaultPosition.depositTokenAddress].balance) / 10 ** tokenBalance[vaultPosition.depositTokenAddress].decimals,
+      ),
+    }));
+  }, [tokenBalance, vaultPosition]);
+
+  /*const getTokenAmount = (stableAmount: string) => {
+    return String(Number(stableAmount) / HOTT_TOKEN_PRICE);
+  };*/
 
   const switchVaultTab = (tab: VaultTab) => {
     setProperties((properties) => ({
