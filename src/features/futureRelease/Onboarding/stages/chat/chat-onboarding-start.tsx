@@ -3,8 +3,8 @@ import { ReactComponent as OnboardingImage } from '../../../../assets/ember.svg'
 import { MainContainer, ChatContainer, MessageList, Message, MessageInput, Loader, Button, InputToolbox } from '@chatscope/chat-ui-kit-react';
 import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
 import { useRef, useState } from 'react';
-import BottomBarBalance from '../../../../components/shared/BottomBarBalance/BottomBar';
-import BottomBarButton from '../../../../components/shared/BottomBarButton/BottomBar';
+import BottomBarBalance from '../../../../../components/shared/BottomBarBalance/BottomBar';
+import BottomBarButton from '../../../../../components/shared/BottomBarButton/BottomBar';
 import background from '../../../../assets/onboarding-bg.svg';
 
 function ChatOnboardingStart() {

@@ -22,10 +22,10 @@
         align-content: center;
         align-items: center;
         margin-bottom: 10px;
+        justify-content: space-between;
 
         .currencyBox {
             display: flex;
-            width: 100%;
             align-items: center;
             justify-content: end;
 
@@ -106,9 +106,9 @@
 
             .interestSection {
                 display: flex;
+                justify-content: space-between;
 
                 span {
-                    width: 100%;
                     font-size: 12px;
                     font-weight: 600;
                     line-height: 15px;
@@ -118,7 +118,6 @@
 
                 .percentage {
                     display: flex;
-                    width: 50%;
                     align-items: center;
                     justify-content: end;
                     padding: 4px 6px 4px 6px;
@@ -235,7 +234,7 @@
 
 
         .option {
-            width: 49.5%;
+            width: calc(50% - 0.15rem);
             height: 32px;
             position: relative;
             top: 2px;

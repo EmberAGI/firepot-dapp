@@ -1,16 +1,35 @@
 import { erc20ABI, mainnet, readContracts, useAccount } from 'wagmi';
-import { OpportunityData } from '../../SmartDiscovery/types';
+import { OpportunityData } from '../../futureRelease/SmartDiscovery/types';
 import { useEffect, useState } from 'react';
 import { ContractFunctionConfig } from 'viem';
-import { arbitrum, aurora, avalanche, bsc, canto, celo, cronos, fantom, metis, moonbeam, moonriver, optimism, polygon, zkSync } from 'wagmi/chains';
+import {
+  arbitrum,
+  arbitrumGoerli,
+  aurora,
+  avalanche,
+  bsc,
+  canto,
+  celo,
+  cronos,
+  fantom,
+  metis,
+  moonbeam,
+  moonriver,
+  optimism,
+  polygon,
+  zkSync,
+} from 'wagmi/chains';
+import { rHottTokenAbi } from '../abis/rHottToken.ts';
 
-function mapChain(chain: string): number | null {
+export function mapChain(chain: string): number | null {
   switch (chain) {
     // case 'emerald': return 42262;
     // case 'fuse': return 122;
     // case 'kava': return 2222;
     case 'arbitrum':
       return arbitrum.id;
+    case 'arbitrum-goerli':
+      return arbitrumGoerli.id;
     case 'aurora':
       return aurora.id;
     case 'avax':
@@ -43,8 +62,8 @@ function mapChain(chain: string): number | null {
   return null;
 }
 
-type MultichainContractFunctionsConfig = ContractFunctionConfig & { chainId: number };
-function packContractCalls({
+export type MulticallContractFunctionConfig = ContractFunctionConfig & { chainId: number };
+function packContractCallsBeefy({
   userAddress,
   vaultAddress,
   depositTokenAddress,
@@ -54,7 +73,7 @@ function packContractCalls({
   vaultAddress: `0x${string}`;
   depositTokenAddress: `0x${string}`;
   chainId: number | null;
-}): MultichainContractFunctionsConfig[] {
+}): MulticallContractFunctionConfig[] {
   if (!chainId) chainId = 0; // forces a fail, but does not change array size from the opportunityData size
   return [
     // vault balance
@@ -76,35 +95,87 @@ function packContractCalls({
   ];
 }
 
+function packContractCallsFirepot({
+  userAddress,
+  usageAddress,
+  depositTokenAddress,
+  chainId,
+}: {
+  userAddress: `0x${string}`;
+  usageAddress: `0x${string}`;
+  depositTokenAddress: `0x${string}`;
+  chainId: number | null;
+}): MulticallContractFunctionConfig[] {
+  if (!chainId) chainId = 0; // forces a fail, but does not change array size from the opportunityData size
+  return [
+    // Reward vault balance
+    {
+      abi: rHottTokenAbi,
+      address: depositTokenAddress,
+      functionName: 'getUsageAllocation',
+      args: [userAddress, usageAddress],
+      chainId,
+    },
+    // depositToken balance
+    {
+      abi: erc20ABI,
+      address: depositTokenAddress,
+      functionName: 'balanceOf',
+      args: [userAddress],
+      chainId,
+    },
+  ];
+}
+
 export type TokenBalances = TokenBalanceElem[] | null;
 export type TokenBalanceElem = {
   vaultTokenBalance: bigint;
   depositTokenBalance: bigint;
 };
 export const defaultTokenBalance: TokenBalanceElem = {
-    vaultTokenBalance: 0n,
-    depositTokenBalance: 0n
-}
-export function useChainData(opportunityData: OpportunityData[]): TokenBalances {
+  vaultTokenBalance: 0n,
+  depositTokenBalance: 0n,
+};
+type VaultSource = 'beefy' | 'firepot';
+export function useChainData(opportunityData: OpportunityData[], vaultSource: VaultSource): TokenBalances {
   const [chainData, setChainData] = useState<TokenBalances>(null);
   const { address } = useAccount();
   useEffect(() => {
     async function getDatData() {
       if (opportunityData.length == 0) return;
       if (!address) return;
-      const contractReadConfig = opportunityData.flatMap((opportunity) =>
-        packContractCalls({
-          userAddress: address,
-          vaultAddress: opportunity.vaultAddress,
-          depositTokenAddress: opportunity.depositTokenAddress,
-          chainId: mapChain(opportunity.chain),
-        }),
-      );
+
+      console.log('opportunityData', opportunityData);
+
+      const contractReadConfig = opportunityData.flatMap((opportunity) => {
+        switch (vaultSource) {
+          case 'beefy': {
+            return packContractCallsBeefy({
+              userAddress: address,
+              vaultAddress: opportunity.vaultAddress,
+              depositTokenAddress: opportunity.depositTokenAddress,
+              chainId: mapChain(opportunity.chain),
+            });
+          }
+          case 'firepot': {
+            return packContractCallsFirepot({
+              userAddress: address,
+              usageAddress: opportunity.vaultAddress,
+              depositTokenAddress: opportunity.depositTokenAddress,
+              chainId: mapChain(opportunity.chain),
+            });
+          }
+        }
+      });
+
+      console.log('contractReadConfig', contractReadConfig);
 
       const data = await readContracts({
         contracts: contractReadConfig as any[],
         batchSize: 100000, // disables size limit
       });
+
+      console.log('data', data);
 
       setChainData(
         data.reduce(

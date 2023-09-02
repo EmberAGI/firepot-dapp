@@ -11,7 +11,7 @@ function Portfolio() {
     setTimeout(() => {
       setShowWelcome(false);
       navigate('/portfolio');
-    }, 2000);
+    }, 1000);
   }, []);
 
   return (

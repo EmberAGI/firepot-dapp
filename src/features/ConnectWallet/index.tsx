@@ -1,23 +1,7 @@
 import '@rainbow-me/rainbowkit/styles.css';
 import { ConnectButton, getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit';
 import { configureChains, createConfig, WagmiConfig } from 'wagmi';
-import {
-  arbitrum,
-  aurora,
-  avalanche,
-  bsc,
-  canto,
-  celo,
-  cronos,
-  fantom,
-  mainnet,
-  metis,
-  moonbeam,
-  moonriver,
-  optimism,
-  polygon,
-  zkSync,
-} from 'wagmi/chains';
+import { arbitrum, arbitrumGoerli } from 'wagmi/chains';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { publicProvider } from 'wagmi/providers/public';
 import { JSX } from 'react';
@@ -32,19 +16,20 @@ export default function ConnectWalletConfig({ children }: Props) {
       // COMMENTS LEGEND: If there is a list, that is the order in which the networks are used.
       //      If there is a blank line, we default to using the default/public RPC.
       arbitrum, // Alchemy, (Infura paid add-on), Ankr
+      arbitrumGoerli, // Alchemy, (Infura paid add-on), Ankr
       //aurora, // Infura
-      avalanche, // Infura, Ankr
-      bsc, // Ankr
+      // avalanche, // Infura, Ankr
+      // bsc, // Ankr
       //canto, //
       //celo, // Infura, Ankr
       //cronos, //
-      fantom, // Ankr
-      mainnet, // Alchemy
+      // fantom, // Ankr
+      // mainnet, // Alchemy
       //metis, // Ankr
       //moonbeam, // Ankr
       //moonriver, //
-      optimism, // Alchemy, (Infura paid add-on)
-      polygon, // Alchemy, (Infura paid add-on)
+      // optimism, // Alchemy, (Infura paid add-on)
+      // polygon, // Alchemy, (Infura paid add-on)
       //zkSync, //
       // fuse,        TODO(AVK): Not urgent. Create custom chain
       // kava,        TODO(AVK): Not urgent. Create custom chain
@@ -59,7 +44,9 @@ export default function ConnectWalletConfig({ children }: Props) {
           switch (chain.id) {
             case arbitrum.id:
               return { http: `https://rpc.ankr.com/arbitrum/${apiKey}` };
-            case avalanche.id:
+            case arbitrumGoerli.id:
+              return { http: 'https://goerli-rollup.arbitrum.io/rpc' };
+            /*case avalanche.id:
               return { http: `https://rpc.ankr.com/avalanche/${apiKey}` };
             case bsc.id:
               return { http: `https://rpc.ankr.com/bsc/${apiKey}` };
@@ -70,7 +57,7 @@ export default function ConnectWalletConfig({ children }: Props) {
             case metis.id:
               return { http: `https://rpc.ankr.com/metis/${apiKey}` };
             case moonbeam.id:
-              return { http: `https://rpc.ankr.com/moonbeam/${apiKey}` };
+              return { http: `https://rpc.ankr.com/moonbeam/${apiKey}` };*/
           }
           // if chain is not valid, move to next provider
           return null;
@@ -81,7 +68,7 @@ export default function ConnectWalletConfig({ children }: Props) {
   );
 
   const { connectors } = getDefaultWallets({
-    appName: 'FirePot Finance',
+    appName: 'Firepot Finance',
     chains,
     projectId: import.meta.env.VITE_WALLETCONNECT_PROJECT_ID,
   });
@@ -96,7 +83,9 @@ export default function ConnectWalletConfig({ children }: Props) {
 
   return (
     <WagmiConfig config={wagmiConfig}>
-      <RainbowKitProvider chains={chains}>{children}</RainbowKitProvider>
+      <RainbowKitProvider modalSize='compact' chains={chains}>
+        {children}
+      </RainbowKitProvider>
     </WagmiConfig>
   );
 }

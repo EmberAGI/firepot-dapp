@@ -2,6 +2,7 @@
     align-items: center;
     display: flex;
     height: 7vh;
+    justify-content: flex-start;
 
     img {
         object-fit: cover;
@@ -18,6 +19,6 @@
         letter-spacing: 0em;
         text-align: center;
         color: #212082;
-        width: 75%;
+        width: calc(100% - 85px);
     }
 }
