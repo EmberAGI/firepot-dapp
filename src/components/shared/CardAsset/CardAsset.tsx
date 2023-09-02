@@ -22,7 +22,7 @@ export default function CardAsset({ usd, token, amount, onClick, icon, name, cha
             <h3>{name}</h3>
             <h5 className={styles.pill}>
               <i>
-                <IoMdInfinite></IoMdInfinite>
+                <img loading='lazy' src='https://goerli.arbiscan.io/images/svg/brands/arbitrum.svg' width={12}/>
               </i>
               <p>{chain?.toUpperCase()}</p>
             </h5>
