@@ -50,6 +50,16 @@
 
                 }
 
+                input[type=number]::-webkit-inner-spin-button,
+                input[type=number]::-webkit-outer-spin-button {
+                    -webkit-appearance: none;
+                    margin: 0;
+                }
+
+                input[type=number] {
+                    appearance: textfield;
+                }
+
                 button {
                     position: absolute;
                     left: 5px;
@@ -76,7 +86,7 @@
                     top: 9px;
                     color: #373737c9;
                     font-size: 12px;
-                    font-weight: 600;
+                    font-weight: 700;
                     line-height: 15px;
                     text-align: right;
 
