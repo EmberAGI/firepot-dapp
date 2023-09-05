@@ -2,7 +2,6 @@ import HeaderBackButton from '../../components/shared/HeaderBackButton/headerBac
 import DepositWithdrawInput from '../../components/shared/DepositWithdrawInput/depositWithdrawInput';
 import styles from './yieldVault.module.scss';
 import useYieldVaultViewModel from './useYieldVaultViewModel';
-import { useEffect, useState } from 'react';
 import Button from '../../components/shared/Button/Button';
 
 const YIELD_VAULT_ADDRESS = '0xe3dc90C119c46d77659CBbc5f470159A3385ad74';

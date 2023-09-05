@@ -14,7 +14,6 @@ const DEFAULT_DENOMINATION_SYMBOL = 'USDT';
 const DEFAULT_DECIMALS = 18;
 const TOKEN_PRICE_FRACTION = 0.005;
 
-// BUG: The token parameter array of objects causes an infinite loop
 export function useTokenPrice(tokenAddress?: `0x${string}`, priceDenominationTokenAddress?: `0x${string}`): TokenPrice | undefined {
   const [tokenPrice, setTokenPrice] = useState<TokenPrice | undefined>();
 

@@ -19,7 +19,7 @@ import {
   polygon,
   zkSync,
 } from 'wagmi/chains';
-import { rHottTokenAbi } from '../abis/rHottToken.ts';
+import { rHottTokenAbi } from '../abis/rHottTokenAbi.ts';
 
 export function mapChain(chain: string): number | null {
   switch (chain) {

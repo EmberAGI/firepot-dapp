@@ -3,7 +3,7 @@ import { erc20ABI, readContracts, useAccount } from 'wagmi';
 import { MulticallContractFunctionConfig, mapChain } from '../BeefyVault/reads';
 import { useTokenPrice } from './useTokenPrice';
 
-interface TokenBalance {
+export interface TokenBalance {
   [a: `0x${string}`]: {
     balance: bigint;
     decimals: number;
@@ -12,6 +12,25 @@ interface TokenBalance {
     priceDenominationDecimals: number;
   };
 }
+
+export const convertTokenBalance = (
+  tokenAddress: `0x${string}`,
+  tokenAmount: bigint,
+  decimals: number,
+  pricePerToken: bigint,
+  priceDenominationSymbol: string,
+  priceDenominationDecimals: number,
+): TokenBalance => {
+  return {
+    [tokenAddress]: {
+      balance: tokenAmount,
+      decimals,
+      priceDenominationBalance: (tokenAmount * pricePerToken) / BigInt(10 ** decimals),
+      priceDenominationSymbol: priceDenominationSymbol,
+      priceDenominationDecimals: priceDenominationDecimals,
+    },
+  };
+};
 
 export function useTokenBalance(tokenAddress: `0x${string}` | undefined): TokenBalance | undefined {
   const [tokenBalance, setTokenBalance] = useState<TokenBalance | undefined>();
@@ -50,16 +69,18 @@ export function useTokenBalance(tokenAddress: `0x${string}` | undefined): TokenB
 
         const balance = response.result as bigint;
         const decimals = 18;
+        const tokenBalance = convertTokenBalance(
+          tokenAddress,
+          balance,
+          decimals,
+          tokenPrice.pricePerToken,
+          tokenPrice.priceDenominationSymbol,
+          tokenPrice.priceDenominationDecimals,
+        );
 
         return {
           ...acc,
-          [tokenAddress]: {
-            balance,
-            decimals,
-            priceDenominationBalance: (balance * tokenPrice.pricePerToken) / BigInt(10 ** decimals),
-            priceDenominationSymbol: tokenPrice.priceDenominationSymbol,
-            priceDenominationDecimals: tokenPrice.priceDenominationDecimals,
-          },
+          ...tokenBalance,
         };
       }, {});
 
