@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAccount, useToken } from 'wagmi';
 import { useVaultPosition } from '../Contracts/FirepotVault/useVaultPosition';
+import { useRHottDetails } from '../Contracts/FirepotVault/useRHottDetails';
 import { useTokenBalance } from '../Contracts/FungibleTokens/useTokenBalance';
 
 interface TransactionPreview {
@@ -57,11 +58,11 @@ export interface YieldVaultViewModel {
 }
 
 const initialProperties: ViewModelProperties = {
-  vaultStableBalance: '5.00',
-  availableStableBalance: '2.50',
+  vaultStableBalance: '0.00',
+  availableStableBalance: '0.00',
   stableSymbol: 'USD',
-  vaultTokenBalance: '1000.00',
-  availableTokenBalance: '500.00',
+  vaultTokenBalance: '0',
+  availableTokenBalance: '0',
   tokenSymbol: 'HOTT',
   showLoading: true,
   showTransactionPreview: false,
@@ -69,7 +70,7 @@ const initialProperties: ViewModelProperties = {
   actionLabel: 'Deposit',
   moveTokenAmount: '0',
   moveTokenPercentage: 0,
-  apy: '20.44',
+  apy: '0.00',
   vaultReturn: {
     tokenReturn: '0.00',
     returnPercentage: '0.00',
@@ -77,16 +78,14 @@ const initialProperties: ViewModelProperties = {
   showActionButton: false,
 };
 
-//const HOTT_TOKEN_PRICE = 0.005;
-
 export default function useYieldVaultViewModel(address: `0x${string}`, initialState: ViewModelProperties = initialProperties): YieldVaultViewModel {
   const [properties, setProperties] = useState<ViewModelProperties>(initialState);
   const [depositTokenAddress, setDepositTokenAddress] = useState<`0x${string}` | undefined>();
   const [moveStableAmount, setMoveStableAmount] = useState<string>('0');
   const vaultPosition = useVaultPosition(address);
-  const tokenBalance = useTokenBalance(depositTokenAddress);
-
-  useEffect(() => {
+  const rHottDetails = useRHottDetails();
+  const hottBalance = useTokenBalance(rHottDetails?.hottAddress);
+  const approvals = useEffect(() => {
     setTimeout(() => {
       setProperties((properties) => ({
         ...properties,
@@ -124,23 +123,29 @@ export default function useYieldVaultViewModel(address: `0x${string}`, initialSt
   }, [vaultPosition]);
 
   useEffect(() => {
-    if (!tokenBalance || !vaultPosition || !tokenBalance.hasOwnProperty(vaultPosition.depositTokenAddress)) {
+    const unallocatedBalance = rHottDetails?.rHottAccountDetails.unallocatedBalance;
+    if (
+      !rHottDetails ||
+      !hottBalance ||
+      !vaultPosition ||
+      !unallocatedBalance?.hasOwnProperty(vaultPosition.depositTokenAddress) ||
+      !hottBalance.hasOwnProperty(rHottDetails.hottAddress)
+    ) {
       return;
     }
 
-    console.log('tokenBalance', tokenBalance);
+    const totalHottRHottBalance = unallocatedBalance[vaultPosition.depositTokenAddress].balance + hottBalance[rHottDetails.hottAddress].balance;
+    const totalHottRHottDenomBalance =
+      unallocatedBalance[vaultPosition.depositTokenAddress].priceDenominationBalance + hottBalance[rHottDetails.hottAddress].priceDenominationBalance;
 
     setProperties((properties) => ({
       ...properties,
       availableStableBalance: String(
-        Number(tokenBalance[vaultPosition.depositTokenAddress].priceDenominationBalance) /
-          10 ** tokenBalance[vaultPosition.depositTokenAddress].priceDenominationDecimals,
+        Number(totalHottRHottDenomBalance) / 10 ** unallocatedBalance[vaultPosition.depositTokenAddress].priceDenominationDecimals,
       ),
-      availableTokenBalance: String(
-        Number(tokenBalance[vaultPosition.depositTokenAddress].balance) / 10 ** tokenBalance[vaultPosition.depositTokenAddress].decimals,
-      ),
+      availableTokenBalance: String(Number(totalHottRHottBalance) / 10 ** unallocatedBalance[vaultPosition.depositTokenAddress].decimals),
     }));
-  }, [tokenBalance, vaultPosition]);
+  }, [rHottDetails, hottBalance, vaultPosition]);
 
   /*const getTokenAmount = (stableAmount: string) => {
     return String(Number(stableAmount) / HOTT_TOKEN_PRICE);

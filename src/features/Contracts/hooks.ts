@@ -46,7 +46,7 @@ export function useTokenAllowance({
         chainId: chain?.id,
       },
     ],
-    enabled: enabled && !!userAddress, // hook does not attemp to fetch data until form has been touched
+    enabled: enabled && !!userAddress, // hook does not attempt to fetch data until form has been touched
   });
 
   const allowances = useMemo(() => {
