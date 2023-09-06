@@ -1,6 +1,7 @@
 import styles from './Button.module.scss';
 import { ReactComponent as PasskeyIcon } from '../../../assets/passkey.svg';
 import { ReactComponent as SettingsIcon } from '../../../assets/settings-icon.svg';
+import { ReactComponent as Loading } from '../../../assets/oval.svg';
 
 export default function Button({
   text,
@@ -8,17 +9,20 @@ export default function Button({
   disabled,
   buttonType,
   icon,
+  isActivate
 }: {
   text: string;
   onClick: any;
   disabled: boolean;
   buttonType: string;
   icon?: string;
+  isActivate?:boolean
 }) {
   return (
     <button onClick={onClick} disabled={disabled} className={styles[buttonType]}>
-      {icon === 'passkey' && <PasskeyIcon width={24} height={24} />}
-      {icon === 'settings' && <SettingsIcon width={24} height={24} />}
+      {(!isActivate && icon   === 'passkey') && <PasskeyIcon width={24} height={24} />}
+      {(!isActivate && icon === 'settings')  && <SettingsIcon width={24} height={24} />}
+      {isActivate && <Loading width={20} height={20} />}
       {text}
     </button>
   );
