@@ -6,6 +6,7 @@ export default function CardPosition({
   usd,
   hott,
   onClick,
+  // @ts-ignore
   icon,
   APY,
   change,

@@ -1,20 +1,22 @@
+import { Address } from "viem";
+
 export type BeefyVaultData = {
   id: string;
   name: string;
   token: string;
-  tokenAddress: string;
+  tokenAddress: Address;
   tokenDecimals: number;
   tokenProviderId: string;
   earnedToken: string;
-  earnedTokenAddress: string;
-  earnContractAddress: string;
+  earnedTokenAddress: Address;
+  earnContractAddress: Address;
   oracle: string;
   oracleId: string;
   status: string;
   platformId: string;
   assets: string[];
   strategyTypeId: string;
-  risks: string[];
+  risks: Risks[];
   addLiquidityUrl: string;
   network: string;
   createdAt: number;
@@ -34,9 +36,9 @@ export type OpportunityData = {
   assets: string[];
   platformId: string;
   strategyTypeId: string;
-  safetyRank: SafetyRank;
-  vaultAddress: `0x${string}`;
-  depositTokenAddress: `0x${string}`;
+  safetyRank?: SafetyRank;
+  vaultAddress: Address;
+  depositTokenAddress: Address;
   tokenDecimals: number;
   pricePerFullShare: string;
   chain: string;
@@ -275,6 +277,8 @@ export const RISKS = {
     condition: 'Platfrm-TimelockNo-Cond',
   },
 };
+
+export type Risks = keyof typeof RISKS;
 
 export const CATEGORIES = {
   'Categry-Beefy': 0.2,

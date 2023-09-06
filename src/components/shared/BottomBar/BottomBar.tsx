@@ -1,4 +1,4 @@
-import style from './bottombar.module.scss';
+import style from './bottomBar.module.scss';
 import { ReactComponent as Icon } from '../../../assets/ember-icon.svg';
 import { BsChevronRight } from 'react-icons/bs';
 import { useNavigate } from 'react-router-dom';

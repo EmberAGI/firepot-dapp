@@ -15,6 +15,7 @@ function HomeDashboard() {
   const [assets, setAssets]: [boolean, any] = useState(true);
   const [discover, setDiscover]: [boolean, any] = useState(true);
   const [positions, setPositions]: [boolean, any] = useState(true);
+  // @ts-ignore
   const [sliderRef, instanceRef] = useKeenSlider(
     {
       slides: {
