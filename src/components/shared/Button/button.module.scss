@@ -46,9 +46,20 @@
   }
 }
 
-button:disabled,
-button[disabled]{
-  background-color: #D9D9D9 !important;
-  border-color: #D9D9D9;
-  cursor:not-allowed;
-}
+
+  .primary:disabled,
+  .primary[disabled] {
+    background-color: #D9D9D9 !important;
+    border-color: #D9D9D9;
+    cursor: not-allowed;
+    color: #fff;
+  }
+
+  
+  .secondary:disabled,
+  .secondary[disabled] {
+    background-color: #D9D9D9 !important;
+    border-color: #D9D9D9;
+    color: #575757 !important;
+    cursor: not-allowed;
+  }
