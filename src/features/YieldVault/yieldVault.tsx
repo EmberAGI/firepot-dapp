@@ -6,7 +6,6 @@ import Button from '../../components/shared/Button/Button';
 
 const YIELD_VAULT_ADDRESS = '0xe3dc90C119c46d77659CBbc5f470159A3385ad74';
 
-function action() {}
 function YieldVault() {
   const { properties, commands } = useYieldVaultViewModel(YIELD_VAULT_ADDRESS);
 
@@ -158,11 +157,27 @@ function YieldVault() {
             </div>
           </section>
         ) : null}
-        {properties.showActionButton ? (
-          <footer className={styles.footerBox}>
-            <Button text={properties.actionLabel} buttonType='primary' onClick={action} disabled={false} icon=''></Button>
-          </footer>
-        ) : null}
+        <footer className={styles.footerBox}>
+          {properties.showPrimaryActionButtons && properties.showVaultApproveButton ? (
+            <Button
+              text={properties.vaultApproveButtonLabel}
+              buttonType='secondary'
+              onClick={() => commands.approveDeposit()}
+              disabled={properties.isVaultApproveComplete}
+              icon=''
+            ></Button>
+          ) : null}
+          <br></br>
+          {properties.showPrimaryActionButtons ? (
+            <Button
+              text={properties.actionLabel}
+              buttonType='primary'
+              onClick={() => commands.deposit()}
+              disabled={!properties.isDepositEnabled}
+              icon=''
+            ></Button>
+          ) : null}
+        </footer>
       </main>
     </>
   );
