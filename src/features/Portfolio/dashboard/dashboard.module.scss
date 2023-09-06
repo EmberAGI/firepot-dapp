@@ -83,6 +83,7 @@
     .container {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
+
       div:last-child {
         grid-column: 1 / 3;
       }
@@ -118,6 +119,7 @@
     .container {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
+
       div:last-child {
         grid-column: 1 / 3;
       }
@@ -125,8 +127,9 @@
   }
 
   .position {
-    width: 100%;
+    max-width: 768px;
   }
+
   .notification {
     color: white;
     font-weight: bold;
@@ -145,6 +148,7 @@
     text-align: center;
     font-size: small;
   }
+
 
   /* section {
     width: 100%;

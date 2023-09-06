@@ -10,6 +10,9 @@ import Button from '../../../components/shared/Button/Button';
 import VaultPositionCard from '../../../components/shared/VaultPositionCard/VaultPositionCard';
 import useDashboardViewModel from './useDashboardViewModel';
 import { ConnectWalletButton } from '../../../components/shared/ConnectWalletButton/ConnectWalletButton';
+import CardLoaderAsset from '../../../components/shared/CardLoaderAsset/CardLoaderAsset';
+import CardLoaderPosition from '../../../components/shared/CardLoaderPosition/CardLoaderPosition';
+import CardLoaderDiscovery from '../../../components/shared/CardLoaderDiscovery/CardLoaderDiscovery';
 
 function PortfolioDashboard() {
   const { properties, commands } = useDashboardViewModel();
@@ -99,13 +102,36 @@ function PortfolioDashboard() {
             </h1>
           </section>
           {!properties.showLoading ? (
-            <>
-              {renderDiscovery()}
-              {renderPositions()}
-            </>
+            renderDiscovery()
           ) : (
-            // TODO: loading element
-            <div>loading...</div>
+            <>
+              <section className={style.discover}>
+                <div className={style.header}>
+                  <h3>
+                    <span>Discover</span>
+                  </h3>
+                </div>
+                <div className={style.container}>
+                  <CardLoaderDiscovery></CardLoaderDiscovery>
+                </div>
+              </section>
+            </>
+          )}
+
+          {!properties.showLoading ? (
+            renderPositions()
+          ) : (
+
+            <>
+              <section className={style.position}>
+                <div className={style.header}>
+                  <h3>
+                    <span>Positions</span>
+                  </h3>
+                </div>
+                <CardLoaderPosition></CardLoaderPosition>
+              </section>
+            </>
           )}
 
           <section className={style.assets}>
@@ -117,8 +143,7 @@ function PortfolioDashboard() {
             {!properties.showLoading ? (
               renderAssetElement()
             ) : (
-              // TODO: loading element
-              <div>loading...</div>
+              <CardLoaderAsset></CardLoaderAsset>
             )}
           </section>
         </main>

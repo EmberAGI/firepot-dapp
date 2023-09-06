@@ -77,19 +77,20 @@ export default function useDashboardViewModel(initialState: ViewModelProperties 
   const { address, isConnected } = useAccount();
   const tokenBalances = useChainData(vaults, 'firepot');
 
-  /*useEffect(() => {
-    setTimeout(() => {
-      setProperties((properties) => ({
-        ...properties,
-        showLoading: false,
-        showWalletAddress: true,
-        truncatedWalletAddress: '0x123…678',
-        showDiscovery: true,
-        showPositions: true,
-        assetElement: 'buy_token',
-      }));
-    }, 1000);
-  }, []);*/
+  /* useEffect(() => {
+     properties.showLoading = true
+     setTimeout(() => {
+       setProperties((properties) => ({
+         ...properties,
+         showLoading: false,
+         showWalletAddress: true,
+         truncatedWalletAddress: '0x123…678',
+         showDiscovery: true,
+         showPositions: true,
+         assetElement: 'assets',
+       }));
+     }, 1000);
+   }, []);*/
 
   useEffect(() => {
     if (rHottBalance == null || positionBalance == null) return;
@@ -129,9 +130,9 @@ export default function useDashboardViewModel(initialState: ViewModelProperties 
         tokenBalanceData: tokenBalances
           ? tokenBalances[index]
           : {
-              vaultTokenBalance: 0n,
-              depositTokenBalance: 0n,
-            },
+            vaultTokenBalance: 0n,
+            depositTokenBalance: 0n,
+          },
       }));
 
     if (opportunities.length == 0) {
@@ -248,7 +249,7 @@ export default function useDashboardViewModel(initialState: ViewModelProperties 
     return Number(amount / 1000000000000000000n) * hottTokenUsdPrice;
   };
 
-  const connectWallet = () => {};
+  const connectWallet = () => { };
 
   const buyToken = () => {
     window.open('https://launchpad.kommunitas.net/pool/HOTT/PublicCross', '_blank');
