@@ -9,19 +9,19 @@ export default function Button({
   disabled,
   buttonType,
   icon,
-  isActivate
+  showActivityIndicator: isActivate,
 }: {
   text: string;
   onClick: any;
   disabled: boolean;
   buttonType: string;
   icon?: string;
-  isActivate?:boolean
+  showActivityIndicator?: boolean;
 }) {
   return (
     <button onClick={onClick} disabled={disabled} className={styles[buttonType]}>
-      {(!isActivate && icon   === 'passkey') && <PasskeyIcon width={24} height={24} />}
-      {(!isActivate && icon === 'settings')  && <SettingsIcon width={24} height={24} />}
+      {!isActivate && icon === 'passkey' && <PasskeyIcon width={24} height={24} />}
+      {!isActivate && icon === 'settings' && <SettingsIcon width={24} height={24} />}
       {isActivate && <Loading width={20} height={20} />}
       {text}
     </button>
