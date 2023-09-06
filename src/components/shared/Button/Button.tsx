@@ -1,4 +1,4 @@
-import styles from './Button.module.scss';
+import styles from './button.module.scss';
 import { ReactComponent as PasskeyIcon } from '../../../assets/passkey.svg';
 
 export default function Button({

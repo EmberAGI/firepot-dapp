@@ -8,7 +8,6 @@ import { useEffect, useState } from 'react';
 import { useSafeUsdAmountState } from '../../../lib/hooks/useSafeUsdAmountState';
 import { useBeefyVaultDeposit } from '../../Contracts/BeefyVault/hooks';
 import { useNetwork } from 'wagmi';
-import { formatBigInt } from '../../../lib/hooks/useSafeBigIntForms';
 
 type LocationState = {
   opportunity: OpportunityData;

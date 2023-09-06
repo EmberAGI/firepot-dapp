@@ -7,7 +7,8 @@ export default function CardAsset({
   token,
   amount,
   onClick,
-  icon,
+  // @ts-ignore
+  icon, 
   name,
   chain,
 }: {

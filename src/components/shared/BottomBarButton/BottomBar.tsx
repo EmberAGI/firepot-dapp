@@ -1,4 +1,4 @@
-import style from './bottombar.module.scss';
+import style from './bottomBar.module.scss';
 import { ReactComponent as Icon } from '../../../assets/menu-icon.svg';
 import { useNavigate } from 'react-router-dom';
 import Button from '../Button/Button';

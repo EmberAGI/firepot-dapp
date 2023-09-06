@@ -1,4 +1,4 @@
-import style from './bottombar.module.scss';
+import style from './bottomBar.module.scss';
 
 import { useNavigate } from 'react-router-dom';
 import { MdDashboard, MdSettings } from 'react-icons/md';

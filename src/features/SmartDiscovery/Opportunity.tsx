@@ -3,9 +3,8 @@ import { OpportunityData } from './types';
 import styles from './Opportunity.module.css';
 import safetyRankHigh from './safetyRankHigh.svg';
 import TokenImage from '../../components/TokenImage/TokenImage';
-import { BeefyVault } from '../Contracts/BeefyVault';
-import { TokenBalanceElem } from '../Contracts/BeefyVault/reads';
 
+// @ts-ignore
 const getAssetImage = (platformId: string, strategyTypeId: string) => {
   // Placeholder function: replace this with real image fetching logic.
   return '/images/Vectors-Wrapper_1.svg';
@@ -16,6 +15,7 @@ type OpportunityProps = {
 };
 
 const Opportunity: React.FC<OpportunityProps> = ({ data }) => {
+  // @ts-ignore
   const { id, apy, assets, platformId, strategyTypeId, safetyRank, vaultAddress, tokenDecimals } = data;
   const apyPercentage = (apy * 100).toFixed(2);
 

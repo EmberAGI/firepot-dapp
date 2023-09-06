@@ -7,6 +7,7 @@ interface Props {
 }
 
 export default function TokenImage({ symbol }: Props): JSX.Element {
+    // @ts-ignore
     const [tokenImage, setTokenImage] = useState<string>();
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const imgAlt = `${symbol} logo`;

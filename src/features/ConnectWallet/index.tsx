@@ -3,19 +3,24 @@ import { ConnectButton, getDefaultWallets, RainbowKitProvider } from '@rainbow-m
 import { configureChains, createConfig, WagmiConfig } from 'wagmi';
 import {
   arbitrum,
+  // @ts-ignore
   aurora,
   avalanche,
   bsc,
+  // @ts-ignore
   canto,
   celo,
+  // @ts-ignore
   cronos,
   fantom,
   mainnet,
   metis,
   moonbeam,
+  // @ts-ignore
   moonriver,
   optimism,
   polygon,
+  // @ts-ignore
   zkSync,
 } from 'wagmi/chains';
 import { alchemyProvider } from 'wagmi/providers/alchemy';

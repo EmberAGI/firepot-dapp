@@ -14,5 +14,6 @@ function useTransactionLinkString(txHash: Hex | undefined): String | undefined {
 export function ViewOnBlockExplorer(data?: { hash: Hex }) {
     // Do we want to spawn a toast? 
     // Should the tx return some JSX?
+  // @ts-ignore
   const txLink = useTransactionLinkString(data?.hash);
 }

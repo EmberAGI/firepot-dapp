@@ -5,12 +5,13 @@ import {
   MAX_SCORE, 
   OpportunityData, 
   RISKS, 
+  Risks, 
   SafetyRank, 
   UseOpportunitiesOptions 
 } from './types';
 
-const calcRisk = (arr: string[]): number => {
-  const categories = Object.fromEntries(Object.keys(CATEGORIES).map(c => [c, []]));
+const calcRisk = (arr: Risks[]): number => {
+  const categories = Object.fromEntries(Object.keys(CATEGORIES).map(c => [c, [] as Risks[]]));
 
   arr.forEach(r => {
     if (!(r in RISKS)) {
@@ -27,10 +28,11 @@ const calcRisk = (arr: string[]): number => {
 
   let risk = 0;
   for (const c in CATEGORIES) {
+    // @ts-ignore
     const w = CATEGORIES[c];
     risk += w * Math.min(
       1,
-      categories[c].reduce((acc: number, r: number) => acc + RISKS[r].score, 0)
+      categories[c].reduce((acc: number, r) => acc + RISKS[r].score, 0)
     );
   }
 

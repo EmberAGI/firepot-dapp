@@ -6,6 +6,7 @@ export default function CardSmall({
   text,
   subtext,
   onClick,
+  // @ts-ignore
   icon,
   APY,
 }: {
