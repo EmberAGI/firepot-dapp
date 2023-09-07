@@ -77,10 +77,38 @@ function HomeDashboard() {
               <>
                 {assets === false ? (
                   <div className={style.container}>
-                    <VaultOpportunityCard text={'ETH'} onClick={undefined} icon={'eth'} subtext='Compound • Farm' APY={5.44}></VaultOpportunityCard>
-                    <VaultOpportunityCard text={'ETH'} onClick={undefined} icon={'eth'} subtext='Compound • Farm' APY={5.44}></VaultOpportunityCard>
-                    <VaultOpportunityCard text={'ETH'} onClick={undefined} icon={'eth'} subtext='Compound • Farm' APY={5.44}></VaultOpportunityCard>
-                    <VaultOpportunityCard text={'ETH'} onClick={undefined} icon={'eth'} subtext='Compound • Farm' APY={5.44}></VaultOpportunityCard>
+                    <VaultOpportunityCard
+                      text={'ETH'}
+                      onClick={undefined}
+                      icon={'eth'}
+                      subtext='Compound • Farm'
+                      APY={5.44}
+                      id={''}
+                    ></VaultOpportunityCard>
+                    <VaultOpportunityCard
+                      text={'ETH'}
+                      onClick={undefined}
+                      icon={'eth'}
+                      subtext='Compound • Farm'
+                      APY={5.44}
+                      id={''}
+                    ></VaultOpportunityCard>
+                    <VaultOpportunityCard
+                      text={'ETH'}
+                      onClick={undefined}
+                      icon={'eth'}
+                      subtext='Compound • Farm'
+                      APY={5.44}
+                      id={''}
+                    ></VaultOpportunityCard>
+                    <VaultOpportunityCard
+                      text={'ETH'}
+                      onClick={undefined}
+                      icon={'eth'}
+                      subtext='Compound • Farm'
+                      APY={5.44}
+                      id={''}
+                    ></VaultOpportunityCard>
                   </div>
                 ) : (
                   <div ref={sliderRef} className='keen-slider'>

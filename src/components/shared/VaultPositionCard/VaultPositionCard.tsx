@@ -12,7 +12,7 @@ export interface VaultPositionCardProps {
   change?: number;
 }
 
-export default function VaultPositionCard({ usd, hott, onClick, icon, APY, change }: VaultPositionCardProps) {
+export default function VaultPositionCard({ usd, hott, onClick, APY }: VaultPositionCardProps) {
   return (
     <div onClick={onClick} className={`${styles.card} ${styles.glass}`}>
       <div className={styles.flex}>

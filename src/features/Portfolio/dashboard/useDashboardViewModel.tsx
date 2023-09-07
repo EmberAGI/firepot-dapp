@@ -1,11 +1,11 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { VaultPositionCardProps } from '../../../components/shared/VaultPositionCard/VaultPositionCard';
 import { VaultOpportunityCardProps } from '../../../components/shared/VaultOpportunityCard/VaultOpportunityCard';
 import { useNavigate } from 'react-router-dom';
 import { CardAssetProps } from '../../../components/shared/CardAsset/CardAsset';
 import { useAccount } from 'wagmi';
-import { useChainData } from '../../Contracts/BeefyVault/reads';
-import { OpportunityData } from '../../futureRelease/SmartDiscovery/types';
+//import { useChainData } from '../../Contracts/BeefyVault/reads';
+//import { OpportunityData } from '../../futureRelease/SmartDiscovery/types';
 import { useVaultPosition } from '../../Contracts/FirepotVault/useVaultPosition';
 import { useRHottDetails } from '../../Contracts/FirepotVault/useRHottDetails';
 import { useTokenBalance } from '../../Contracts/FungibleTokens/useTokenBalance';
@@ -51,9 +51,9 @@ const initialProperties: ViewModelProperties = {
 };
 
 //const hottTokenAddress = "";
-const rHottTokenAddress = '0xf39e5FCc99565A65953d7ffb195394d968E0f872';
+//const rHottTokenAddress = '0xf39e5FCc99565A65953d7ffb195394d968E0f872';
 
-const vaults: OpportunityData[] = [
+/*const vaults: OpportunityData[] = [
   {
     id: '0xF893Ee319992B8fB8216CE328b41EF7350651374',
     apy: 0,
@@ -68,7 +68,7 @@ const vaults: OpportunityData[] = [
     pricePerFullShare: 'n/a',
     chain: 'arbitrum-goerli',
   },
-];
+];*/
 
 const hottTokenUsdPrice = 0.005;
 const YIELD_VAULT_ADDRESS = '0xe3dc90C119c46d77659CBbc5f470159A3385ad74';

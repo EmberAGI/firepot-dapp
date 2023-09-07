@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAccount, useToken } from 'wagmi';
+//import { useNavigate } from 'react-router-dom';
+//import { useAccount, useToken } from 'wagmi';
 import { useVaultPosition } from '../Contracts/FirepotVault/useVaultPosition';
 import { useRHottDetails } from '../Contracts/FirepotVault/useRHottDetails';
 import { useTokenBalance } from '../Contracts/FungibleTokens/useTokenBalance';
@@ -144,14 +144,14 @@ export default function useYieldVaultViewModel(address: `0x${string}`, initialSt
   const {
     status: lockHottStatus,
     isApprovalRequired: isLockApprovalRequired,
-    error: lockHottError,
+    //error: lockHottError,
     approve: lockHottApprove,
     send: lockHottSend,
   } = useLockHott(rHottDetails?.hottAddress, vaultPosition?.depositTokenAddress, vaultAllowances?.hottTokenAllowance, lockTokenAmount);
   const {
     status: vaultDepositStatus,
     isApprovalRequired: isDepositApprovalRequired,
-    error: vaultDepositError,
+    //error: vaultDepositError,
     approve: vaultDepositApprove,
     send: vaultDepositSend,
   } = useVaultDeposit(vaultPosition?.vaultAddress, vaultPosition?.depositTokenAddress, vaultAllowances?.rHottTokenAllowance, moveTokenAmount);

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+/*import { useEffect, useState } from 'react';
 import { erc20ABI, readContracts, useAccount } from 'wagmi';
 import { MulticallContractFunctionConfig, mapChain } from '../BeefyVault/reads';
 import { TokenParameter, useTokenPrices } from './useTokenPrices';
@@ -67,7 +67,7 @@ export function useTokenBalances(tokenAddresses: `0x${string}`[]): TokenBalance 
       setTokenBalance(balances);
     };
     getTokenBalance();
-  }, [tokenAddresses, accountAddress, tokenPrices]);*/
+  }, [tokenAddresses, accountAddress, tokenPrices]);
 
   return tokenBalance;
-}
+}*/

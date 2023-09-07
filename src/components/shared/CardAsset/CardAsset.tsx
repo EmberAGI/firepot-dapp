@@ -1,6 +1,6 @@
 import { ReactComponent as Logo } from '../../../assets/hott.svg';
 import styles from './card.module.scss';
-import { IoMdInfinite } from 'react-icons/io';
+//import { IoMdInfinite } from 'react-icons/io';
 
 export interface CardAssetProps {
   usd: number;
@@ -12,7 +12,7 @@ export interface CardAssetProps {
   chain?: string;
 }
 
-export default function CardAsset({ usd, token, amount, onClick, icon, name, chain }: CardAssetProps) {
+export default function CardAsset({ usd, token, amount, onClick, name, chain }: CardAssetProps) {
   return (
     <div onClick={onClick} className={`${styles.card} ${styles.glass}`}>
       <div className={styles.flex}>
@@ -22,7 +22,7 @@ export default function CardAsset({ usd, token, amount, onClick, icon, name, cha
             <h3>{name}</h3>
             <h5 className={styles.pill}>
               <i>
-                <img loading='lazy' src='https://goerli.arbiscan.io/images/svg/brands/arbitrum.svg' width={12}/>
+                <img loading='lazy' src='https://goerli.arbiscan.io/images/svg/brands/arbitrum.svg' width={12} />
               </i>
               <p>{chain?.toUpperCase()}</p>
             </h5>
