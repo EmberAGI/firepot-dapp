@@ -6,6 +6,9 @@ import { CardAssetProps } from '../../../components/shared/CardAsset/CardAsset';
 import { useAccount } from 'wagmi';
 import { useChainData } from '../../Contracts/BeefyVault/reads';
 import { OpportunityData } from '../../futureRelease/SmartDiscovery/types';
+import { useVaultPosition } from '../../Contracts/FirepotVault/useVaultPosition';
+import { useRHottDetails } from '../../Contracts/FirepotVault/useRHottDetails';
+import { useTokenBalance } from '../../Contracts/FungibleTokens/useTokenBalance';
 
 interface ViewModelProperties {
   totalBalance: string;
@@ -68,14 +71,18 @@ const vaults: OpportunityData[] = [
 ];
 
 const hottTokenUsdPrice = 0.005;
+const YIELD_VAULT_ADDRESS = '0xe3dc90C119c46d77659CBbc5f470159A3385ad74';
 
 export default function useDashboardViewModel(initialState: ViewModelProperties = initialProperties): DashboardViewModel {
   const [properties, setProperties] = useState<ViewModelProperties>(initialState);
-  const [rHottBalance, setRHottBalance] = useState<bigint | undefined>();
+  //const [rHottBalance, setRHottBalance] = useState<bigint | undefined>();
   const [positionBalance, setPositionBalance] = useState<bigint | undefined>();
   const navigate = useNavigate();
   const { address, isConnected } = useAccount();
-  const tokenBalances = useChainData(vaults, 'firepot');
+  //const tokenBalances = useChainData(vaults, 'firepot');
+  const vaultPosition = useVaultPosition(YIELD_VAULT_ADDRESS);
+  const rHottDetails = useRHottDetails();
+  const hottBalance = useTokenBalance(rHottDetails?.hottAddress);
 
   /*useEffect(() => {
     setTimeout(() => {
@@ -92,14 +99,15 @@ export default function useDashboardViewModel(initialState: ViewModelProperties 
   }, []);*/
 
   useEffect(() => {
-    if (rHottBalance == null || positionBalance == null) return;
+    if (!rHottDetails || hottBalance == null || !hottBalance[rHottDetails.hottAddress].balance || positionBalance == null) return;
 
-    const totalHottBalance = rHottBalance + positionBalance;
+    const tokenBalance = hottBalance[rHottDetails.hottAddress].balance;
+    const totalHottBalance = tokenBalance + positionBalance;
     setProperties((properties) => ({
       ...properties,
       totalBalance: getUsdValue(totalHottBalance).toFixed(2),
     }));
-  }, [rHottBalance, positionBalance]);
+  }, [rHottDetails, hottBalance, positionBalance]);
 
   useEffect(() => {
     if (isConnected) {
@@ -119,22 +127,10 @@ export default function useDashboardViewModel(initialState: ViewModelProperties 
         truncatedWalletAddress: '0x…',
       }));
     }
-  }, [isConnected, tokenBalances]);
+  }, [isConnected]);
 
   useEffect(() => {
-    const opportunities = vaults
-      .filter((_, index) => (tokenBalances ? tokenBalances[index].vaultTokenBalance == 0n : true))
-      .map((opp, index) => ({
-        opportunity: opp,
-        tokenBalanceData: tokenBalances
-          ? tokenBalances[index]
-          : {
-              vaultTokenBalance: 0n,
-              depositTokenBalance: 0n,
-            },
-      }));
-
-    if (opportunities.length == 0) {
+    if (!vaultPosition || vaultPosition.balance) {
       setProperties((properties) => ({
         ...properties,
         showDiscovery: false,
@@ -143,21 +139,24 @@ export default function useDashboardViewModel(initialState: ViewModelProperties 
       return;
     }
 
-    const vaultOpportunities: VaultOpportunityCardProps[] = opportunities.map((opportunity) => ({
-      id: opportunity.opportunity.id,
-      text: 'HOTT Vault',
-      onClick: undefined,
-    }));
+    const vaultOpportunities: VaultOpportunityCardProps[] = [
+      {
+        id: vaultPosition.vaultAddress,
+        text: 'HOTT Vault',
+        APY: Number(vaultPosition.apy),
+        onClick: undefined,
+      },
+    ];
 
     setProperties((properties) => ({
       ...properties,
       showDiscovery: true,
       vaultOpportunities,
     }));
-  }, [tokenBalances]);
+  }, [vaultPosition]);
 
   useEffect(() => {
-    if (!tokenBalances) {
+    if (!vaultPosition) {
       setProperties((properties) => ({
         ...properties,
         showPositions: false,
@@ -166,14 +165,7 @@ export default function useDashboardViewModel(initialState: ViewModelProperties 
       return;
     }
 
-    const positions = vaults
-      .filter((_, index) => tokenBalances[index].vaultTokenBalance > 0n)
-      .map((opp, index) => ({
-        opportunity: opp,
-        tokenBalanceData: tokenBalances[index],
-      }));
-
-    if (positions.length == 0) {
+    if (vaultPosition.balance === 0n) {
       setProperties((properties) => ({
         ...properties,
         showPositions: false,
@@ -183,24 +175,27 @@ export default function useDashboardViewModel(initialState: ViewModelProperties 
       return;
     }
 
-    setPositionBalance(tokenBalances[0].vaultTokenBalance);
+    setPositionBalance(vaultPosition.balance);
 
-    const vaultPositions: VaultPositionCardProps[] = positions.map((opportunity) => ({
-      id: opportunity.opportunity.id,
-      usd: getUsdValue(opportunity.tokenBalanceData.vaultTokenBalance),
-      hott: Number(opportunity.tokenBalanceData.vaultTokenBalance / 1000000000000000000n),
-      onClick: undefined,
-    }));
+    const vaultPositions: VaultPositionCardProps[] = [
+      {
+        id: vaultPosition.vaultAddress,
+        usd: getUsdValue(vaultPosition.balance),
+        hott: Number(vaultPosition.balance / 1000000000000000000n),
+        onClick: undefined,
+        APY: Number(vaultPosition.apy),
+      },
+    ];
 
     setProperties((properties) => ({
       ...properties,
       showPositions: true,
       vaultPositions,
     }));
-  }, [tokenBalances]);
+  }, [vaultPosition]);
 
   useEffect(() => {
-    if (!tokenBalances) {
+    if (!rHottDetails || !hottBalance || !hottBalance[rHottDetails.hottAddress].balance) {
       setProperties((properties) => ({
         ...properties,
         assetElement: 'buy_token',
@@ -209,40 +204,27 @@ export default function useDashboardViewModel(initialState: ViewModelProperties 
       return;
     }
 
-    const rHottTokens = vaults
-      .filter((opp, index) => tokenBalances[index].depositTokenBalance > 0n && opp.depositTokenAddress == rHottTokenAddress)
-      .map((opp, index) => ({
-        tokenAddress: opp.depositTokenAddress,
-        tokenBalance: tokenBalances[index].depositTokenBalance,
-      }));
-
-    if (rHottTokens.length == 0) {
-      setProperties((properties) => ({
-        ...properties,
-        assetElement: 'buy_token',
-        assets: [],
-      }));
-      setRHottBalance(0n);
-      return;
-    }
-
-    setRHottBalance(rHottTokens[0].tokenBalance);
-
-    const assets: CardAssetProps[] = rHottTokens.map((token) => ({
-      usd: getUsdValue(token.tokenBalance),
-      token: 'HOTT',
-      amount: Number(token.tokenBalance / 1000000000000000000n),
-      onClick: undefined,
-      name: 'HOTT',
-      chain: 'arbitrum-goerli',
-    }));
+    const rHottBalance = rHottDetails.rHottAccountDetails.unallocatedBalance.hasOwnProperty(rHottDetails.hottAddress)
+      ? rHottDetails.rHottAccountDetails.unallocatedBalance[rHottDetails.hottAddress].balance
+      : 0n;
+    const tokenBalance = hottBalance[rHottDetails.hottAddress].balance + rHottBalance;
+    const assets: CardAssetProps[] = [
+      {
+        usd: getUsdValue(tokenBalance),
+        token: 'HOTT',
+        amount: Number(tokenBalance / 1000000000000000000n),
+        onClick: undefined,
+        name: 'HOTT',
+        chain: 'arbitrum-goerli',
+      },
+    ];
 
     setProperties((properties) => ({
       ...properties,
       assetElement: 'assets',
       assets,
     }));
-  }, [tokenBalances]);
+  }, [rHottDetails, hottBalance]);
 
   const getUsdValue = (amount: bigint) => {
     return Number(amount / 1000000000000000000n) * hottTokenUsdPrice;
@@ -251,7 +233,7 @@ export default function useDashboardViewModel(initialState: ViewModelProperties 
   const connectWallet = () => {};
 
   const buyToken = () => {
-    window.open('https://launchpad.kommunitas.net/pool/HOTT/PublicCross', '_blank');
+    window.open('https://firepot.finance/sale', '_blank');
   };
 
   const openVaultOpportunity = (id: string) => {

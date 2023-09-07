@@ -28,7 +28,7 @@ function PortfolioDashboard() {
               <VaultOpportunityCard
                 id={opportunity.id}
                 text={opportunity.text}
-                onClick={() => commands.openVaultOpportunity(opportunity.id)}
+                onClick={() => commands.openVaultPosition(opportunity.id)}
                 icon={opportunity.icon}
                 subtext={opportunity.subtext}
                 APY={opportunity.APY}
