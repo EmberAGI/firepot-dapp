@@ -42,7 +42,7 @@ export default function DepositWithdrawInput(props: DepositWithdrawInputProps) {
       <span className={styles.title}>{props.moveAction == 'deposit' ? 'Deposit' : 'Withdraw'}</span>
       <div className={styles.cardWhiteDepositContainer}>
         <div className={styles.currencyBoxContainer}>
-          <img src='public/assets/firepot-blue-logo.svg' loading='lazy' alt='' />
+          <img src='/assets/firepot-blue-logo.svg' loading='lazy' alt='' />
           <div className={styles.inputDeposit}>
             <button onClick={() => setMoveAmount(props.availableStableBalance)}>Max</button>
             <input value={moveAmount} onChange={(event) => onInputChange(event.target.value)} type='number'></input>
