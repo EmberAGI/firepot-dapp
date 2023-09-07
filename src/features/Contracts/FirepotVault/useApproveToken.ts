@@ -1,15 +1,8 @@
 import { useEffect, useState } from 'react';
-import { useTokenApprove } from '../hooks';
 import { erc20ABI, useContractWrite, usePrepareContractWrite } from 'wagmi';
 import { mapChain } from '../BeefyVault/reads';
 
-export interface ApproveTokenParams {
-  tokenAddress: `0x${string}`;
-  spenderAddress: `0x${string}`;
-  amount: bigint;
-}
-
-export function useApproveToken(params?: ApproveTokenParams) {
+export function useApproveToken(tokenAddress: `0x${string}` | undefined, spenderAddress: `0x${string}` | undefined, amount: bigint | undefined) {
   const [chainId, setChainId] = useState<number>(0);
   const [prepareContractWriteParams, setPrepareContractWriteParams] = useState<{} | undefined>();
   const { config } = usePrepareContractWrite(prepareContractWriteParams);
@@ -19,16 +12,16 @@ export function useApproveToken(params?: ApproveTokenParams) {
   }, []);
 
   useEffect(() => {
-    if (!params) return;
+    if (!tokenAddress || !spenderAddress || !amount) return;
 
     setPrepareContractWriteParams({
       abi: erc20ABI,
-      address: params.tokenAddress,
+      address: tokenAddress,
       functionName: 'approve',
       chainId: chainId,
-      args: [params.spenderAddress, params.amount],
+      args: [spenderAddress, amount],
     });
-  }, [params]);
+  }, [tokenAddress, spenderAddress, amount]);
 
   return useContractWrite(config);
 }

@@ -4,13 +4,6 @@ import { useEffect, useState } from 'react';
 import { mapChain } from '../BeefyVault/reads';
 import { useVaultApprove } from './useVaultApprove';
 
-export interface VaultDepositParams {
-  vaultAddress: `0x${string}`;
-  rHottTokenAddress: `0x${string}`;
-  rHottTokenAllowance: bigint;
-  amount: bigint;
-}
-
 type VaultDepositStatus = 'not-started' | 'awaiting-approval' | 'approving' | 'awaiting-deposit' | 'depositing' | 'success' | 'error';
 
 interface VaultDeposit {
@@ -57,7 +50,6 @@ export function useVaultDeposit(
       setStatus('awaiting-approval');
     } else {
       setupDeposit();
-      //setStatus('awaiting-deposit');
     }
   }, [rHottTokenAllowance, amount]);
 
@@ -73,7 +65,6 @@ export function useVaultDeposit(
     }
 
     setupDeposit();
-    //setStatus('awaiting-deposit');
   }, [status, vaultApprove]);
 
   useEffect(() => {
@@ -90,23 +81,6 @@ export function useVaultDeposit(
     console.log('depositContractWrite.isSuccess', depositContractWrite);
     setStatus('success');
   }, [status, depositContractWrite]);
-
-  /*useEffect(() => {
-    console.log('status', status);
-
-    switch (status) {
-      case 'approving':
-        console.log('vaultApprove', vaultApprove);
-
-        vaultApprove.write && vaultApprove.write();
-        break;
-      case 'depositing':
-        console.log('depositContractWrite', depositContractWrite);
-
-        depositContractWrite.write && depositContractWrite.write();
-        break;
-    }
-  }, [status, vaultApprove, depositContractWrite]);*/
 
   const setupDeposit = () => {
     setDepositWriteParams({
@@ -135,13 +109,6 @@ export function useVaultDeposit(
   const send = () => {
     if (status !== 'awaiting-deposit') return;
 
-    /*setDepositWriteParams({
-      abi: rHottTokenAbi,
-      address: rHottTokenAddress,
-      functionName: 'allocate',
-      chainId: chainId,
-      args: [vaultAddress, amount, '0x00'],
-    });*/
     setStatus('depositing');
     depositContractWrite.write?.();
   };

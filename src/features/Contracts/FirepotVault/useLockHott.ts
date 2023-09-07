@@ -1,35 +1,123 @@
-import { useEffect, useState } from 'react';
-import { useTokenApprove } from '../hooks';
-import { erc20ABI, useContractWrite, usePrepareContractWrite } from 'wagmi';
-import { mapChain } from '../BeefyVault/reads';
+import { useContractWrite, usePrepareContractWrite } from 'wagmi';
 import { rHottTokenAbi } from '../abis/rHottTokenAbi';
+import { useEffect, useState } from 'react';
+import { mapChain } from '../BeefyVault/reads';
+import { useApproveToken } from './useApproveToken';
 
-export interface LockHottParams {
-  address: `0x${string}`;
-  rHottTokenAddress: `0x${string}`;
-  amount: bigint;
+type LockHottStatus = 'not-started' | 'awaiting-approval' | 'approving' | 'awaiting-lock' | 'locking' | 'success' | 'error';
+
+interface LockHott {
+  status: LockHottStatus;
+  isApprovalRequired: boolean;
+  error: Error | null;
+  approve: () => void;
+  send: () => void;
 }
 
-export function useLockHott(params?: LockHottParams) {
+export function useLockHott(
+  hottTokenAddress: `0x${string}` | undefined,
+  rHottTokenAddress: `0x${string}` | undefined,
+  hottTokenAllowance: bigint | undefined,
+  amount: bigint | undefined,
+): LockHott {
+  const [status, setStatus] = useState<LockHottStatus>('not-started');
+  const [isApprovalRequired, setIsApprovalRequired] = useState<boolean>(false);
+  const [error, setError] = useState<Error | null>(null);
+
   const [chainId, setChainId] = useState<number>(0);
-  const [prepareContractWriteParams, setPrepareContractWriteParams] = useState<{} | undefined>();
-  const { config } = usePrepareContractWrite(prepareContractWriteParams);
+
+  const approveToken = useApproveToken(hottTokenAddress, rHottTokenAddress, amount);
+
+  const [lockWriteParams, setLockWriteParams] = useState<{} | undefined>();
+  const { config: lockConfig } = usePrepareContractWrite(lockWriteParams);
+  const lockContractWrite = useContractWrite(lockConfig);
 
   useEffect(() => {
     setChainId(mapChain('arbitrum-goerli') ?? 0);
   }, []);
 
   useEffect(() => {
-    if (!params) return;
+    resetState();
+  }, [amount]);
 
-    setPrepareContractWriteParams({
-      abi: erc20ABI,
-      address: params.rHottTokenAddress,
-      functionName: 'approve',
+  useEffect(() => {
+    if (hottTokenAllowance == null || amount == null || amount === 0n) {
+      return;
+    }
+
+    if (hottTokenAllowance < amount) {
+      setIsApprovalRequired(true);
+      setStatus('awaiting-approval');
+    } else {
+      setupLock();
+    }
+  }, [hottTokenAllowance, amount]);
+
+  useEffect(() => {
+    if (status !== 'approving') return;
+
+    if (approveToken.isError) {
+      console.error('vaultApprove.isError', approveToken.error);
+      setError(approveToken.error);
+      return;
+    } else if (!approveToken.isSuccess) {
+      return;
+    }
+
+    setupLock();
+  }, [status, approveToken]);
+
+  useEffect(() => {
+    if (status !== 'locking') return;
+
+    if (lockContractWrite.isError) {
+      console.error('vaultApprove.isError', lockContractWrite.error);
+      setError(lockContractWrite.error);
+      return;
+    } else if (!lockContractWrite.isSuccess) {
+      return;
+    }
+
+    console.log('lockContractWrite.isSuccess', lockContractWrite);
+    setStatus('success');
+  }, [status, lockContractWrite]);
+
+  const setupLock = () => {
+    setLockWriteParams({
+      abi: rHottTokenAbi,
+      address: rHottTokenAddress,
+      functionName: 'convert',
       chainId: chainId,
-      args: [params.address, params.amount],
+      args: [amount],
     });
-  }, [params]);
+    setStatus('awaiting-lock');
+  };
 
-  return useContractWrite(config);
+  const resetState = () => {
+    setIsApprovalRequired(false);
+    setStatus('not-started');
+    setError(null);
+  };
+
+  const approve = () => {
+    if (status !== 'awaiting-approval') return;
+
+    setStatus('approving');
+    approveToken.write?.();
+  };
+
+  const send = () => {
+    if (status !== 'awaiting-lock') return;
+
+    setStatus('locking');
+    lockContractWrite.write?.();
+  };
+
+  return {
+    status,
+    isApprovalRequired,
+    error,
+    approve,
+    send,
+  };
 }
