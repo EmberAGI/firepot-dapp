@@ -17,13 +17,13 @@ function YieldVault() {
           <div className={styles.titleContainer}>
             <span>Firepot Finance</span>
             <div className={styles.currencyBox}>
-              <img src='src/public/assets/verify.svg' loading='lazy' alt='' />
+              <img src='public/assets/verify.svg' loading='lazy' alt='' />
               <span className={styles.percentage}>{properties.apy}%</span>
               <span className={styles.currency}>APY</span>
             </div>
           </div>
           <div className={styles.secondSection}>
-            <img src='src/public/assets/firepot-blue-logo.svg' loading='lazy' alt='' />
+            <img src='public/assets/firepot-blue-logo.svg' loading='lazy' alt='' />
             <div className={styles.currencySection}>
               <div className={styles.firstSection}>
                 <span className={styles.symbol}>$</span>

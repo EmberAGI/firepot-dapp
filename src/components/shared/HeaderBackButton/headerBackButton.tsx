@@ -10,7 +10,7 @@ import { PropsHeader } from '../../interface/header.interface';
  */
 export default function HeaderBackButton(props: PropsHeader) {
   const navigate = useNavigate();
-  const icon = props.icon ? props.icon : 'src/public/assets/back.svg';
+  const icon = props.icon ? props.icon : 'public/assets/back.svg';
   return (
     <header className={styles.headerBox}>
       <img src={icon} loading='lazy' alt='' onClick={() => navigate((props.url ?? -1) as To)} />
