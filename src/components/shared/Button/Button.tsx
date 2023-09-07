@@ -1,7 +1,7 @@
 import styles from './button.module.scss';
-import { ReactComponent as PasskeyIcon } from '../../../assets/passkey.svg';
-import { ReactComponent as SettingsIcon } from '../../../assets/settings-icon.svg';
-import { ReactComponent as Loading } from '../../../assets/oval.svg';
+import { ReactComponent as PasskeyIcon } from '../../../../public/assets/passkey.svg';
+import { ReactComponent as SettingsIcon } from '../../../../public/assets/settings-icon.svg';
+import { ReactComponent as Loading } from '../../../../public/assets/oval.svg';
 
 export interface ButtonProps {
   label: string;

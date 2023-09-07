@@ -1,4 +1,4 @@
-import { ReactComponent as Logo } from '../../../assets/hott.svg';
+import { ReactComponent as Logo } from '../../../../public/assets/hott.svg';
 import styles from './card.module.scss';
 //import { IoMdInfinite } from 'react-icons/io';
 

@@ -1,6 +1,6 @@
 import { BsShieldFillCheck } from 'react-icons/bs';
-import { ReactComponent as Logo } from '../../../assets/vault-icon.svg';
-import { ReactComponent as Hott } from '../../../assets/hott.svg';
+import { ReactComponent as Logo } from '../../../../public/assets/vault-icon.svg';
+import { ReactComponent as Hott } from '../../../../public/assets/hott.svg';
 import styles from './vaultOpportunityCard.module.scss';
 
 export interface VaultOpportunityCardProps {

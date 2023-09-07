@@ -1,5 +1,5 @@
 import { BsShieldFillCheck } from 'react-icons/bs';
-import { ReactComponent as Logo } from '../../../assets/hott.svg';
+import { ReactComponent as Logo } from '../../../../public/assets/hott.svg';
 import styles from './vaultPositionCard.module.scss';
 
 export interface VaultPositionCardProps {
