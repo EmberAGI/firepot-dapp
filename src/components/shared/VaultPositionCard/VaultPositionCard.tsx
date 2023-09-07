@@ -32,7 +32,7 @@ export default function VaultPositionCard({ usd, hott, onClick, icon, APY, chang
           <span>{APY}%</span>
         </div>
 
-        <span className={styles.highlight}>{change}%</span>
+        {/*<span className={styles.highlight}>{change}%</span>*/}
       </div>
     </div>
   );
