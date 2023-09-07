@@ -12,9 +12,9 @@ function YieldVaultDeposit() {
         <section className={styles.sectionBox}>
           <div className={styles.cardWhiteContainer}>
             <div className={styles.firstSection}>
-              <img src='src/assets/firepot-blue-logo.svg' loading='lazy' alt='' />
+              <img src='src/public/assets/firepot-blue-logo.svg' loading='lazy' alt='' />
               <div className={styles.currencyBox}>
-                <img src='src/assets/verify.svg' loading='lazy' alt='' />
+                <img src='src/public/assets/verify.svg' loading='lazy' alt='' />
                 <span className={styles.percentage}>20.44%</span>
                 <span className={styles.currency}>APY</span>
               </div>
@@ -55,7 +55,7 @@ function YieldVaultDeposit() {
                 <span className={styles.currency}>USD</span>
               </div>
             </div>
-            <img src='src/assets/coin.svg' loading='lazy' alt='' className={styles.leftBox} />
+            <img src='src/public/assets/coin.svg' loading='lazy' alt='' className={styles.leftBox} />
           </div>
           {/* <DepositWithdrawInput></DepositWithdrawInput>*/}
           <div className={styles.connectWalletContainer}>
