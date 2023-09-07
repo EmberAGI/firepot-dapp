@@ -21,10 +21,10 @@ export const ConnectWalletButton = () => {
           >
             {(() => {
               if (!connected) {
-                return <Button text={'Connect Wallet'} onClick={openConnectModal} disabled={false} buttonType={'secondary'} />;
+                return <Button label={'Connect Wallet'} onClick={openConnectModal} disabled={false} buttonType={'secondary'} />;
               }
               if (chain.unsupported) {
-                return <Button text={'Wrong network'} onClick={openChainModal} disabled={false} buttonType={'secondary'} />;
+                return <Button label={'Wrong network'} onClick={openChainModal} disabled={false} buttonType={'secondary'} />;
               }
               return (
                 <div style={{ display: 'flex', gap: 12 }}>

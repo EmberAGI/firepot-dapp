@@ -80,7 +80,7 @@ function PortfolioDashboard() {
         ));
       }
       case 'buy_token': {
-        return <Button text={'Buy HOTT'} onClick={commands.buyToken} disabled={false} buttonType={'secondary'} />;
+        return <Button label={'Buy HOTT'} onClick={commands.buyToken} disabled={false} buttonType={'secondary'} />;
       }
       case 'connect_wallet': {
         return <ConnectWalletButton />;

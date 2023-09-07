@@ -40,7 +40,7 @@ function SettingsWallet() {
                 </h3>
               </div>
 
-              <Button text={'Disconnect Wallet'} onClick={toggleAssets} disabled={!walletAddress} buttonType={'secondary'} icon='settings' />
+              <Button label={'Disconnect Wallet'} onClick={toggleAssets} disabled={!walletAddress} buttonType={'secondary'} icon='settings' />
             </section>
           </>
         </main>
