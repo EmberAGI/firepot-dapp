@@ -3,13 +3,7 @@ import { rHottTokenAbi } from '../abis/rHottTokenAbi';
 import { useEffect, useState } from 'react';
 import { mapChain } from '../BeefyVault/reads';
 
-export interface VaultApproveParams {
-  address: `0x${string}`;
-  rHottTokenAddress: `0x${string}`;
-  amount: bigint;
-}
-
-export function useVaultApprove(params?: VaultApproveParams) {
+export function useVaultApprove(vaultAddress: `0x${string}` | undefined, rHottTokenAddress: `0x${string}` | undefined, amount: bigint | undefined) {
   const [chainId, setChainId] = useState<number>(0);
   const [prepareContractWriteParams, setPrepareContractWriteParams] = useState<{} | undefined>();
   const { config } = usePrepareContractWrite(prepareContractWriteParams);
@@ -19,16 +13,16 @@ export function useVaultApprove(params?: VaultApproveParams) {
   }, []);
 
   useEffect(() => {
-    if (!params) return;
+    if (!vaultAddress || !rHottTokenAddress || !amount) return;
 
     setPrepareContractWriteParams({
       abi: rHottTokenAbi,
-      address: params.rHottTokenAddress,
+      address: rHottTokenAddress,
       functionName: 'approveUsage',
       chainId: chainId,
-      args: [params.address, params.amount],
+      args: [vaultAddress, amount],
     });
-  }, [params]);
+  }, [vaultAddress, rHottTokenAddress, amount, chainId]);
 
   return useContractWrite(config);
 }
