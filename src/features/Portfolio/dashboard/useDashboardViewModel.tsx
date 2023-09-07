@@ -196,6 +196,7 @@ export default function useDashboardViewModel(initialState: ViewModelProperties 
 
   useEffect(() => {
     if (!rHottDetails || !hottBalance || !hottBalance[rHottDetails.hottAddress].balance) {
+      if (!isConnected) return;
       setProperties((properties) => ({
         ...properties,
         assetElement: 'buy_token',
