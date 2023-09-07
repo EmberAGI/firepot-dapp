@@ -103,6 +103,7 @@ function YieldVault() {
         </section>
         {properties.showTransactionPreview && properties.transactionPreview != null ? (
           <section className={styles.resume}>
+            {/*
             <div className={styles.container}>
               <span className={styles.title}>Subtotal</span>
               <div className={styles.valuesContainer}>
@@ -142,6 +143,7 @@ function YieldVault() {
                 </span>
               </div>
             </div>
+            */}
             <div className={styles.container}>
               <span className={styles.title}>Total {properties.actionLabel}</span>
               <div className={styles.valuesContainer}>
@@ -158,23 +160,25 @@ function YieldVault() {
           </section>
         ) : null}
         <footer className={styles.footerBox}>
-          {properties.showPrimaryActionButtons && properties.showVaultApproveButton ? (
+          {properties.vaultApproveButton.show ? (
             <Button
-              text={properties.vaultApproveButtonLabel}
+              text={properties.vaultApproveButton.label}
               buttonType='secondary'
               onClick={() => commands.approveDeposit()}
-              disabled={properties.isVaultApproveComplete}
+              disabled={!properties.vaultApproveButton.isEnabled}
               icon=''
+              showActivityIndicator={properties.vaultApproveButton.showActivityIndicator}
             ></Button>
           ) : null}
           <br></br>
-          {properties.showPrimaryActionButtons ? (
+          {properties.vaultDepositButton.show ? (
             <Button
-              text={properties.actionLabel}
+              text={properties.vaultDepositButton.label}
               buttonType='primary'
               onClick={() => commands.deposit()}
-              disabled={!properties.isDepositEnabled}
+              disabled={!properties.vaultDepositButton.isEnabled}
               icon=''
+              showActivityIndicator={properties.vaultDepositButton.showActivityIndicator}
             ></Button>
           ) : null}
         </footer>
