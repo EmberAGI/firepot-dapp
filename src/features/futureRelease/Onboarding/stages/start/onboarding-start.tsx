@@ -40,7 +40,7 @@ function OnboardingStart() {
         </section>
         <div>
           <p>By connecting your wallet, you accept our Terms of Use and Privacy Policy</p>
-          <Button text='Continue' onClick={handleNext} disabled={false} buttonType='primary' />
+          <Button label='Continue' onClick={handleNext} disabled={false} buttonType='primary' />
         </div>
       </main>
       <BottomBar />

@@ -12,7 +12,7 @@ export default function BottomBarButton(action: any) {
         <Icon />
       </button>
       <div className={style.box}>
-        <Button text='Register Passkey' buttonType='primary' onClick={action} disabled={false} icon='passkey'></Button>
+        <Button label='Register Passkey' buttonType='primary' onClick={action} disabled={false} icon='passkey'></Button>
       </div>
     </aside>
   );

@@ -2,10 +2,7 @@ import HeaderBackButton from '../../components/shared/HeaderBackButton/headerBac
 import styles from './yield.module.scss';
 import Button from '../../components/shared/Button/Button';
 
-
-function action() {
-}
-
+function action() {}
 
 function YieldVaultDeposit() {
   return (
@@ -67,7 +64,7 @@ function YieldVaultDeposit() {
           </div>
         </section>
         <footer className={styles.footerBox}>
-          <Button text='Deposit' buttonType='primary' onClick={action} disabled={true} icon=''></Button>
+          <Button label='Deposit' buttonType='primary' onClick={action} disabled={true} icon=''></Button>
         </footer>
       </main>
     </>
