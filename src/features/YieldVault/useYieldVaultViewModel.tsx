@@ -6,6 +6,7 @@ import { useRHottDetails } from '../Contracts/FirepotVault/useRHottDetails';
 import { useTokenBalance } from '../Contracts/FungibleTokens/useTokenBalance';
 import { VaultAllowancesParams, useVaultAllowances } from '../Contracts/FirepotVault/useVaultAllowances';
 import { useVaultDeposit } from '../Contracts/FirepotVault/useVaultDeposit';
+import { useLockHott } from '../Contracts/FirepotVault/useLockHott';
 
 interface TransactionPreview {
   tokenSymbol: string;
@@ -51,8 +52,10 @@ interface ViewModelProperties {
   moveTokenPercentage: number;
   apy: string;
   vaultReturn: VaultReturn;
-  vaultApproveButton: ButtonState;
-  vaultDepositButton: ButtonState;
+  approveLockButton: ButtonState;
+  lockButton: ButtonState;
+  approveDepositButton: ButtonState;
+  depositButton: ButtonState;
   /*vaultApproveButtonLabel: string;
   showVaultApproveButton: boolean;
   isVaultApproveComplete: boolean;
@@ -64,6 +67,8 @@ interface ViewModelProperties {
 interface ViewModelCommands {
   switchVaultTab: (tab: VaultTab) => void;
   updateMoveStableAmount: (amount: string) => void;
+  approveLock: () => void;
+  lock: () => void;
   approveDeposit: () => void;
   deposit: () => void;
   withdraw: () => void;
@@ -92,13 +97,25 @@ const initialProperties: ViewModelProperties = {
     tokenReturn: '0.00',
     returnPercentage: '0.00',
   },
-  vaultApproveButton: {
-    label: 'Approve Deposit',
+  approveLockButton: {
+    label: 'Approve',
     show: false,
     isEnabled: false,
     showActivityIndicator: false,
   },
-  vaultDepositButton: {
+  lockButton: {
+    label: 'Lock tokens',
+    show: false,
+    isEnabled: false,
+    showActivityIndicator: false,
+  },
+  approveDepositButton: {
+    label: 'Approve',
+    show: false,
+    isEnabled: false,
+    showActivityIndicator: false,
+  },
+  depositButton: {
     label: 'Deposit',
     show: false,
     isEnabled: false,
@@ -117,12 +134,20 @@ export default function useYieldVaultViewModel(address: `0x${string}`, initialSt
   //const [depositTokenAddress, setDepositTokenAddress] = useState<`0x${string}` | undefined>();
   //const [moveStableAmount, setMoveStableAmount] = useState<string>('0');
   const [moveTokenAmount, setMoveTokenAmount] = useState<bigint>(0n);
+  const [lockTokenAmount, setLockTokenAmount] = useState<bigint>(0n);
   const vaultPosition = useVaultPosition(address);
   const rHottDetails = useRHottDetails();
   const hottBalance = useTokenBalance(rHottDetails?.hottAddress);
   const [formTouched, setFormTouched] = useState(false);
   const [vaultAllowancesParams, setVaultAllowancesParams] = useState<VaultAllowancesParams | undefined>();
   const vaultAllowances = useVaultAllowances(vaultAllowancesParams);
+  const {
+    status: lockHottStatus,
+    isApprovalRequired: isLockApprovalRequired,
+    error: lockHottError,
+    approve: lockHottApprove,
+    send: lockHottSend,
+  } = useLockHott(rHottDetails?.hottAddress, vaultPosition?.depositTokenAddress, vaultAllowances?.hottTokenAllowance, lockTokenAmount);
   const {
     status: vaultDepositStatus,
     isApprovalRequired: isDepositApprovalRequired,
@@ -200,30 +225,90 @@ export default function useYieldVaultViewModel(address: `0x${string}`, initialSt
     }
 
     const rHottBalance = rHottDetails.rHottAccountDetails.unallocatedBalance[rHottDetails.rHottAddress].balance;
+
+    console.log('moveTokenAmount', moveTokenAmount);
+    console.log('rHottBalance', rHottBalance);
+
     const hasEnoughRHott = moveTokenAmount <= rHottBalance;
 
     console.log('hasEnoughRHott', hasEnoughRHott);
 
-    if (hasEnoughRHott) {
-      setProperties((properties) => ({
-        ...properties,
-        showPrimaryActionButtons: true,
-      }));
-      /*setVaultDespositParams({
-        vaultAddress: vaultPosition.vaultAddress,
-        rHottTokenAddress: vaultPosition.depositTokenAddress,
-        rHottTokenAllowance: vaultAllowances.rHottTokenAllowance,
-        amount: moveTokenAmount,
-      });*/
+    if (!hasEnoughRHott) {
+      setLockTokenAmount(moveTokenAmount - rHottBalance);
     } else {
-      const convertAmount = moveTokenAmount - rHottBalance;
-      //convertToRHottAndDesposit(convertAmount);
+      resetLockTokenState();
     }
   }, [vaultPosition, vaultAllowances, moveTokenAmount, rHottDetails]);
 
   useEffect(() => {
-    console.log('vaultDepositStatus', vaultDepositStatus);
-    console.log('isDepositApprovalRequired', isDepositApprovalRequired);
+    console.log('lockHottStatus', lockHottStatus);
+    switch (lockHottStatus) {
+      case 'not-started':
+        return;
+      case 'awaiting-approval':
+        setProperties((properties) => ({
+          ...properties,
+          approveLockButton: {
+            ...properties.approveLockButton,
+            show: true,
+            isEnabled: true,
+          },
+          lockButton: {
+            ...properties.lockButton,
+            show: true,
+            isEnabled: false,
+            showActivityIndicator: false,
+          },
+          approveDepositButton: {
+            ...properties.approveDepositButton,
+            isEnabled: false,
+          },
+        }));
+        return;
+      case 'approving':
+        setProperties((properties) => ({
+          ...properties,
+          approveLockButton: {
+            ...properties.approveLockButton,
+            isEnabled: false,
+            showActivityIndicator: true,
+          },
+        }));
+        return;
+      case 'awaiting-lock':
+        setProperties((properties) => ({
+          ...properties,
+          approveLockButton: {
+            ...properties.approveLockButton,
+            show: isLockApprovalRequired,
+            isEnabled: false,
+            showActivityIndicator: false,
+          },
+          lockButton: {
+            ...properties.lockButton,
+            show: true,
+            isEnabled: true,
+          },
+        }));
+        return;
+      case 'locking':
+        setProperties((properties) => ({
+          ...properties,
+          lockButton: {
+            ...properties.lockButton,
+            isEnabled: false,
+            showActivityIndicator: true,
+          },
+        }));
+        return;
+      case 'success':
+      case 'error':
+        resetLockTokenState();
+    }
+  }, [lockHottStatus, isLockApprovalRequired]);
+
+  useEffect(() => {
+    if (lockTokenAmount !== 0n) return;
 
     switch (vaultDepositStatus) {
       case 'not-started':
@@ -231,13 +316,13 @@ export default function useYieldVaultViewModel(address: `0x${string}`, initialSt
       case 'awaiting-approval':
         setProperties((properties) => ({
           ...properties,
-          vaultApproveButton: {
-            ...properties.vaultApproveButton,
+          approveDepositButton: {
+            ...properties.approveDepositButton,
             show: true,
             isEnabled: true,
           },
-          vaultDepositButton: {
-            ...properties.vaultDepositButton,
+          depositButton: {
+            ...properties.depositButton,
             show: true,
             isEnabled: false,
             showActivityIndicator: false,
@@ -247,8 +332,8 @@ export default function useYieldVaultViewModel(address: `0x${string}`, initialSt
       case 'approving':
         setProperties((properties) => ({
           ...properties,
-          vaultApproveButton: {
-            ...properties.vaultApproveButton,
+          approveDepositButton: {
+            ...properties.approveDepositButton,
             isEnabled: false,
             showActivityIndicator: true,
           },
@@ -257,14 +342,14 @@ export default function useYieldVaultViewModel(address: `0x${string}`, initialSt
       case 'awaiting-deposit':
         setProperties((properties) => ({
           ...properties,
-          vaultApproveButton: {
-            ...properties.vaultApproveButton,
+          approveDepositButton: {
+            ...properties.approveDepositButton,
             show: isDepositApprovalRequired,
             isEnabled: false,
             showActivityIndicator: false,
           },
-          vaultDepositButton: {
-            ...properties.vaultDepositButton,
+          depositButton: {
+            ...properties.depositButton,
             show: true,
             isEnabled: true,
           },
@@ -273,8 +358,8 @@ export default function useYieldVaultViewModel(address: `0x${string}`, initialSt
       case 'depositing':
         setProperties((properties) => ({
           ...properties,
-          vaultDepositButton: {
-            ...properties.vaultDepositButton,
+          depositButton: {
+            ...properties.depositButton,
             isEnabled: false,
             showActivityIndicator: true,
           },
@@ -284,13 +369,32 @@ export default function useYieldVaultViewModel(address: `0x${string}`, initialSt
       case 'error':
         resetMoveTokenState();
     }
-  }, [vaultDepositStatus, isDepositApprovalRequired]);
+  }, [lockTokenAmount, vaultDepositStatus, isDepositApprovalRequired]);
 
   const switchVaultTab = (tab: VaultTab) => {
     setProperties((properties) => ({
       ...properties,
       vaultTab: tab,
       actionLabel: tab == 'deposit' ? 'Deposit' : 'Withdraw',
+    }));
+  };
+
+  const resetLockTokenState = () => {
+    setLockTokenAmount(0n);
+    setProperties((properties) => ({
+      ...properties,
+      approveLockButton: {
+        ...properties.approveLockButton,
+        show: false,
+        isEnabled: false,
+        showActivityIndicator: false,
+      },
+      lockButton: {
+        ...properties.lockButton,
+        show: false,
+        isEnabled: false,
+        showActivityIndicator: false,
+      },
     }));
   };
 
@@ -301,14 +405,14 @@ export default function useYieldVaultViewModel(address: `0x${string}`, initialSt
       moveTokenAmount: '0',
       moveTokenPercentage: 0,
       showTransactionPreview: false,
-      vaultApproveButton: {
-        ...properties.vaultApproveButton,
+      approveDepositButton: {
+        ...properties.approveDepositButton,
         show: false,
         isEnabled: false,
         showActivityIndicator: false,
       },
-      vaultDepositButton: {
-        ...properties.vaultDepositButton,
+      depositButton: {
+        ...properties.depositButton,
         show: false,
         isEnabled: false,
         showActivityIndicator: false,
@@ -318,6 +422,8 @@ export default function useYieldVaultViewModel(address: `0x${string}`, initialSt
 
   const updateMoveStableAmount = (amount: string) => {
     if (!amount) {
+      console.log('RESETTING STATES');
+      resetLockTokenState();
       resetMoveTokenState();
       return;
     }
@@ -342,12 +448,12 @@ export default function useYieldVaultViewModel(address: `0x${string}`, initialSt
       ...properties,
       moveTokenAmount,
       moveTokenPercentage: percentageDecimal * 100,
-      showPrimaryActionButtons: true,
+      //showPrimaryActionButtons: true,
       showTransactionPreview: true,
       transactionPreview,
-      showVaultApproveButton: false,
+      /*showVaultApproveButton: false,
       isVaultApproveComplete: false,
-      isDepositEnabled: false,
+      isDepositEnabled: false,*/
     }));
     !formTouched && setFormTouched(true);
   };
@@ -368,6 +474,8 @@ export default function useYieldVaultViewModel(address: `0x${string}`, initialSt
       switchVaultTab,
       updateMoveStableAmount,
       approveDeposit,
+      approveLock: lockHottApprove,
+      lock: lockHottSend,
       deposit,
       withdraw,
     },

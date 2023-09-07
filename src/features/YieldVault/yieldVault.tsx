@@ -2,7 +2,7 @@ import HeaderBackButton from '../../components/shared/HeaderBackButton/headerBac
 import DepositWithdrawInput from '../../components/shared/DepositWithdrawInput/depositWithdrawInput';
 import styles from './yieldVault.module.scss';
 import useYieldVaultViewModel from './useYieldVaultViewModel';
-import Button from '../../components/shared/Button/Button';
+import ButtonBar from '../../components/shared/ButtonBar/ButtonBar';
 
 const YIELD_VAULT_ADDRESS = '0xe3dc90C119c46d77659CBbc5f470159A3385ad74';
 
@@ -59,6 +59,7 @@ function YieldVault() {
             <span className={styles.value}>$428.39 USD</span>
           </div>
           */}
+          {/*
           <div className={styles.switchContainer}>
             <div className={styles.wrapper}>
               <div className={styles.option}>
@@ -89,6 +90,7 @@ function YieldVault() {
               </div>
             </div>
           </div>
+          */}
           <DepositWithdrawInput
             moveAction={properties.vaultTab}
             tokenName='Firepot Finance'
@@ -100,6 +102,22 @@ function YieldVault() {
             moveTokenAmount={properties.moveTokenAmount}
             moveTokenPercentage={properties.moveTokenPercentage}
           ></DepositWithdrawInput>
+          <ButtonBar
+            leftButton={{
+              label: properties.approveLockButton.label,
+              onClick: () => commands.approveLock(),
+              disabled: !properties.approveLockButton.isEnabled,
+              hide: !properties.approveLockButton.show,
+              showActivityIndicator: properties.approveLockButton.showActivityIndicator,
+            }}
+            rightButton={{
+              label: properties.lockButton.label,
+              onClick: () => commands.lock(),
+              disabled: !properties.lockButton.isEnabled,
+              hide: !properties.lockButton.show,
+              showActivityIndicator: properties.lockButton.showActivityIndicator,
+            }}
+          />
         </section>
         {properties.showTransactionPreview && properties.transactionPreview != null ? (
           <section className={styles.resume}>
@@ -160,27 +178,22 @@ function YieldVault() {
           </section>
         ) : null}
         <footer className={styles.footerBox}>
-          {properties.vaultApproveButton.show ? (
-            <Button
-              text={properties.vaultApproveButton.label}
-              buttonType='secondary'
-              onClick={() => commands.approveDeposit()}
-              disabled={!properties.vaultApproveButton.isEnabled}
-              icon=''
-              showActivityIndicator={properties.vaultApproveButton.showActivityIndicator}
-            ></Button>
-          ) : null}
-          <br></br>
-          {properties.vaultDepositButton.show ? (
-            <Button
-              text={properties.vaultDepositButton.label}
-              buttonType='primary'
-              onClick={() => commands.deposit()}
-              disabled={!properties.vaultDepositButton.isEnabled}
-              icon=''
-              showActivityIndicator={properties.vaultDepositButton.showActivityIndicator}
-            ></Button>
-          ) : null}
+          <ButtonBar
+            leftButton={{
+              label: properties.approveDepositButton.label,
+              onClick: () => commands.approveDeposit(),
+              disabled: !properties.approveDepositButton.isEnabled,
+              hide: !properties.approveDepositButton.show,
+              showActivityIndicator: properties.approveDepositButton.showActivityIndicator,
+            }}
+            rightButton={{
+              label: properties.depositButton.label,
+              onClick: () => commands.deposit(),
+              disabled: !properties.depositButton.isEnabled,
+              hide: !properties.depositButton.show,
+              showActivityIndicator: properties.depositButton.showActivityIndicator,
+            }}
+          />
         </footer>
       </main>
     </>
