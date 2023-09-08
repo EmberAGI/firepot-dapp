@@ -428,9 +428,11 @@ export default function useYieldVaultViewModel(address: `0x${string}`, initialSt
       return;
     }
 
-    if (properties.availableStableBalance == '0.00') return;
+    const availableStableBalance = Number(properties.availableStableBalance);
 
-    const percentageDecimal = Number(amount) / Number(properties.availableStableBalance);
+    if (availableStableBalance == 0) return;
+
+    const percentageDecimal = Number(amount) / availableStableBalance;
     const moveTokenAmount = String(Number(properties.availableTokenBalance) * percentageDecimal);
     const transactionPreview = {
       tokenSymbol: properties.tokenSymbol,
