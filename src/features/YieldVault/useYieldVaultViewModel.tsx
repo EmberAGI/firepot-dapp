@@ -450,6 +450,9 @@ export default function useYieldVaultViewModel(address: `0x${string}`, initialSt
     const availableStableBalance = parseUnits(properties.availableStableBalance as `${number}`, precisionDecimals);
 
     if (availableStableBalance == 0n) return;
+    const availableStableBalance = parseUnits(properties.availableStableBalance as `${number}`, precisionDecimals);
+
+    if (availableStableBalance == 0n) return;
 
     const percentageDecimal = (parseUnits(amount as `${number}`, precisionDecimals) * precision) / availableStableBalance;
     const moveTokenAmount = (parseUnits(properties.availableTokenBalance as `${number}`, 18) * percentageDecimal) / precision;
@@ -459,11 +462,13 @@ export default function useYieldVaultViewModel(address: `0x${string}`, initialSt
       tokenSymbol: properties.tokenSymbol,
       stableSymbol: properties.stableSymbol,
       subtotalTokenAmount: formattedMoveTokenAmount,
+      subtotalTokenAmount: formattedMoveTokenAmount,
       subtotalStableAmount: amount,
       penaltyTokenAmount: '0',
       penaltyStableAmount: '0',
       feesTokenAmount: '0',
       feesStableAmount: '0',
+      totalTokenAmount: formattedMoveTokenAmount,
       totalTokenAmount: formattedMoveTokenAmount,
       totalStableAmount: amount,
     };
