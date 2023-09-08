@@ -1,4 +1,4 @@
-import { useContractWrite, usePrepareContractWrite } from 'wagmi';
+import { useContractWrite, usePrepareContractWrite, useWaitForTransaction } from 'wagmi';
 import { rHottTokenAbi } from '../abis/rHottTokenAbi';
 import { useEffect, useState } from 'react';
 import { mapChain } from '../BeefyVault/reads';
@@ -26,11 +26,18 @@ export function useLockHott(
 
   const [chainId, setChainId] = useState<number>(0);
 
-  const approveToken = useApproveToken(hottTokenAddress, rHottTokenAddress, amount);
+  const {
+    data: approveData,
+    status: approveStatus,
+    error: approveError,
+    write: approveWrite,
+  } = useApproveToken(hottTokenAddress, rHottTokenAddress, amount);
+  const { data: approveTxData, status: approveTxStatus, error: approveTxError } = useWaitForTransaction(approveData);
 
   const [lockWriteParams, setLockWriteParams] = useState<{} | undefined>();
   const { config: lockConfig } = usePrepareContractWrite(lockWriteParams);
-  const lockContractWrite = useContractWrite(lockConfig);
+  const { data: lockData, status: lockStatus, error: lockError, write: lockWrite } = useContractWrite(lockConfig);
+  const { data: lockTxData, status: lockTxStatus, error: lockTxError } = useWaitForTransaction(lockData);
 
   useEffect(() => {
     setChainId(mapChain('arbitrum-goerli') ?? 0);
@@ -56,31 +63,34 @@ export function useLockHott(
   useEffect(() => {
     if (status !== 'approving') return;
 
-    if (approveToken.isError) {
-      console.error('vaultApprove.isError', approveToken.error);
-      setError(approveToken.error);
+    if (approveStatus === 'error' || approveTxStatus === 'error') {
+      const error = approveError ?? approveTxError;
+      console.error('approve error: ', error);
+      setError(error);
       return;
-    } else if (!approveToken.isSuccess) {
+    } else if (approveStatus !== 'success' || approveTxStatus !== 'success') {
       return;
     }
 
+    console.log('approve successful! ', approveTxData);
     setupLock();
-  }, [status, approveToken]);
+  }, [status, approveStatus, approveTxStatus, approveError, approveTxError]);
 
   useEffect(() => {
     if (status !== 'locking') return;
 
-    if (lockContractWrite.isError) {
-      console.error('vaultApprove.isError', lockContractWrite.error);
-      setError(lockContractWrite.error);
+    if (lockStatus === 'error' || lockTxStatus === 'error') {
+      const error = lockError ?? lockTxError;
+      console.error('lock error: ', error);
+      setError(error);
       return;
-    } else if (!lockContractWrite.isSuccess) {
+    } else if (lockStatus !== 'success' || lockTxStatus !== 'success') {
       return;
     }
 
-    console.log('lockContractWrite.isSuccess', lockContractWrite);
+    console.log('lock successful! ', lockTxData);
     setStatus('success');
-  }, [status, lockContractWrite]);
+  }, [status, lockStatus, lockTxStatus, lockError, lockTxError]);
 
   const setupLock = () => {
     setLockWriteParams({
@@ -103,14 +113,14 @@ export function useLockHott(
     if (status !== 'awaiting-approval') return;
 
     setStatus('approving');
-    approveToken.write?.();
+    approveWrite?.();
   };
 
   const send = () => {
     if (status !== 'awaiting-lock') return;
 
     setStatus('locking');
-    lockContractWrite.write?.();
+    lockWrite?.();
   };
 
   return {

@@ -1,4 +1,4 @@
-import { useContractWrite, usePrepareContractWrite } from 'wagmi';
+import { useContractWrite, usePrepareContractWrite, useWaitForTransaction } from 'wagmi';
 import { rHottTokenAbi } from '../abis/rHottTokenAbi';
 import { useEffect, useState } from 'react';
 import { mapChain } from '../BeefyVault/reads';
@@ -26,11 +26,18 @@ export function useVaultDeposit(
 
   const [chainId, setChainId] = useState<number>(0);
 
-  const vaultApprove = useVaultApprove(vaultAddress, rHottTokenAddress, amount);
+  const {
+    data: approveData,
+    status: approveStatus,
+    error: approveError,
+    write: approveWrite,
+  } = useVaultApprove(vaultAddress, rHottTokenAddress, amount);
+  const { data: approveTxData, status: approveTxStatus, error: approveTxError } = useWaitForTransaction(approveData);
 
   const [depositWriteParams, setDepositWriteParams] = useState<{} | undefined>();
   const { config: depositConfig } = usePrepareContractWrite(depositWriteParams);
-  const depositContractWrite = useContractWrite(depositConfig);
+  const { data: depositData, status: depositStatus, error: depositError, write: depositWrite } = useContractWrite(depositConfig);
+  const { data: depositTxData, status: depositTxStatus, error: depositTxError } = useWaitForTransaction(depositData);
 
   useEffect(() => {
     setChainId(mapChain('arbitrum-goerli') ?? 0);
@@ -56,31 +63,34 @@ export function useVaultDeposit(
   useEffect(() => {
     if (status !== 'approving') return;
 
-    if (vaultApprove.isError) {
-      console.error('vaultApprove.isError', vaultApprove.error);
-      setError(vaultApprove.error);
+    if (approveStatus === 'error' || approveTxStatus === 'error') {
+      const error = approveError ?? approveTxError;
+      console.error('approve error: ', error);
+      setError(error);
       return;
-    } else if (!vaultApprove.isSuccess) {
+    } else if (approveStatus !== 'success' || approveTxStatus !== 'success') {
       return;
     }
 
+    console.log('approve successful! ', approveTxData);
     setupDeposit();
-  }, [status, vaultApprove]);
+  }, [status, approveStatus, approveTxStatus, approveError, approveTxError]);
 
   useEffect(() => {
     if (status !== 'depositing') return;
 
-    if (depositContractWrite.isError) {
-      console.error('vaultApprove.isError', depositContractWrite.error);
-      setError(depositContractWrite.error);
+    if (depositStatus === 'error' || depositTxStatus === 'error') {
+      const error = depositError ?? depositTxError;
+      console.error('deposit error: ', error);
+      setError(error);
       return;
-    } else if (!depositContractWrite.isSuccess) {
+    } else if (depositStatus !== 'success' || depositTxStatus !== 'success') {
       return;
     }
 
-    console.log('depositContractWrite.isSuccess', depositContractWrite);
+    console.log('deposit successful! ', depositTxData);
     setStatus('success');
-  }, [status, depositContractWrite]);
+  }, [status, depositStatus, depositTxStatus, depositError, depositTxError]);
 
   const setupDeposit = () => {
     setDepositWriteParams({
@@ -103,14 +113,14 @@ export function useVaultDeposit(
     if (status !== 'awaiting-approval') return;
 
     setStatus('approving');
-    vaultApprove.write?.();
+    approveWrite?.();
   };
 
   const send = () => {
     if (status !== 'awaiting-deposit') return;
 
     setStatus('depositing');
-    depositContractWrite.write?.();
+    depositWrite?.();
   };
 
   return {

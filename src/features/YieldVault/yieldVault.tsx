@@ -19,7 +19,7 @@ function YieldVault() {
             <div className={styles.currencyBox}>
               <img src='/assets/verify.svg' loading='lazy' alt='' />
               <span className={styles.percentage}>{properties.apy}%</span>
-              <span className={styles.currency}>APY</span>
+              <span className={styles.currency}>APR</span>
             </div>
           </div>
           <div className={styles.secondSection}>
@@ -34,11 +34,13 @@ function YieldVault() {
                 <span>
                   {properties.vaultTokenBalance} {properties.tokenSymbol}
                 </span>
+                {/*}
                 <div className={styles.percentage}>
                   <span>
                     +{properties.vaultReturn.tokenReturn} ({properties.vaultReturn.returnPercentage}%)
                   </span>
                 </div>
+                */}
               </div>
             </div>
           </div>

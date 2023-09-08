@@ -15,6 +15,7 @@ export default function ButtonBar({ leftButton, rightButton }: ButtonBarProps) {
           onClick={leftButton.onClick}
           disabled={leftButton.disabled}
           buttonType={leftButton.buttonType ?? 'secondary'}
+          showActivityIndicator={leftButton.showActivityIndicator}
         />
       )}
       {!rightButton.hide && (
@@ -23,6 +24,7 @@ export default function ButtonBar({ leftButton, rightButton }: ButtonBarProps) {
           onClick={rightButton.onClick}
           disabled={rightButton.disabled}
           buttonType={rightButton.buttonType ?? 'primary'}
+          showActivityIndicator={rightButton.showActivityIndicator}
         />
       )}
     </div>
