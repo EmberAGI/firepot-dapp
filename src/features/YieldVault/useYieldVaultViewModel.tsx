@@ -166,6 +166,18 @@ export default function useYieldVaultViewModel(address: `0x${string}`, initialSt
   }, []);
 
   useEffect(() => {
+    if (!vaultPosition) {
+      return;
+    }
+
+    const apy = vaultPosition.apy;
+    setProperties((properties) => ({
+      ...properties,
+      apy,
+    }));
+  }, [vaultPosition]);
+
+  useEffect(() => {
     if (!vaultPosition || !vaultPosition.accountDetails) {
       return;
     }
@@ -177,14 +189,12 @@ export default function useYieldVaultViewModel(address: `0x${string}`, initialSt
     );
     const stableSymbol = vaultPosition.accountDetails.priceDenominationSymbol;
     const vaultTokenBalance = String(vaultPosition.accountDetails.balance / BigInt(10 ** vaultPosition.depositTokenDecimals));
-    const apy = vaultPosition.apy;
 
     setProperties((properties) => ({
       ...properties,
       vaultStableBalance,
       stableSymbol,
       vaultTokenBalance,
-      apy,
     }));
   }, [vaultPosition]);
 
