@@ -4,7 +4,7 @@ import { MdChevronRight } from 'react-icons/md';
 
 import { useState } from 'react';
 
-import Button from '../../../components/shared/Button/Button';
+//import Button from '../../../components/shared/Button/Button';
 import { ConnectWallet } from '../../ConnectWallet';
 
 function SettingsWallet() {
