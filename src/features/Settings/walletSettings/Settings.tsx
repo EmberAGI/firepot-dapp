@@ -5,6 +5,7 @@ import { MdChevronRight } from 'react-icons/md';
 import { useState } from 'react';
 
 import Button from '../../../components/shared/Button/Button';
+import { ConnectWallet } from '../../ConnectWallet';
 
 function SettingsWallet() {
   const [assets, setAssets]: [boolean, any] = useState(false);
@@ -39,8 +40,8 @@ function SettingsWallet() {
                   <MdChevronRight size='1em'></MdChevronRight>
                 </h3>
               </div>
-
-              <Button label={'Disconnect Wallet'} onClick={toggleAssets} disabled={!walletAddress} buttonType={'secondary'} icon='settings' />
+              <ConnectWallet />
+              {/*<Button label={'Disconnect Wallet'} onClick={toggleAssets} disabled={!walletAddress} buttonType={'secondary'} icon='settings' />*/}
             </section>
           </>
         </main>
