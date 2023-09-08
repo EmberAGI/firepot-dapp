@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 import { useAccount, useContractWrite, usePrepareContractWrite } from "wagmi";
 import TokenVesting from "../features/Contracts/abis/PowerTokenVesting.json";
 
-const tokenVesting = "0xsomething";
+const tokenVesting = "0xE0Ab51F248539ee0a1E3bd1C0ECe12f96BddFD8F";
 const hottDecimals = 18;
 
 const chunk = (arr: any[], size: number) =>
