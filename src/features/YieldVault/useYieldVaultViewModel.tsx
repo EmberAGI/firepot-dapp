@@ -166,20 +166,25 @@ export default function useYieldVaultViewModel(address: `0x${string}`, initialSt
   }, []);
 
   useEffect(() => {
-    if (!vaultPosition) {
+    if (!vaultPosition || !vaultPosition.accountDetails) {
       return;
     }
 
+    const vaultStableBalance = String(
+      vaultPosition.accountDetails.priceDenominationBalance /
+        BigInt(10 ** vaultPosition.accountDetails.priceDenominationDecimals) /
+        BigInt(10 ** vaultPosition.depositTokenDecimals),
+    );
+    const stableSymbol = vaultPosition.accountDetails.priceDenominationSymbol;
+    const vaultTokenBalance = String(vaultPosition.accountDetails.balance / BigInt(10 ** vaultPosition.depositTokenDecimals));
+    const apy = vaultPosition.apy;
+
     setProperties((properties) => ({
       ...properties,
-      vaultStableBalance: String(
-        vaultPosition.priceDenominationBalance /
-          BigInt(10 ** vaultPosition.priceDenominationDecimals) /
-          BigInt(10 ** vaultPosition.depositTokenDecimals),
-      ),
-      stableSymbol: vaultPosition.priceDenominationSymbol,
-      vaultTokenBalance: String(vaultPosition.balance / BigInt(10 ** vaultPosition.depositTokenDecimals)),
-      apy: vaultPosition.apy,
+      vaultStableBalance,
+      stableSymbol,
+      vaultTokenBalance,
+      apy,
     }));
   }, [vaultPosition]);
 

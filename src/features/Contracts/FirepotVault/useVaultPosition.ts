@@ -9,12 +9,15 @@ interface VaultPosition {
   depositTokenAddress: `0x${string}`;
   depositTokenDecimals: number;
   depositTokenTradeUrl: string;
-  balance: bigint;
-  priceDenominationBalance: bigint;
-  priceDenominationDecimals: number;
-  priceDenominationSymbol: string;
+  totalBalance: bigint;
   apy: string;
-  vaultRewardsTokenReturn: bigint;
+  accountDetails?: {
+    balance: bigint;
+    priceDenominationBalance: bigint;
+    priceDenominationDecimals: number;
+    priceDenominationSymbol: string;
+    vaultRewardsTokenReturn: bigint;
+  };
 }
 
 interface DividendsInfo {
@@ -43,33 +46,34 @@ export function useVaultPosition(vaultAddress: `0x${string}`): VaultPosition | u
     }
 
     const getVaultPosition = async () => {
-      console.log('getVaultPosition', vaultAddress, address);
-
-      let contractReadConfig: MulticallContractFunctionConfig[] = [];
       const chainId = mapChain('arbitrum-goerli') ?? 0;
-
-      contractReadConfig.push({
-        abi: rewardsAbi,
-        address: vaultAddress,
-        functionName: 'usersAllocation',
-        args: [address],
-        chainId,
-      });
-
-      contractReadConfig.push({
-        abi: rewardsAbi,
-        address: vaultAddress,
-        functionName: 'dividendsInfo',
-        args: [REWARDS_TOKEN],
-        chainId,
-      });
+      let contractReadConfig: MulticallContractFunctionConfig[] = [
+        {
+          abi: rewardsAbi,
+          address: vaultAddress,
+          functionName: 'totalAllocation',
+          chainId,
+        },
+        {
+          abi: rewardsAbi,
+          address: vaultAddress,
+          functionName: 'dividendsInfo',
+          args: [REWARDS_TOKEN],
+          chainId,
+        },
+        {
+          abi: rewardsAbi,
+          address: vaultAddress,
+          functionName: 'usersAllocation',
+          args: [address],
+          chainId,
+        },
+      ];
 
       const readResponse = await readContracts({
         contracts: contractReadConfig as any[],
         batchSize: 100000, // disables size limit
       });
-
-      console.log('useVaultPosition - readResult', readResponse);
 
       const totalAllocation = !readResponse[0].error ? (readResponse[0].result as bigint) : undefined;
 
@@ -88,25 +92,31 @@ export function useVaultPosition(vaultAddress: `0x${string}`): VaultPosition | u
           }
         : undefined;
 
+      const usersAllocation = !readResponse[2].error ? (readResponse[2].result as bigint) : undefined;
+
       if (!totalAllocation || !dividendsInfo) {
         return;
       }
 
-      console.log('dividendsInfo', dividendsInfo);
-
       const apy = (Number(dividendsInfo.currentDistributionAmount) / Number(totalAllocation) / 7) * 365 * 100;
+      const accountDetails = usersAllocation
+        ? {
+            balance: usersAllocation,
+            priceDenominationBalance: totalAllocation * tokenPrice[0].pricePerToken,
+            priceDenominationDecimals: tokenPrice[0].priceDenominationDecimals,
+            priceDenominationSymbol: tokenPrice[0].priceDenominationSymbol,
+            vaultRewardsTokenReturn: 0n,
+          }
+        : undefined;
 
       setVaultPosition({
         vaultAddress,
         depositTokenAddress: tokenPrice[0].tokenAddress,
         depositTokenDecimals: tokenPrice[0].tokenDecimals,
         depositTokenTradeUrl: import.meta.env.BUY_HOTT_URL!,
-        balance: totalAllocation,
-        priceDenominationBalance: totalAllocation * tokenPrice[0].pricePerToken,
-        priceDenominationDecimals: tokenPrice[0].priceDenominationDecimals,
-        priceDenominationSymbol: tokenPrice[0].priceDenominationSymbol,
+        totalBalance: totalAllocation,
         apy: apy.toFixed(2),
-        vaultRewardsTokenReturn: 0n,
+        accountDetails,
       });
     };
     getVaultPosition();

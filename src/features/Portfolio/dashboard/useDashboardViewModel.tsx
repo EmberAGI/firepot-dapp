@@ -130,7 +130,13 @@ export default function useDashboardViewModel(initialState: ViewModelProperties 
   }, [isConnected]);
 
   useEffect(() => {
-    if (!vaultPosition || vaultPosition.balance) {
+    console.log(
+      'vaultPosition, vaultPosition?.accountDetails, vaultPosition?.accountDetails?.balance',
+      vaultPosition,
+      vaultPosition?.accountDetails,
+      vaultPosition?.accountDetails?.balance,
+    );
+    if (!vaultPosition || (vaultPosition.accountDetails && vaultPosition.accountDetails.balance != 0n)) {
       setProperties((properties) => ({
         ...properties,
         showDiscovery: false,
@@ -142,7 +148,7 @@ export default function useDashboardViewModel(initialState: ViewModelProperties 
     const vaultOpportunities: VaultOpportunityCardProps[] = [
       {
         id: vaultPosition.vaultAddress,
-        text: 'HOTT Vault',
+        text: 'HOTT Rewards',
         APY: Number(vaultPosition.apy),
         onClick: undefined,
       },
@@ -156,7 +162,7 @@ export default function useDashboardViewModel(initialState: ViewModelProperties 
   }, [vaultPosition]);
 
   useEffect(() => {
-    if (!vaultPosition) {
+    if (!vaultPosition || !vaultPosition.accountDetails) {
       setProperties((properties) => ({
         ...properties,
         showPositions: false,
@@ -165,7 +171,9 @@ export default function useDashboardViewModel(initialState: ViewModelProperties 
       return;
     }
 
-    if (vaultPosition.balance === 0n) {
+    const accountBalance = vaultPosition.accountDetails.balance;
+
+    if (accountBalance === 0n) {
       setProperties((properties) => ({
         ...properties,
         showPositions: false,
@@ -175,13 +183,13 @@ export default function useDashboardViewModel(initialState: ViewModelProperties 
       return;
     }
 
-    setPositionBalance(vaultPosition.balance);
+    setPositionBalance(accountBalance);
 
     const vaultPositions: VaultPositionCardProps[] = [
       {
         id: vaultPosition.vaultAddress,
-        usd: getUsdValue(vaultPosition.balance),
-        hott: Number(vaultPosition.balance / 1000000000000000000n),
+        usd: getUsdValue(accountBalance),
+        hott: Number(accountBalance / 1000000000000000000n),
         onClick: undefined,
         APY: Number(vaultPosition.apy),
       },
