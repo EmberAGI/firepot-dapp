@@ -7,6 +7,10 @@ import { useTokenBalance } from '../Contracts/FungibleTokens/useTokenBalance';
 import { VaultAllowancesParams, useVaultAllowances } from '../Contracts/FirepotVault/useVaultAllowances';
 import { useVaultDeposit } from '../Contracts/FirepotVault/useVaultDeposit';
 import { useLockHott } from '../Contracts/FirepotVault/useLockHott';
+import { parseUnits, formatUnits } from 'viem';
+
+const precision = 1000000n
+const precisionDecimals = 6;
 
 interface TransactionPreview {
   tokenSymbol: string;
@@ -428,30 +432,32 @@ export default function useYieldVaultViewModel(address: `0x${string}`, initialSt
       return;
     }
 
-    const availableStableBalance = Number(properties.availableStableBalance);
+    const availableStableBalance = parseUnits(properties.availableStableBalance as `${number}`, precisionDecimals);
 
-    if (availableStableBalance == 0) return;
+    if (availableStableBalance == 0n) return;
 
-    const percentageDecimal = Number(amount) / availableStableBalance;
-    const moveTokenAmount = String(Number(properties.availableTokenBalance) * percentageDecimal);
+    const percentageDecimal = parseUnits(amount as `${number}`, precisionDecimals) * precision / availableStableBalance;
+    const moveTokenAmount =  parseUnits(properties.availableTokenBalance as `${number}`, 18) * percentageDecimal / precision;
+    const formattedMoveTokenAmount = formatUnits(moveTokenAmount, 18);
+
     const transactionPreview = {
       tokenSymbol: properties.tokenSymbol,
       stableSymbol: properties.stableSymbol,
-      subtotalTokenAmount: moveTokenAmount,
+      subtotalTokenAmount: formattedMoveTokenAmount,
       subtotalStableAmount: amount,
       penaltyTokenAmount: '0',
       penaltyStableAmount: '0',
       feesTokenAmount: '0',
       feesStableAmount: '0',
-      totalTokenAmount: moveTokenAmount,
+      totalTokenAmount: formattedMoveTokenAmount,
       totalStableAmount: amount,
     };
 
-    setMoveTokenAmount(BigInt(Number(moveTokenAmount) * 10 ** 18));
+    setMoveTokenAmount(moveTokenAmount);
     setProperties((properties) => ({
       ...properties,
-      moveTokenAmount,
-      moveTokenPercentage: percentageDecimal * 100,
+      moveTokenAmount: formattedMoveTokenAmount,
+      moveTokenPercentage: Number(percentageDecimal * 100n / precision),
       //showPrimaryActionButtons: true,
       showTransactionPreview: true,
       transactionPreview,
