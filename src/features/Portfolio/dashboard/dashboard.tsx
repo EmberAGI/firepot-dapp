@@ -42,7 +42,7 @@ function PortfolioDashboard() {
 
   const renderPositions = () => {
     return properties.showPositions ? (
-      <section className={style.position}>
+      <section className={style.positions}>
         <div className={style.header}>
           <h3>
             <span>Positions</span>
