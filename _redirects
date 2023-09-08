@@ -1,2 +1,0 @@
-# Instructs netlify to redirect any traffic (/*) to /
-/* /index.html 200
