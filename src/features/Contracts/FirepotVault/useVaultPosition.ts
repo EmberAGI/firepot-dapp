@@ -102,7 +102,7 @@ export function useVaultPosition(vaultAddress: `0x${string}`): VaultPosition | u
       const accountDetails = usersAllocation
         ? {
             balance: usersAllocation,
-            priceDenominationBalance: totalAllocation * tokenPrice[0].pricePerToken,
+            priceDenominationBalance: usersAllocation * tokenPrice[0].pricePerToken,
             priceDenominationDecimals: tokenPrice[0].priceDenominationDecimals,
             priceDenominationSymbol: tokenPrice[0].priceDenominationSymbol,
             vaultRewardsTokenReturn: 0n,
