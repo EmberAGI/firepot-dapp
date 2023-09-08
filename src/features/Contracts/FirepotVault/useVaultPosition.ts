@@ -51,7 +51,8 @@ export function useVaultPosition(vaultAddress: `0x${string}`): VaultPosition | u
       contractReadConfig.push({
         abi: rewardsAbi,
         address: vaultAddress,
-        functionName: 'totalAllocation',
+        functionName: 'usersAllocation',
+        args: [address],
         chainId,
       });
 
@@ -68,7 +69,7 @@ export function useVaultPosition(vaultAddress: `0x${string}`): VaultPosition | u
         batchSize: 100000, // disables size limit
       });
 
-      console.log('readResult', readResponse);
+      console.log('useVaultPosition - readResult', readResponse);
 
       const totalAllocation = !readResponse[0].error ? (readResponse[0].result as bigint) : undefined;
 
@@ -99,7 +100,7 @@ export function useVaultPosition(vaultAddress: `0x${string}`): VaultPosition | u
         vaultAddress,
         depositTokenAddress: tokenPrice[0].tokenAddress,
         depositTokenDecimals: tokenPrice[0].tokenDecimals,
-        depositTokenTradeUrl: 'https://launchpad.kommunitas.net/pool/HOTT/PublicCross',
+        depositTokenTradeUrl: import.meta.env.BUY_HOTT_URL!,
         balance: totalAllocation,
         priceDenominationBalance: totalAllocation * tokenPrice[0].pricePerToken,
         priceDenominationDecimals: tokenPrice[0].priceDenominationDecimals,
