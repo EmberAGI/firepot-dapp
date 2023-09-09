@@ -31,7 +31,9 @@ interface DividendsInfo {
   distributionDisabled: boolean; // deactivate a token distribution (for temporary dividends)
 }
 
-const REWARDS_TOKEN = '0xf39e5FCc99565A65953d7ffb195394d968E0f872';
+const REWARDS_TOKEN = import.meta.env.IS_MAINNET!
+  ? import.meta.env.MAINNET_RHOTT_CONTRACT_ADDRESS!
+  : import.meta.env.REPLACE_WITH_TESTNET_REWARDS_CONTRACT_ADDRESS;
 const TOKEN_PARAMETERS: TokenParameter[] = [{ tokenAddress: REWARDS_TOKEN }];
 
 export function useVaultPosition(vaultAddress: `0x${string}`): VaultPosition | undefined {

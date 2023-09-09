@@ -1,6 +1,6 @@
 import { readContracts, useAccount } from 'wagmi';
 import { TokenBalance, convertTokenBalance, useTokenBalance } from '../FungibleTokens/useTokenBalance';
-import { MulticallContractFunctionConfig, mapChain } from '../BeefyVault/reads';
+import { CHAIN, MulticallContractFunctionConfig } from '../BeefyVault/reads';
 import { rHottTokenAbi } from '../abis/rHottTokenAbi';
 import { useEffect, useState } from 'react';
 import { useTokenPrice } from '../FungibleTokens/useTokenPrice';
@@ -26,7 +26,9 @@ interface RHottDetails {
   rHottAccountDetails: RHottAccountDetails;
 }
 
-const RHOTT_ADDRESS = '0xf39e5FCc99565A65953d7ffb195394d968E0f872';
+const RHOTT_ADDRESS = import.meta.env.IS_MAINNET!
+  ? import.meta.env.MAINNET_RHOTT_CONTRACT_ADDRESS!
+  : import.meta.env.REPLACE_WITH_TESTNET_REWARDS_CONTRACT_ADDRESS;
 
 export function useRHottDetails(): RHottDetails | undefined {
   const [rHottDetails, setRHottDetails] = useState<RHottDetails | undefined>();
@@ -42,7 +44,7 @@ export function useRHottDetails(): RHottDetails | undefined {
   const tokenPrice = useTokenPrice(RHOTT_ADDRESS);
 
   useEffect(() => {
-    setChainId(mapChain('arbitrum-goerli') ?? 0);
+    setChainId(CHAIN);
   }, []);
 
   useEffect(() => {

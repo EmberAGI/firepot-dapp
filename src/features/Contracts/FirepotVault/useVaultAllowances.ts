@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { erc20ABI, readContracts, useAccount } from 'wagmi';
-import { MulticallContractFunctionConfig, mapChain } from '../BeefyVault/reads';
+import { CHAIN, MulticallContractFunctionConfig } from '../BeefyVault/reads';
 import { rHottTokenAbi } from '../abis/rHottTokenAbi';
 
 export interface VaultAllowancesParams {
@@ -41,7 +41,7 @@ export function useVaultAllowances(params?: VaultAllowancesParams) {
   });*/
 
   useEffect(() => {
-    setChainId(mapChain('arbitrum-goerli') ?? 0);
+    setChainId(CHAIN);
   }, []);
 
   useEffect(() => {

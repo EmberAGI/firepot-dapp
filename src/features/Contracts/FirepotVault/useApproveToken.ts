@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { erc20ABI, useContractWrite, usePrepareContractWrite } from 'wagmi';
-import { mapChain } from '../BeefyVault/reads';
+import { CHAIN } from '../BeefyVault/reads';
 
 export function useApproveToken(tokenAddress: `0x${string}` | undefined, spenderAddress: `0x${string}` | undefined, amount: bigint | undefined) {
   const [chainId, setChainId] = useState<number>(0);
@@ -8,7 +8,7 @@ export function useApproveToken(tokenAddress: `0x${string}` | undefined, spender
   const { config } = usePrepareContractWrite(prepareContractWriteParams);
 
   useEffect(() => {
-    setChainId(mapChain('arbitrum-goerli') ?? 0);
+    setChainId(CHAIN);
   }, []);
 
   useEffect(() => {

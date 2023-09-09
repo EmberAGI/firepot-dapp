@@ -1,7 +1,7 @@
 import { useContractWrite, usePrepareContractWrite, useWaitForTransaction } from 'wagmi';
 import { rHottTokenAbi } from '../abis/rHottTokenAbi';
 import { useEffect, useState } from 'react';
-import { mapChain } from '../BeefyVault/reads';
+import { CHAIN } from '../BeefyVault/reads';
 import { useVaultApprove } from './useVaultApprove';
 
 type VaultDepositStatus = 'not-started' | 'awaiting-approval' | 'approving' | 'awaiting-deposit' | 'depositing' | 'success' | 'error';
@@ -40,7 +40,7 @@ export function useVaultDeposit(
   const { data: depositTxData, status: depositTxStatus, error: depositTxError } = useWaitForTransaction(depositData);
 
   useEffect(() => {
-    setChainId(mapChain('arbitrum-goerli') ?? 0);
+    setChainId(CHAIN);
   }, []);
 
   useEffect(() => {

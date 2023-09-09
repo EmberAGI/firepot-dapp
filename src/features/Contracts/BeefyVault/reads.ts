@@ -21,6 +21,8 @@ import {
 } from 'wagmi/chains';
 import { rHottTokenAbi } from '../abis/rHottTokenAbi.ts';
 
+export const CHAIN = mapChain(import.meta.env.IS_MAINNET! ? 'arbitrum' : 'arbitrum-goerli') ?? 0;
+
 export function mapChain(chain: string): number | null {
   switch (chain) {
     // case 'emerald': return 42262;

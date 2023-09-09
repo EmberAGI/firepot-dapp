@@ -1,7 +1,7 @@
 import { useContractWrite, usePrepareContractWrite, useWaitForTransaction } from 'wagmi';
 import { rHottTokenAbi } from '../abis/rHottTokenAbi';
 import { useEffect, useState } from 'react';
-import { mapChain } from '../BeefyVault/reads';
+import { CHAIN } from '../BeefyVault/reads';
 import { useApproveToken } from './useApproveToken';
 
 type LockHottStatus = 'not-started' | 'awaiting-approval' | 'approving' | 'awaiting-lock' | 'locking' | 'success' | 'error';
@@ -40,7 +40,7 @@ export function useLockHott(
   const { data: lockTxData, status: lockTxStatus, error: lockTxError } = useWaitForTransaction(lockData);
 
   useEffect(() => {
-    setChainId(mapChain('arbitrum-goerli') ?? 0);
+    setChainId(CHAIN);
   }, []);
 
   useEffect(() => {
