@@ -20,8 +20,10 @@ import {
   zkSync,
 } from 'wagmi/chains';
 import { rHottTokenAbi } from '../abis/rHottTokenAbi.ts';
+import { getEnv } from '../../../lib/envVar.ts';
 
-export const CHAIN = mapChain(import.meta.env.IS_MAINNET! ? 'arbitrum' : 'arbitrum-goerli') ?? 0;
+console.log('IS_MAINNET', getEnv('VITE_IS_MAINNET') === 'true');
+export const CHAIN = mapChain(getEnv('VITE_IS_MAINNET') === 'true' ? 'arbitrum' : 'arbitrum-goerli') ?? 0;
 
 export function mapChain(chain: string): number | null {
   switch (chain) {

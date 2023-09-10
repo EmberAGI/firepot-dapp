@@ -3,6 +3,7 @@ import { readContracts, useAccount } from 'wagmi';
 import { MulticallContractFunctionConfig, mapChain } from '../BeefyVault/reads';
 import { rewardsAbi } from '../abis/rewardsAbi';
 import { TokenParameter, useTokenPrices } from '../FungibleTokens/useTokenPrices';
+import { getEnv } from '../../../lib/envVar';
 
 interface VaultPosition {
   vaultAddress: `0x${string}`;
@@ -20,20 +21,20 @@ interface VaultPosition {
   };
 }
 
-interface DividendsInfo {
+interface RewardsInfo {
   currentDistributionAmount: bigint; // total amount to distribute during the current cycle
   currentCycleDistributedAmount: bigint; // amount already distributed for the current cycle (times 1e2)
   pendingAmount: bigint; // total amount in the pending slot, not distributed yet
   distributedAmount: bigint; // total amount that has been distributed since initialization
-  accDividendsPerShare: bigint; // accumulated dividends per share (times 1e18)
-  lastUpdateTime: bigint; // last time the dividends distribution occurred
-  cycleDividendsPercent: bigint; // fixed part of the pending dividends to assign to currentDistributionAmount on every cycle
-  distributionDisabled: boolean; // deactivate a token distribution (for temporary dividends)
+  accRewardsPerShare: bigint; // accumulated rewards per share (times 1e18)
+  lastUpdateTime: bigint; // last time the rewards distribution occurred
+  cycleRewardsPercent: bigint; // fixed part of the pending rewards to assign to currentDistributionAmount on every cycle
+  distributionDisabled: boolean; // deactivate a token distribution (for temporary rewards)
 }
 
-const REWARDS_TOKEN = import.meta.env.IS_MAINNET!
-  ? import.meta.env.MAINNET_RHOTT_CONTRACT_ADDRESS!
-  : import.meta.env.REPLACE_WITH_TESTNET_REWARDS_CONTRACT_ADDRESS;
+const REWARDS_TOKEN = (
+  getEnv('VITE_IS_MAINNET') === 'true' ? getEnv('VITE_MAINNET_RHOTT_CONTRACT_ADDRESS') : getEnv('VITE_TESTNET_REWARDS_CONTRACT_ADDRESS')
+) as `0x${string}`;
 const TOKEN_PARAMETERS: TokenParameter[] = [{ tokenAddress: REWARDS_TOKEN }];
 
 export function useVaultPosition(vaultAddress: `0x${string}`): VaultPosition | undefined {
@@ -59,7 +60,7 @@ export function useVaultPosition(vaultAddress: `0x${string}`): VaultPosition | u
         {
           abi: rewardsAbi,
           address: vaultAddress,
-          functionName: 'dividendsInfo',
+          functionName: 'rewardsInfo',
           args: [REWARDS_TOKEN],
           chainId,
         },
@@ -79,28 +80,28 @@ export function useVaultPosition(vaultAddress: `0x${string}`): VaultPosition | u
 
       const totalAllocation = !readResponse[0].error ? (readResponse[0].result as bigint) : undefined;
 
-      type DividendsInfoResult = [bigint, bigint, bigint, bigint, bigint, bigint, bigint, boolean];
-      const dividendsInfoResult = !readResponse[1].error ? (readResponse[1].result as DividendsInfoResult) : undefined;
-      const dividendsInfo: DividendsInfo | undefined = dividendsInfoResult
+      type RewardsInfoResult = [bigint, bigint, bigint, bigint, bigint, bigint, bigint, boolean];
+      const rewardsInfoResult = !readResponse[1].error ? (readResponse[1].result as RewardsInfoResult) : undefined;
+      const rewardsInfo: RewardsInfo | undefined = rewardsInfoResult
         ? {
-            currentDistributionAmount: dividendsInfoResult[0],
-            currentCycleDistributedAmount: dividendsInfoResult[1],
-            pendingAmount: dividendsInfoResult[2],
-            distributedAmount: dividendsInfoResult[3],
-            accDividendsPerShare: dividendsInfoResult[4],
-            lastUpdateTime: dividendsInfoResult[5],
-            cycleDividendsPercent: dividendsInfoResult[6],
-            distributionDisabled: dividendsInfoResult[7],
+            currentDistributionAmount: rewardsInfoResult[0],
+            currentCycleDistributedAmount: rewardsInfoResult[1],
+            pendingAmount: rewardsInfoResult[2],
+            distributedAmount: rewardsInfoResult[3],
+            accRewardsPerShare: rewardsInfoResult[4],
+            lastUpdateTime: rewardsInfoResult[5],
+            cycleRewardsPercent: rewardsInfoResult[6],
+            distributionDisabled: rewardsInfoResult[7],
           }
         : undefined;
 
       const usersAllocation = !readResponse[2].error ? (readResponse[2].result as bigint) : undefined;
 
-      if (!totalAllocation || !dividendsInfo) {
+      if (!totalAllocation || !rewardsInfo) {
         return;
       }
 
-      const apy = (Number(dividendsInfo.currentDistributionAmount) / Number(totalAllocation) / 7) * 365 * 100;
+      const apy = (Number(rewardsInfo.currentDistributionAmount) / Number(totalAllocation) / 7) * 365 * 100;
       const accountDetails = usersAllocation
         ? {
             balance: usersAllocation,
@@ -115,7 +116,7 @@ export function useVaultPosition(vaultAddress: `0x${string}`): VaultPosition | u
         vaultAddress,
         depositTokenAddress: tokenPrice[0].tokenAddress,
         depositTokenDecimals: tokenPrice[0].tokenDecimals,
-        depositTokenTradeUrl: import.meta.env.BUY_HOTT_URL!,
+        depositTokenTradeUrl: getEnv('VITE_BUY_HOTT_URL'),
         totalBalance: totalAllocation,
         apy: apy.toFixed(2),
         accountDetails,

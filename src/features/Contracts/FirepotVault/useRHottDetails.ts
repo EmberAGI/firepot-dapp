@@ -4,6 +4,7 @@ import { CHAIN, MulticallContractFunctionConfig } from '../BeefyVault/reads';
 import { rHottTokenAbi } from '../abis/rHottTokenAbi';
 import { useEffect, useState } from 'react';
 import { useTokenPrice } from '../FungibleTokens/useTokenPrice';
+import { getEnv } from '../../../lib/envVar';
 
 interface RedeemDetails {
   hottReceiveAmount: bigint;
@@ -26,9 +27,9 @@ interface RHottDetails {
   rHottAccountDetails: RHottAccountDetails;
 }
 
-const RHOTT_ADDRESS = import.meta.env.IS_MAINNET!
-  ? import.meta.env.MAINNET_RHOTT_CONTRACT_ADDRESS!
-  : import.meta.env.REPLACE_WITH_TESTNET_REWARDS_CONTRACT_ADDRESS;
+const RHOTT_ADDRESS = (
+  getEnv('VITE_IS_MAINNET') === 'true' ? getEnv('VITE_MAINNET_RHOTT_CONTRACT_ADDRESS') : getEnv('VITE_TESTNET_RHOTT_CONTRACT_ADDRESS')
+) as `0x${string}`;
 
 export function useRHottDetails(): RHottDetails | undefined {
   const [rHottDetails, setRHottDetails] = useState<RHottDetails | undefined>();

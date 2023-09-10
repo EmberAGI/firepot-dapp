@@ -40,7 +40,7 @@ export const rewardsAbi = [
         type: 'uint256',
       },
     ],
-    name: 'CycleDividendsPercentUpdated',
+    name: 'CycleRewardsPercentUpdated',
     type: 'event',
   },
   {
@@ -98,7 +98,7 @@ export const rewardsAbi = [
         type: 'uint256',
       },
     ],
-    name: 'DividendsAddedToPending',
+    name: 'RewardsAddedToPending',
     type: 'event',
   },
   {
@@ -123,7 +123,7 @@ export const rewardsAbi = [
         type: 'uint256',
       },
     ],
-    name: 'DividendsCollected',
+    name: 'RewardsCollected',
     type: 'event',
   },
   {
@@ -235,7 +235,7 @@ export const rewardsAbi = [
         type: 'uint256',
       },
     ],
-    name: 'addDividendsToPending',
+    name: 'addRewardsToPending',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
@@ -365,7 +365,7 @@ export const rewardsAbi = [
         type: 'address',
       },
     ],
-    name: 'dividendsInfo',
+    name: 'rewardsInfo',
     outputs: [
       {
         internalType: 'uint256',
@@ -389,7 +389,7 @@ export const rewardsAbi = [
       },
       {
         internalType: 'uint256',
-        name: 'accDividendsPerShare',
+        name: 'accRewardsPerShare',
         type: 'uint256',
       },
       {
@@ -399,7 +399,7 @@ export const rewardsAbi = [
       },
       {
         internalType: 'uint256',
-        name: 'cycleDividendsPercent',
+        name: 'cycleRewardsPercent',
         type: 'uint256',
       },
       {
@@ -446,7 +446,7 @@ export const rewardsAbi = [
   },
   {
     inputs: [],
-    name: 'harvestAllDividends',
+    name: 'harvestAllRewards',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
@@ -459,7 +459,7 @@ export const rewardsAbi = [
         type: 'address',
       },
     ],
-    name: 'harvestDividends',
+    name: 'harvestRewards',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
@@ -485,7 +485,7 @@ export const rewardsAbi = [
   },
   {
     inputs: [],
-    name: 'massUpdateDividendsInfo',
+    name: 'massUpdateRewardsInfo',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
@@ -529,7 +529,7 @@ export const rewardsAbi = [
         type: 'address',
       },
     ],
-    name: 'pendingDividendsAmount',
+    name: 'pendingRewardsAmount',
     outputs: [
       {
         internalType: 'uint256',
@@ -619,7 +619,7 @@ export const rewardsAbi = [
         type: 'uint256',
       },
     ],
-    name: 'updateCycleDividendsPercent',
+    name: 'updateCycleRewardsPercent',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
@@ -632,7 +632,7 @@ export const rewardsAbi = [
         type: 'address',
       },
     ],
-    name: 'updateDividendsInfo',
+    name: 'updateRewardsInfo',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
@@ -654,7 +654,7 @@ export const rewardsAbi = [
     outputs: [
       {
         internalType: 'uint256',
-        name: 'pendingDividends',
+        name: 'pendingRewards',
         type: 'uint256',
       },
       {

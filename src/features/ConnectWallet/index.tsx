@@ -7,6 +7,7 @@ import { publicProvider } from 'wagmi/providers/public';
 import { JSX } from 'react';
 import { infuraProvider } from 'wagmi/providers/infura';
 import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
+import { getEnv } from '../../lib/envVar';
 
 type Props = { children: JSX.Element | JSX.Element[] };
 
@@ -36,11 +37,11 @@ export default function ConnectWalletConfig({ children }: Props) {
       // emerald,     TODO(AVK): Not urgent. Create custom chain
     ],
     [
-      alchemyProvider({ apiKey: import.meta.env.VITE_ALCHEMY_KEY! }),
-      infuraProvider({ apiKey: import.meta.env.VITE_INFURA_KEY! }),
+      alchemyProvider({ apiKey: getEnv('VITE_ALCHEMY_KEY') }),
+      infuraProvider({ apiKey: getEnv('VITE_INUFRA_KEY') }),
       jsonRpcProvider({
         rpc: (chain) => {
-          const apiKey = import.meta.env.VITE_ANKR_KEY!;
+          const apiKey = getEnv('VITE_ANKR_KEY');
           switch (chain.id) {
             case arbitrum.id:
               return { http: `https://rpc.ankr.com/arbitrum/${apiKey}` };
@@ -70,7 +71,7 @@ export default function ConnectWalletConfig({ children }: Props) {
   const { connectors } = getDefaultWallets({
     appName: 'Firepot Finance',
     chains,
-    projectId: import.meta.env.VITE_WALLETCONNECT_PROJECT_ID,
+    projectId: getEnv('VITE_WALLETCONNECT_PROJECT_ID'),
   });
 
   const wagmiConfig = createConfig({
