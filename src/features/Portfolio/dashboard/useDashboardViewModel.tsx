@@ -99,13 +99,13 @@ export default function useDashboardViewModel(initialState: ViewModelProperties 
   }, []);*/
 
   useEffect(() => {
-    if (!rHottDetails || hottBalance == null || !hottBalance[rHottDetails.hottAddress].balance || positionBalance == null) return;
-
-    const tokenBalance = hottBalance[rHottDetails.hottAddress].balance;
-    const totalHottBalance = tokenBalance + positionBalance;
+    const hottTokenBalance = hottBalance && rHottDetails ? hottBalance[rHottDetails.hottAddress].balance : 0n;
+    const rHottTokenBalance = rHottDetails ? rHottDetails.rHottAccountDetails.unallocatedBalance[rHottDetails.rHottAddress].balance : 0n;
+    const totalTokenBalance = hottTokenBalance + rHottTokenBalance;
+    const totalAccountBalance = totalTokenBalance + (positionBalance ?? 0n);
     setProperties((properties) => ({
       ...properties,
-      totalBalance: getUsdValue(totalHottBalance).toFixed(2),
+      totalBalance: getUsdValue(totalAccountBalance).toFixed(2),
     }));
   }, [rHottDetails, hottBalance, positionBalance]);
 
@@ -213,15 +213,15 @@ export default function useDashboardViewModel(initialState: ViewModelProperties 
       return;
     }
 
-    const rHottBalance = rHottDetails.rHottAccountDetails.unallocatedBalance.hasOwnProperty(rHottDetails.hottAddress)
-      ? rHottDetails.rHottAccountDetails.unallocatedBalance[rHottDetails.hottAddress].balance
+    const rHottTokenBalance = rHottDetails.rHottAccountDetails.unallocatedBalance.hasOwnProperty(rHottDetails.rHottAddress)
+      ? rHottDetails.rHottAccountDetails.unallocatedBalance[rHottDetails.rHottAddress].balance
       : 0n;
-    const tokenBalance = hottBalance[rHottDetails.hottAddress].balance + rHottBalance;
+    const totalTokenBalance = hottBalance[rHottDetails.hottAddress].balance + rHottTokenBalance;
     const assets: CardAssetProps[] = [
       {
-        usd: getUsdValue(tokenBalance),
+        usd: getUsdValue(totalTokenBalance),
         token: 'HOTT',
-        amount: Number(tokenBalance / 1000000000000000000n),
+        amount: Number(totalTokenBalance / 1000000000000000000n),
         onClick: undefined,
         name: 'HOTT',
         chain: 'arbitrum-goerli',
