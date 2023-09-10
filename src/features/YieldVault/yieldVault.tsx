@@ -18,7 +18,7 @@ function YieldVault() {
         <HeaderBackButton title='Yield Vault' />
         <section className={styles.sectionBox}>
           <div className={styles.titleContainer}>
-            <span>Firepot Finance</span>
+            <span>Firepot Rewards Vault</span>
             <div className={styles.currencyBox}>
               <img src='/assets/verify.svg' loading='lazy' alt='' />
               <span className={styles.percentage}>{properties.apy}%</span>
@@ -45,6 +45,23 @@ function YieldVault() {
                 </div>
                 */}
               </div>
+            </div>
+          </div>
+          <div className={styles.thirdSection}>
+            <span className={styles.title}>Locking the HOTT Token</span>
+            <div className={styles.subtitleSection}>
+              <span className={styles.subtitle}>
+                Locked HOTT is used to deposit into special Firepot plugins like this Rewards Vault. It can be unlocked 15 to 90 days after initiating
+                a withdrawal. The longer you wait, the less penalty you pay on a linear scale from -50% to 0%.
+              </span>
+            </div>
+            <div className={styles.subtitleSection}>
+              <span className={styles.subtitle}>15-day Burn Penalty</span>
+              <span className={styles.pot}>-50%</span>
+            </div>
+            <div className={styles.subtitleSection}>
+              <span className={styles.subtitle}>90-day Burn Penalty</span>
+              <span className={styles.pot}>0%</span>
             </div>
           </div>
           {/* TODO: Add this section when we have the data
