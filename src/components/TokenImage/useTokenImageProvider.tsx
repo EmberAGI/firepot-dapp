@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { getEnv } from '../../lib/envVar';
 
 interface Token {
   id: string;
@@ -18,8 +19,8 @@ interface TokenDetails {
 
 export default function useTokenImageProvider(symbol: string): string | null {
   const [tokenImage, setTokenImage] = useState<string | null>(null);
-  const isDev = import.meta.env.DEV;
-  const corsAnywhereUrl = isDev ? "https://cors-anywhere.herokuapp.com/" : "";
+  const isDev = !getEnv('DEV');
+  const corsAnywhereUrl = isDev ? 'https://cors-anywhere.herokuapp.com/' : '';
   const cryptoIconUrl = `https://cryptoicons.org/api/icon/${symbol.toLowerCase()}/120`;
 
   useEffect(() => {
@@ -62,4 +63,4 @@ export default function useTokenImageProvider(symbol: string): string | null {
   }, [symbol]);
 
   return tokenImage;
-};
+}

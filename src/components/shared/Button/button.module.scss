@@ -2,7 +2,7 @@
   background-color: var(--primary) !important;
   border-radius: 30px !important;
   width: 100% !important;
-  padding: 0.2rem 0.5rem !important;
+  padding: 0.8rem 1rem !important;
   font-size: medium !important;
   font-weight: bold !important;
   display: flex;
@@ -26,7 +26,7 @@
   color: var(--primary) !important;
   border-radius: 30px !important;
   width: 100% !important;
-  padding: 0.8rem 0.5rem !important;
+  padding: 0.8rem 1rem !important;
   font-size: medium !important;
   font-weight: bold !important;
   display: flex;
@@ -44,4 +44,20 @@
     font-size: medium !important;
     font-weight: bold !important;
   }
+}
+
+.primary:disabled,
+.primary[disabled] {
+  background-color: #d9d9d9 !important;
+  border-color: #d9d9d9;
+  cursor: not-allowed;
+  color: #fff;
+}
+
+.secondary:disabled,
+.secondary[disabled] {
+  background-color: #d9d9d9 !important;
+  border-color: #d9d9d9;
+  color: #575757 !important;
+  cursor: not-allowed;
 }

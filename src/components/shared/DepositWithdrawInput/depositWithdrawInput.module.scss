@@ -32,9 +32,10 @@
             .inputDeposit {
                 position: relative;
                 margin-left: 10px;
+                width: 100%;
 
                 input {
-                    padding: 6px 47px;
+                    padding: 0.5em 3.6em;
                     background-color: #fff;
                     border: 1px solid;
                     border-color: #CCC;
@@ -47,6 +48,16 @@
                     letter-spacing: 0em;
                     text-align: right;
 
+                }
+
+                input[type=number]::-webkit-inner-spin-button,
+                input[type=number]::-webkit-outer-spin-button {
+                    -webkit-appearance: none;
+                    margin: 0;
+                }
+
+                input[type=number] {
+                    appearance: textfield;
                 }
 
                 button {
@@ -71,11 +82,11 @@
 
                 span {
                     position: absolute;
-                    right: 20px;
+                    right: 15px;
                     top: 9px;
                     color: #373737c9;
                     font-size: 12px;
-                    font-weight: 600;
+                    font-weight: 700;
                     line-height: 15px;
                     text-align: right;
 
@@ -88,6 +99,7 @@
             display: flex;
             align-items: baseline;
             margin-top: 10px;
+
             .titleCurrency {
                 font-size: 14px;
                 font-weight: 600;
@@ -107,11 +119,13 @@
                 color: #929292;
             }
         }
-        .progressBox{
+
+        .progressBox {
             display: flex;
-            progress{
+
+            progress {
                 width: 100%;
-                color:#212082;
+                color: #212082;
             }
         }
     }

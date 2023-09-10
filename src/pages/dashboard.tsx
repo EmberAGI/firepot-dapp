@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom';
 import { TokenBalanceElem, useChainData } from '../features/Contracts/BeefyVault/reads';
-import Opportunity from '../features/SmartDiscovery/Opportunity';
-import useOpportunityData from '../features/SmartDiscovery/useOpportunities';
+import Opportunity from '../features/futureRelease/SmartDiscovery/Opportunity';
+import useOpportunityData from '../features/futureRelease/SmartDiscovery/useOpportunities';
 import { Fragment, useMemo } from 'react';
-import { OpportunityData } from '../features/SmartDiscovery/types';
+import { OpportunityData } from '../features/futureRelease/SmartDiscovery/types';
 
 function OpportunityMap({ positions }: { positions: { opportunity: OpportunityData; tokenBalanceData: TokenBalanceElem | null }[] }) {
   return (
@@ -24,7 +24,7 @@ function OpportunityMap({ positions }: { positions: { opportunity: OpportunityDa
 export default function Dashboard() {
   const { opportunities, loading, error } = useOpportunityData();
   // {safetyRanks: ['high']}
-  const tokenBalances = useChainData(opportunities);
+  const tokenBalances = useChainData(opportunities, 'beefy');
 
   const filteredUserPositions = useMemo(() => {
     if (!opportunities || !tokenBalances) return null;
@@ -37,7 +37,7 @@ export default function Dashboard() {
   }, [opportunities, tokenBalances]);
   const filteredOtherPositions = useMemo(() => {
     if (!opportunities) return null;
-    if (!tokenBalances) return opportunities.map((opp) => ({opportunity: opp, tokenBalanceData: null}));
+    if (!tokenBalances) return opportunities.map((opp) => ({ opportunity: opp, tokenBalanceData: null }));
     return opportunities
       .filter((_, index) => tokenBalances[index].depositTokenBalance == 0n)
       .map((opp, index) => ({
