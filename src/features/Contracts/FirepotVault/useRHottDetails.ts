@@ -1,6 +1,6 @@
 import { readContracts, useAccount } from 'wagmi';
 import { TokenBalance, convertTokenBalance, useTokenBalance } from '../FungibleTokens/useTokenBalance';
-import { CHAIN, MulticallContractFunctionConfig } from '../BeefyVault/reads';
+import { CHAIN_ID, MulticallContractFunctionConfig } from '../BeefyVault/reads';
 import { rHottTokenAbi } from '../abis/rHottTokenAbi';
 import { useEffect, useState } from 'react';
 import { useTokenPrice } from '../FungibleTokens/useTokenPrice';
@@ -45,7 +45,7 @@ export function useRHottDetails(): RHottDetails | undefined {
   const tokenPrice = useTokenPrice(RHOTT_ADDRESS);
 
   useEffect(() => {
-    setChainId(CHAIN);
+    setChainId(CHAIN_ID);
   }, []);
 
   useEffect(() => {

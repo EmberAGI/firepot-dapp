@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { readContracts, useAccount } from 'wagmi';
-import { MulticallContractFunctionConfig, mapChain } from '../BeefyVault/reads';
+import { CHAIN_ID, MulticallContractFunctionConfig } from '../BeefyVault/reads';
 import { rewardsAbi } from '../abis/rewardsAbi';
 import { TokenParameter, useTokenPrices } from '../FungibleTokens/useTokenPrices';
 import { getEnv } from '../../../lib/envVar';
@@ -33,7 +33,7 @@ interface RewardsInfo {
 }
 
 const REWARDS_TOKEN = (
-  getEnv('VITE_IS_MAINNET') === 'true' ? getEnv('VITE_MAINNET_RHOTT_CONTRACT_ADDRESS') : getEnv('VITE_TESTNET_REWARDS_CONTRACT_ADDRESS')
+  getEnv('VITE_IS_MAINNET') === 'true' ? getEnv('VITE_MAINNET_RHOTT_CONTRACT_ADDRESS') : getEnv('VITE_TESTNET_RHOTT_CONTRACT_ADDRESS')
 ) as `0x${string}`;
 const TOKEN_PARAMETERS: TokenParameter[] = [{ tokenAddress: REWARDS_TOKEN }];
 
@@ -44,12 +44,16 @@ export function useVaultPosition(vaultAddress: `0x${string}`): VaultPosition | u
   //const tokenPrice = useTokenPrices([{ tokenAddress: REWARDS_TOKEN }]);
 
   useEffect(() => {
+    console.log('REWARDS_TOKEN', REWARDS_TOKEN);
+    console.log('tokenPrice', tokenPrice);
     if (!address || !tokenPrice) {
       return;
     }
 
+    console.log('useVaultPosition - vaultAddress', vaultAddress);
+
     const getVaultPosition = async () => {
-      const chainId = mapChain('arbitrum-goerli') ?? 0;
+      const chainId = CHAIN_ID;
       let contractReadConfig: MulticallContractFunctionConfig[] = [
         {
           abi: rewardsAbi,
@@ -78,7 +82,9 @@ export function useVaultPosition(vaultAddress: `0x${string}`): VaultPosition | u
         batchSize: 100000, // disables size limit
       });
 
-      const totalAllocation = !readResponse[0].error ? (readResponse[0].result as bigint) : undefined;
+      console.log('useVaultPosition - readResponse', readResponse);
+
+      const totalAllocation = !readResponse[0].error ? (readResponse[0].result as bigint) : 0n;
 
       type RewardsInfoResult = [bigint, bigint, bigint, bigint, bigint, bigint, bigint, boolean];
       const rewardsInfoResult = !readResponse[1].error ? (readResponse[1].result as RewardsInfoResult) : undefined;
@@ -97,11 +103,11 @@ export function useVaultPosition(vaultAddress: `0x${string}`): VaultPosition | u
 
       const usersAllocation = !readResponse[2].error ? (readResponse[2].result as bigint) : undefined;
 
-      if (!totalAllocation || !rewardsInfo) {
+      if (!rewardsInfo) {
         return;
       }
 
-      const apy = (Number(rewardsInfo.currentDistributionAmount) / Number(totalAllocation) / 7) * 365 * 100;
+      const apy = totalAllocation != 0n ? (Number(rewardsInfo.currentDistributionAmount) / Number(totalAllocation) / 7) * 365 * 100 : 0;
       const accountDetails = usersAllocation
         ? {
             balance: usersAllocation,

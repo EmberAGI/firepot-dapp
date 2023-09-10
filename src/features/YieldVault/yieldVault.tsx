@@ -3,8 +3,11 @@ import DepositWithdrawInput from '../../components/shared/DepositWithdrawInput/d
 import styles from './yieldVault.module.scss';
 import useYieldVaultViewModel from './useYieldVaultViewModel';
 import ButtonBar from '../../components/shared/ButtonBar/ButtonBar';
+import { getEnv } from '../../lib/envVar';
 
-const YIELD_VAULT_ADDRESS = '0xe3dc90C119c46d77659CBbc5f470159A3385ad74';
+const YIELD_VAULT_ADDRESS = (
+  getEnv('VITE_IS_MAINNET') === 'true' ? getEnv('VITE_MAINNET_REWARDS_CONTRACT_ADDRESS') : getEnv('VITE_TESTNET_REWARDS_CONTRACT_ADDRESS')
+) as `0x${string}`;
 
 function YieldVault() {
   const { properties, commands } = useYieldVaultViewModel(YIELD_VAULT_ADDRESS);

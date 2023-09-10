@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { erc20ABI, readContracts, useAccount } from 'wagmi';
-import { MulticallContractFunctionConfig, mapChain } from '../BeefyVault/reads';
+import { CHAIN_ID, MulticallContractFunctionConfig } from '../BeefyVault/reads';
 import { useTokenPrice } from './useTokenPrice';
 
 export interface TokenBalance {
@@ -44,7 +44,7 @@ export function useTokenBalance(tokenAddress: `0x${string}` | undefined): TokenB
 
     const getTokenBalance = async () => {
       //let contractReadConfig: MulticallContractFunctionConfig[] = [];
-      const chainId = mapChain('arbitrum-goerli') ?? 0;
+      const chainId = CHAIN_ID;
       const contractReadConfig: MulticallContractFunctionConfig[] = [
         {
           abi: erc20ABI,

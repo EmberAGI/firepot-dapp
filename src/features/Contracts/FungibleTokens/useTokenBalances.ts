@@ -26,7 +26,7 @@ export function useTokenBalances(tokenAddresses: `0x${string}`[]): TokenBalance 
 
     const getTokenBalance = async () => {
       //let contractReadConfig: MulticallContractFunctionConfig[] = [];
-      const chainId = mapChain('arbitrum-goerli') ?? 0;
+      const chainId = CHAIN_ID;
 
       const contractReadConfig: MulticallContractFunctionConfig[] = tokenAddresses.map((address) => ({
         abi: erc20ABI,

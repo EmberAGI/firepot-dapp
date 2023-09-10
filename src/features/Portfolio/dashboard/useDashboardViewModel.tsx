@@ -9,6 +9,8 @@ import { useAccount } from 'wagmi';
 import { useVaultPosition } from '../../Contracts/FirepotVault/useVaultPosition';
 import { useRHottDetails } from '../../Contracts/FirepotVault/useRHottDetails';
 import { useTokenBalance } from '../../Contracts/FungibleTokens/useTokenBalance';
+import { getEnv } from '../../../lib/envVar';
+import { CHAIN } from '../../Contracts/BeefyVault/reads';
 
 interface ViewModelProperties {
   totalBalance: string;
@@ -71,7 +73,9 @@ const initialProperties: ViewModelProperties = {
 ];*/
 
 const hottTokenUsdPrice = 0.005;
-const YIELD_VAULT_ADDRESS = '0xe3dc90C119c46d77659CBbc5f470159A3385ad74';
+const YIELD_VAULT_ADDRESS = (
+  getEnv('VITE_IS_MAINNET') === 'true' ? getEnv('VITE_MAINNET_REWARDS_CONTRACT_ADDRESS') : getEnv('VITE_TESTNET_REWARDS_CONTRACT_ADDRESS')
+) as `0x${string}`;
 
 export default function useDashboardViewModel(initialState: ViewModelProperties = initialProperties): DashboardViewModel {
   const [properties, setProperties] = useState<ViewModelProperties>(initialState);
@@ -203,7 +207,17 @@ export default function useDashboardViewModel(initialState: ViewModelProperties 
   }, [vaultPosition]);
 
   useEffect(() => {
-    if (!rHottDetails || !hottBalance || !hottBalance[rHottDetails.hottAddress].balance) {
+    if (!rHottDetails || !hottBalance) return;
+
+    const hasUnallocatedRHottBalance = rHottDetails.rHottAccountDetails.unallocatedBalance.hasOwnProperty(rHottDetails.rHottAddress);
+    const rHottTokenBalance = hasUnallocatedRHottBalance
+      ? rHottDetails.rHottAccountDetails.unallocatedBalance[rHottDetails.rHottAddress].balance
+      : 0n;
+    const hasUnallocatedHottBalance = hottBalance.hasOwnProperty(rHottDetails.hottAddress);
+    const hottTokenBalance = hasUnallocatedHottBalance ? hottBalance[rHottDetails.hottAddress].balance : 0n;
+    const totalTokenBalance = hottTokenBalance + rHottTokenBalance;
+
+    if (totalTokenBalance === 0n) {
       if (!isConnected) return;
       setProperties((properties) => ({
         ...properties,
@@ -213,10 +227,6 @@ export default function useDashboardViewModel(initialState: ViewModelProperties 
       return;
     }
 
-    const rHottTokenBalance = rHottDetails.rHottAccountDetails.unallocatedBalance.hasOwnProperty(rHottDetails.rHottAddress)
-      ? rHottDetails.rHottAccountDetails.unallocatedBalance[rHottDetails.rHottAddress].balance
-      : 0n;
-    const totalTokenBalance = hottBalance[rHottDetails.hottAddress].balance + rHottTokenBalance;
     const assets: CardAssetProps[] = [
       {
         usd: getUsdValue(totalTokenBalance),
@@ -224,7 +234,7 @@ export default function useDashboardViewModel(initialState: ViewModelProperties 
         amount: Number(totalTokenBalance / 1000000000000000000n),
         onClick: undefined,
         name: 'HOTT',
-        chain: 'arbitrum-goerli',
+        chain: CHAIN,
       },
     ];
 

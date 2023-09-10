@@ -23,7 +23,8 @@ import { rHottTokenAbi } from '../abis/rHottTokenAbi.ts';
 import { getEnv } from '../../../lib/envVar.ts';
 
 console.log('IS_MAINNET', getEnv('VITE_IS_MAINNET') === 'true');
-export const CHAIN = mapChain(getEnv('VITE_IS_MAINNET') === 'true' ? 'arbitrum' : 'arbitrum-goerli') ?? 0;
+export const CHAIN = getEnv('VITE_IS_MAINNET') === 'true' ? 'arbitrum' : 'arbitrum-goerli';
+export const CHAIN_ID = mapChain(CHAIN) ?? 0;
 
 export function mapChain(chain: string): number | null {
   switch (chain) {
