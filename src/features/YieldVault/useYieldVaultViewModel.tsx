@@ -9,7 +9,7 @@ import { useVaultDeposit } from '../Contracts/FirepotVault/useVaultDeposit';
 import { useLockHott } from '../Contracts/FirepotVault/useLockHott';
 import { parseUnits, formatUnits } from 'viem';
 
-const precision = 1000000n
+const precision = 1000000n;
 const precisionDecimals = 6;
 
 interface TransactionPreview {
@@ -451,8 +451,8 @@ export default function useYieldVaultViewModel(address: `0x${string}`, initialSt
 
     if (availableStableBalance == 0n) return;
 
-    const percentageDecimal = parseUnits(amount as `${number}`, precisionDecimals) * precision / availableStableBalance;
-    const moveTokenAmount =  parseUnits(properties.availableTokenBalance as `${number}`, 18) * percentageDecimal / precision;
+    const percentageDecimal = (parseUnits(amount as `${number}`, precisionDecimals) * precision) / availableStableBalance;
+    const moveTokenAmount = (parseUnits(properties.availableTokenBalance as `${number}`, 18) * percentageDecimal) / precision;
     const formattedMoveTokenAmount = formatUnits(moveTokenAmount, 18);
 
     const transactionPreview = {
@@ -472,7 +472,7 @@ export default function useYieldVaultViewModel(address: `0x${string}`, initialSt
     setProperties((properties) => ({
       ...properties,
       moveTokenAmount: formattedMoveTokenAmount,
-      moveTokenPercentage: Number(percentageDecimal * 100n / precision),
+      moveTokenPercentage: Number((percentageDecimal * 100n) / precision),
       //showPrimaryActionButtons: true,
       showTransactionPreview: true,
       transactionPreview,
