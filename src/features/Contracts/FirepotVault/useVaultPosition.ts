@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { readContracts, useAccount } from 'wagmi';
 import { CHAIN_ID, MulticallContractFunctionConfig } from '../BeefyVault/reads';
 import { rewardsAbi } from '../abis/rewardsAbi';
-import { TokenParameter, useTokenPrices } from '../FungibleTokens/useTokenPrices';
+//import { TokenParameter, useTokenPrices } from '../FungibleTokens/useTokenPrices';
 import { getEnv } from '../../../lib/envVar';
 import { useAlgebraPoolTokenPrice } from '../FungibleTokens/useAlgebraPoolTokenPrice';
 

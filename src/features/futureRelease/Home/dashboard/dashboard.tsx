@@ -175,7 +175,7 @@ function HomeDashboard() {
                   name='Firepot Finance'
                   chain='polygon'
                   amount={32}
-                  usd={428.39}
+                  usd={'428.39'}
                 ></CardAsset>
               </section>
             </>
