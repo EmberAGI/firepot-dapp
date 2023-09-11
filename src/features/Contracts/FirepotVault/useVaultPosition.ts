@@ -110,7 +110,8 @@ export function useVaultPosition(vaultAddress: `0x${string}`): VaultPosition | u
         return;
       }
 
-      const apy = totalAllocation != 0n ? (Number(rewardsInfo.currentDistributionAmount) / Number(totalAllocation) / 7) * 365 * 100 : 0;
+      //const apy = totalAllocation != 0n ? (Number(rewardsInfo.currentDistributionAmount) / Number(totalAllocation) / 7) * 365 * 100 : 0;
+      const apy = 35;
       const accountDetails = usersAllocation
         ? {
             balance: usersAllocation,
