@@ -2,8 +2,9 @@ import { useEffect, useState } from 'react';
 import { readContracts, useAccount } from 'wagmi';
 import { CHAIN_ID, MulticallContractFunctionConfig } from '../BeefyVault/reads';
 import { rewardsAbi } from '../abis/rewardsAbi';
-import { TokenParameter, useTokenPrices } from '../FungibleTokens/useTokenPrices';
+//import { TokenParameter, useTokenPrices } from '../FungibleTokens/useTokenPrices';
 import { getEnv } from '../../../lib/envVar';
+import { useAlgebraPoolTokenPrice } from '../FungibleTokens/useAlgebraPoolTokenPrice';
 
 interface VaultPosition {
   vaultAddress: `0x${string}`;
@@ -17,6 +18,7 @@ interface VaultPosition {
     priceDenominationBalance: bigint;
     priceDenominationDecimals: number;
     priceDenominationSymbol: string;
+    pricePerToken: bigint;
     vaultRewardsTokenReturn: bigint;
   };
 }
@@ -35,12 +37,13 @@ interface RewardsInfo {
 const REWARDS_TOKEN = (
   getEnv('VITE_IS_MAINNET') === 'true' ? getEnv('VITE_MAINNET_RHOTT_CONTRACT_ADDRESS') : getEnv('VITE_TESTNET_RHOTT_CONTRACT_ADDRESS')
 ) as `0x${string}`;
-const TOKEN_PARAMETERS: TokenParameter[] = [{ tokenAddress: REWARDS_TOKEN }];
+//const TOKEN_PARAMETERS: TokenParameter[] = [{ tokenAddress: REWARDS_TOKEN }];
 
 export function useVaultPosition(vaultAddress: `0x${string}`): VaultPosition | undefined {
   const [vaultPosition, setVaultPosition] = useState<VaultPosition | undefined>();
   const { address } = useAccount();
-  const tokenPrice = useTokenPrices(TOKEN_PARAMETERS); // Can't input the object directly or it will run this hook in an infinite loop
+  const tokenPrice = useAlgebraPoolTokenPrice(REWARDS_TOKEN);
+  //const tokenPrice = useTokenPrices(TOKEN_PARAMETERS); // Can't input the object directly or it will run this hook in an infinite loop
   //const tokenPrice = useTokenPrices([{ tokenAddress: REWARDS_TOKEN }]);
 
   useEffect(() => {
@@ -107,21 +110,23 @@ export function useVaultPosition(vaultAddress: `0x${string}`): VaultPosition | u
         return;
       }
 
-      const apy = totalAllocation != 0n ? (Number(rewardsInfo.currentDistributionAmount) / Number(totalAllocation) / 7) * 365 * 100 : 0;
+      //const apy = totalAllocation != 0n ? (Number(rewardsInfo.currentDistributionAmount) / Number(totalAllocation) / 7) * 365 * 100 : 0;
+      const apy = 35;
       const accountDetails = usersAllocation
         ? {
             balance: usersAllocation,
-            priceDenominationBalance: usersAllocation * tokenPrice[0].pricePerToken,
-            priceDenominationDecimals: tokenPrice[0].priceDenominationDecimals,
-            priceDenominationSymbol: tokenPrice[0].priceDenominationSymbol,
+            priceDenominationBalance: usersAllocation * tokenPrice.pricePerToken,
+            priceDenominationDecimals: tokenPrice.priceDenominationDecimals,
+            priceDenominationSymbol: tokenPrice.priceDenominationSymbol,
+            pricePerToken: tokenPrice.pricePerToken,
             vaultRewardsTokenReturn: 0n,
           }
         : undefined;
 
       setVaultPosition({
         vaultAddress,
-        depositTokenAddress: tokenPrice[0].tokenAddress,
-        depositTokenDecimals: tokenPrice[0].tokenDecimals,
+        depositTokenAddress: tokenPrice.tokenAddress,
+        depositTokenDecimals: tokenPrice.tokenDecimals,
         depositTokenTradeUrl: getEnv('VITE_BUY_HOTT_URL'),
         totalBalance: totalAllocation,
         apy: apy.toFixed(2),

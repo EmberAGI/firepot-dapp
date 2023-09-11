@@ -9,7 +9,7 @@ import { useVaultDeposit } from '../Contracts/FirepotVault/useVaultDeposit';
 import { useLockHott } from '../Contracts/FirepotVault/useLockHott';
 import { parseUnits, formatUnits } from 'viem';
 
-const precision = 1000000n
+const precision = 1000000n;
 const precisionDecimals = 6;
 
 interface TransactionPreview {
@@ -186,17 +186,17 @@ export default function useYieldVaultViewModel(address: `0x${string}`, initialSt
       return;
     }
 
-    const vaultStableBalance = String(
-      vaultPosition.accountDetails.priceDenominationBalance /
-        BigInt(10 ** vaultPosition.accountDetails.priceDenominationDecimals) /
-        BigInt(10 ** vaultPosition.depositTokenDecimals),
-    );
+    const vaultStableBalance =
+      vaultPosition.accountDetails.priceDenominationBalance / BigInt(10 ** vaultPosition.accountDetails.priceDenominationDecimals);
+    const formattedStableBalance = Number(formatUnits(vaultStableBalance, 18)).toFixed(2);
+    console.log('vaultStableBalance', vaultStableBalance);
+    console.log('formattedStableBalance', formattedStableBalance);
     const stableSymbol = vaultPosition.accountDetails.priceDenominationSymbol;
     const vaultTokenBalance = String(vaultPosition.accountDetails.balance / BigInt(10 ** vaultPosition.depositTokenDecimals));
 
     setProperties((properties) => ({
       ...properties,
-      vaultStableBalance,
+      vaultStableBalance: formattedStableBalance,
       stableSymbol,
       vaultTokenBalance,
     }));
@@ -451,8 +451,8 @@ export default function useYieldVaultViewModel(address: `0x${string}`, initialSt
 
     if (availableStableBalance == 0n) return;
 
-    const percentageDecimal = parseUnits(amount as `${number}`, precisionDecimals) * precision / availableStableBalance;
-    const moveTokenAmount =  parseUnits(properties.availableTokenBalance as `${number}`, 18) * percentageDecimal / precision;
+    const percentageDecimal = (parseUnits(amount as `${number}`, precisionDecimals) * precision) / availableStableBalance;
+    const moveTokenAmount = (parseUnits(properties.availableTokenBalance as `${number}`, 18) * percentageDecimal) / precision;
     const formattedMoveTokenAmount = formatUnits(moveTokenAmount, 18);
 
     const transactionPreview = {
@@ -472,7 +472,7 @@ export default function useYieldVaultViewModel(address: `0x${string}`, initialSt
     setProperties((properties) => ({
       ...properties,
       moveTokenAmount: formattedMoveTokenAmount,
-      moveTokenPercentage: Number(percentageDecimal * 100n / precision),
+      moveTokenPercentage: Number((percentageDecimal * 100n) / precision),
       //showPrimaryActionButtons: true,
       showTransactionPreview: true,
       transactionPreview,

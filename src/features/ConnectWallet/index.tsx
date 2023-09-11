@@ -10,10 +10,11 @@ import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
 import { getEnv } from '../../lib/envVar';
 
 type Props = { children: JSX.Element | JSX.Element[] };
+const CHAIN_CONFIG = getEnv('VITE_IS_MAINNET') === 'true' ? [arbitrum] : [arbitrum, arbitrumGoerli];
 
 export default function ConnectWalletConfig({ children }: Props) {
   const { chains, publicClient, webSocketPublicClient } = configureChains(
-    [
+    /*[
       // COMMENTS LEGEND: If there is a list, that is the order in which the networks are used.
       //      If there is a blank line, we default to using the default/public RPC.
       arbitrum, // Alchemy, (Infura paid add-on), Ankr
@@ -35,7 +36,8 @@ export default function ConnectWalletConfig({ children }: Props) {
       // fuse,        TODO(AVK): Not urgent. Create custom chain
       // kava,        TODO(AVK): Not urgent. Create custom chain
       // emerald,     TODO(AVK): Not urgent. Create custom chain
-    ],
+    ],*/
+    CHAIN_CONFIG,
     [
       alchemyProvider({ apiKey: getEnv('VITE_ALCHEMY_KEY') }),
       infuraProvider({ apiKey: getEnv('VITE_INUFRA_KEY') }),

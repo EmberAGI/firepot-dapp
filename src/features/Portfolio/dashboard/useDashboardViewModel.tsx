@@ -11,6 +11,7 @@ import { useRHottDetails } from '../../Contracts/FirepotVault/useRHottDetails';
 import { useTokenBalance } from '../../Contracts/FungibleTokens/useTokenBalance';
 import { getEnv } from '../../../lib/envVar';
 import { CHAIN } from '../../Contracts/BeefyVault/reads';
+import { formatUnits } from 'viem';
 
 interface ViewModelProperties {
   totalBalance: string;
@@ -72,7 +73,7 @@ const initialProperties: ViewModelProperties = {
   },
 ];*/
 
-const hottTokenUsdPrice = 0.005;
+//const hottTokenUsdPrice = 0.005;
 const YIELD_VAULT_ADDRESS = (
   getEnv('VITE_IS_MAINNET') === 'true' ? getEnv('VITE_MAINNET_REWARDS_CONTRACT_ADDRESS') : getEnv('VITE_TESTNET_REWARDS_CONTRACT_ADDRESS')
 ) as `0x${string}`;
@@ -103,13 +104,15 @@ export default function useDashboardViewModel(initialState: ViewModelProperties 
   }, []);*/
 
   useEffect(() => {
-    const hottTokenBalance = hottBalance && rHottDetails ? hottBalance[rHottDetails.hottAddress].balance : 0n;
-    const rHottTokenBalance = rHottDetails ? rHottDetails.rHottAccountDetails.unallocatedBalance[rHottDetails.rHottAddress].balance : 0n;
+    if (!rHottDetails || !hottBalance) return;
+
+    const hottTokenBalance = hottBalance[rHottDetails.hottAddress].balance;
+    const rHottTokenBalance = rHottDetails.rHottAccountDetails.unallocatedBalance[rHottDetails.rHottAddress].balance;
     const totalTokenBalance = hottTokenBalance + rHottTokenBalance;
     const totalAccountBalance = totalTokenBalance + (positionBalance ?? 0n);
     setProperties((properties) => ({
       ...properties,
-      totalBalance: getUsdValue(totalAccountBalance).toFixed(2),
+      totalBalance: getUsdValue(totalAccountBalance, hottBalance[rHottDetails.hottAddress].pricePerToken).toFixed(2),
     }));
   }, [rHottDetails, hottBalance, positionBalance]);
 
@@ -192,7 +195,7 @@ export default function useDashboardViewModel(initialState: ViewModelProperties 
     const vaultPositions: VaultPositionCardProps[] = [
       {
         id: vaultPosition.vaultAddress,
-        usd: getUsdValue(accountBalance),
+        usd: getUsdValue(accountBalance, vaultPosition.accountDetails.pricePerToken).toFixed(2),
         hott: Number(accountBalance / 1000000000000000000n),
         onClick: undefined,
         APY: Number(vaultPosition.apy),
@@ -229,7 +232,7 @@ export default function useDashboardViewModel(initialState: ViewModelProperties 
 
     const assets: CardAssetProps[] = [
       {
-        usd: getUsdValue(totalTokenBalance),
+        usd: getUsdValue(totalTokenBalance, hottBalance[rHottDetails.hottAddress].pricePerToken).toFixed(2),
         token: 'HOTT',
         amount: Number(totalTokenBalance / 1000000000000000000n),
         onClick: undefined,
@@ -245,8 +248,8 @@ export default function useDashboardViewModel(initialState: ViewModelProperties 
     }));
   }, [rHottDetails, hottBalance]);
 
-  const getUsdValue = (amount: bigint) => {
-    return Number(amount / 1000000000000000000n) * hottTokenUsdPrice;
+  const getUsdValue = (amount: bigint, pricePerToken: bigint) => {
+    return Number(formatUnits((amount / 1000000000000000000n) * pricePerToken, 18));
   };
 
   const connectWallet = () => {};
