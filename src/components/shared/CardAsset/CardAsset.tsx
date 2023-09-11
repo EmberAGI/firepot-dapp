@@ -3,7 +3,7 @@ import styles from './card.module.scss';
 //import { IoMdInfinite } from 'react-icons/io';
 
 export interface CardAssetProps {
-  usd: number;
+  usd: string;
   token: string;
   amount: number;
   onClick: any;

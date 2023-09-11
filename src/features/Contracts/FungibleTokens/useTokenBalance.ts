@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { erc20ABI, readContracts, useAccount } from 'wagmi';
 import { CHAIN_ID, MulticallContractFunctionConfig } from '../BeefyVault/reads';
-import { useTokenPrice } from './useTokenPrice';
+//import { useTokenPrice } from './useTokenPrice';
+import { useAlgebraPoolTokenPrice } from './useAlgebraPoolTokenPrice';
 
 export interface TokenBalance {
   [a: `0x${string}`]: {
@@ -10,6 +11,7 @@ export interface TokenBalance {
     priceDenominationBalance: bigint;
     priceDenominationSymbol: string;
     priceDenominationDecimals: number;
+    pricePerToken: bigint;
   };
 }
 
@@ -28,6 +30,7 @@ export const convertTokenBalance = (
       priceDenominationBalance: (tokenAmount * pricePerToken) / BigInt(10 ** decimals),
       priceDenominationSymbol: priceDenominationSymbol,
       priceDenominationDecimals: priceDenominationDecimals,
+      pricePerToken: pricePerToken,
     },
   };
 };
@@ -35,7 +38,7 @@ export const convertTokenBalance = (
 export function useTokenBalance(tokenAddress: `0x${string}` | undefined): TokenBalance | undefined {
   const [tokenBalance, setTokenBalance] = useState<TokenBalance | undefined>();
   const { address: accountAddress } = useAccount();
-  const tokenPrice = useTokenPrice(tokenAddress);
+  const tokenPrice = useAlgebraPoolTokenPrice(tokenAddress);
 
   useEffect(() => {
     if (!tokenAddress || !accountAddress || !tokenPrice) {

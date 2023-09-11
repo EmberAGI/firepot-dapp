@@ -186,17 +186,17 @@ export default function useYieldVaultViewModel(address: `0x${string}`, initialSt
       return;
     }
 
-    const vaultStableBalance = String(
-      vaultPosition.accountDetails.priceDenominationBalance /
-        BigInt(10 ** vaultPosition.accountDetails.priceDenominationDecimals) /
-        BigInt(10 ** vaultPosition.depositTokenDecimals),
-    );
+    const vaultStableBalance =
+      vaultPosition.accountDetails.priceDenominationBalance / BigInt(10 ** vaultPosition.accountDetails.priceDenominationDecimals);
+    const formattedStableBalance = Number(formatUnits(vaultStableBalance, 18)).toFixed(2);
+    console.log('vaultStableBalance', vaultStableBalance);
+    console.log('formattedStableBalance', formattedStableBalance);
     const stableSymbol = vaultPosition.accountDetails.priceDenominationSymbol;
     const vaultTokenBalance = String(vaultPosition.accountDetails.balance / BigInt(10 ** vaultPosition.depositTokenDecimals));
 
     setProperties((properties) => ({
       ...properties,
-      vaultStableBalance,
+      vaultStableBalance: formattedStableBalance,
       stableSymbol,
       vaultTokenBalance,
     }));
