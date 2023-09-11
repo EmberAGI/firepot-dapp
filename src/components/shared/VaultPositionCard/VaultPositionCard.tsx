@@ -4,7 +4,7 @@ import styles from './vaultPositionCard.module.scss';
 
 export interface VaultPositionCardProps {
   id: string;
-  usd: number;
+  usd: string;
   hott: number;
   onClick: any;
   icon?: string;
